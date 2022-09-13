@@ -91,6 +91,10 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 
+% Used to make two figures side by side
+\usepackage{caption}
+\usepackage{subcaption}
+
 % tocless command - til at ekskludere sektion fra TOC
 %\newcommand{\nocontentsline}[3]{}
 %\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
@@ -101,7 +105,7 @@
 \makeatother
 
 
-% Add sectino numbers to bookmarks
+% Add section numbers to bookmarks
 \usepackage[atend]{bookmark}
 \bookmarksetup{
 	numbered,
@@ -498,27 +502,30 @@
 
 % INTRODUCTION
 % ---------------------------
-\clearpage
+\clearpage \newpage
 \input{Chapters/Introduction}
 \newpage
 
 % THEORETICAL BACKGROUND
 % ---------------------------
-\clearpage
+\clearpage \newpage
 \input{Chapters/TheoreticalBackground}
 \newpage
 
 % SYSTEM DESCRIPTION
 % ---------------------------
+\clearpage \newpage
 \input{Chapters/SystemDescription}
 
 % MODELING
 % ---------------------------
+\clearpage \newpage
 \input{Chapters/Modelling}
 \input{Chapters/Modelling_something}
 
 % CONTROLLER DESIGN
 % ---------------------------
+\clearpage \newpage
 \input{Chapters/ControllerDesign}
 
 % TEST - SIMULATION
