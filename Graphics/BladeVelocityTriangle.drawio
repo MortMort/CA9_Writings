@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-09-14T07:04:11.392Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33" etag="hxkD5IBZpWI0CB1gdqZv" version="20.3.0" type="github">
+<mxfile host="app.diagrams.net" modified="2022-09-14T07:07:05.227Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33" etag="dHH61ILWE52IzcxvdovZ" version="20.3.0" type="github">
   <diagram id="4d93_hR6b8W55I3h4sD-" name="Page-1">
-    <mxGraphModel dx="981" dy="526" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
+    <mxGraphModel dx="1185" dy="635" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -8,7 +8,7 @@
           <mxGeometry x="181" y="20" width="556.8" height="410" as="geometry" />
         </mxCell>
         <mxCell id="k4ere-3MM8fGe5aid2qk-2" value="" style="rounded=0;whiteSpace=wrap;html=1;shadow=0;strokeColor=#FFFFFF;" vertex="1" parent="1">
-          <mxGeometry x="579" y="258" width="17" height="20" as="geometry" />
+          <mxGeometry x="578" y="258" width="22" height="20" as="geometry" />
         </mxCell>
         <mxCell id="k4ere-3MM8fGe5aid2qk-3" value="" style="rounded=0;whiteSpace=wrap;html=1;shadow=0;strokeColor=#FFFFFF;" vertex="1" parent="1">
           <mxGeometry x="630" y="258" width="20" height="20" as="geometry" />
@@ -26,39 +26,39 @@
           <mxGeometry x="626" y="308" width="20" height="20" as="geometry" />
         </mxCell>
         <mxCell id="k4ere-3MM8fGe5aid2qk-8" value="" style="rounded=0;whiteSpace=wrap;html=1;shadow=0;strokeColor=#FFFFFF;" vertex="1" parent="1">
-          <mxGeometry x="472" y="158" width="23" height="22" as="geometry" />
+          <mxGeometry x="472" y="158" width="24" height="22" as="geometry" />
         </mxCell>
         <mxCell id="k4ere-3MM8fGe5aid2qk-9" value="" style="rounded=0;whiteSpace=wrap;html=1;shadow=0;strokeColor=#FFFFFF;" vertex="1" parent="1">
           <mxGeometry x="380" y="142" width="13" height="16" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-10" value="\begin{equation}&lt;br&gt;\phi&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-10" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;\phi&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="453.5" y="67" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-11" value="\begin{equation}&lt;br&gt;D&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-11" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;D&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="356.5" y="128" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-12" value="\begin{equation}&lt;br&gt;F_T&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-12" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;F_T&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="390.5" y="23" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-13" value="\begin{equation}&lt;br&gt;\alpha&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
-          <mxGeometry x="555" y="249" width="60" height="30" as="geometry" />
+        <mxCell id="k4ere-3MM8fGe5aid2qk-13" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;\alpha&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="556" y="248" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-14" value="\begin{equation}&lt;br&gt;\theta&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-14" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;\theta&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="572" y="204" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-15" value="\begin{equation}&lt;br&gt;\tau\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-15" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;\tau\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="577" y="177" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-16" value="\begin{equation}&lt;br&gt;F_Q&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-16" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;F_Q&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="460" y="154" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-17" value="\begin{equation}&lt;br&gt;\phi&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-17" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;\phi&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="604" y="248" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-18" value="\begin{equation}&lt;br&gt;L&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-18" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;L&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="547" y="65" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-19" value="chord" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-19" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;chord&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="208" y="147" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="k4ere-3MM8fGe5aid2qk-20" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
@@ -67,16 +67,16 @@
             <mxPoint x="260" y="128" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-21" value="\begin{equation}&lt;br&gt;v(1-a)&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-21" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;v(1-a)&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="690" y="288" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-22" value="\begin{equation}&lt;br&gt;V&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-22" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;V&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="514" y="295" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-23" value="\begin{equation}&lt;br&gt;\Omega \, r (1+a&#39;)&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-23" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;\begin{equation}&lt;br&gt;\Omega \, r (1+a&#39;)&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="596" y="147" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="k4ere-3MM8fGe5aid2qk-24" value="Rotor plane" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+        <mxCell id="k4ere-3MM8fGe5aid2qk-24" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;Rotor plane&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="226" y="180" width="140" height="30" as="geometry" />
         </mxCell>
       </root>
