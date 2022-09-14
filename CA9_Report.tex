@@ -50,8 +50,8 @@
 % http://www.michaelshell.org/tex/testflow/
 
 
-
-\documentclass[onecolumn,a4paper,compsoc]{IEEEtran}
+% How to change font size: put 9pt, 10pt, 11pt, 12pt in the first position here:
+\documentclass[12pt, onecolumn,a4paper,compsoc]{IEEEtran}
 % Some Computer Society conferences also require the compsoc mode option,
 % but others use the standard conference format.
 %
@@ -91,9 +91,10 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 
-% Used to make two figures side by side
-\usepackage{caption}
-\usepackage{subcaption}
+% Used to make two figures side by side (another package can also be used and is currently used)
+% The caption package fucks with the font size of figures....
+%\usepackage[]{caption}
+%\usepackage{subcaption}
 
 % tocless command - til at ekskludere sektion fra TOC
 %\newcommand{\nocontentsline}[3]{}
@@ -287,7 +288,8 @@
 
 % *** SUBFIGURE PACKAGES ***
 %\ifCLASSOPTIONcompsoc
-%  \usepackage[caption=false,=normalsize,labelfont=sf,textfont=sf]{subfig}
+%\usepackage[caption=false]{subfig}
+\usepackage[caption=false,labelfont=sf,textfont=sf]{subfig}
 %\else
 %  \usepackage[caption=false,font=footnotesize]{subfig}
 %\fi

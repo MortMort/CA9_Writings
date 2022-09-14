@@ -55,25 +55,38 @@ When the air travels over the WT blade the air travels slower on one side than t
 \end{figure}
 Blade element momentum theory is often used to model the forces acting along WT blades. Blade element theory involves breaking a blade into small sections and determining the forces acting on that section. In \cref{fig:blade_vel_triangle} a cross section of a WT blade can be seen. In this figure, as it is also illustrated at the rotor blade in \cref{fig:betz}, the wind velocity that hits the rotor blades is lowered indicated by the \textit{axial induction factor} $ a $. What is not observed in \cref{fig:betz} is that some of the energy of the wind also goes into driving an airstream around the back of the rotors in the opposite direction of the blade rotation, indicated by the \textit{tangential induction factor} $ a' $. This is known as \textit{swirl losses}.
 
-\begin{figure}[h]
+% This was an attempt to make two subfigures. It used the caption package which resulted in larger and changed fonts...
+%\begin{figure}[h]
+%	\centering
+%	\begin{subfigure}[t]{.44\textwidth}
+%		\centering
+%		\includegraphics[width=1\linewidth]{Graphics/RotorBladeElement.pdf}
+%		\caption{Illustration of a blade cross section}
+%		\label{fig:blade_vel_triangles}
+%	\end{subfigure}%
+%	\hspace{0.01cm}
+%	\begin{subfigure}[t]{.55\textwidth}
+%		\centering
+%		\includegraphics[width=1\linewidth]{Graphics/BladeVelocityTriangle.pdf}
+%		\caption{Velocity triangle with the rotation induction factor $ a' $ included \textbf{TO DO: Ensret notation ift. om vindhastighed er U eller v!}}
+%		\label{fig:blade_vel_triangle}
+%	\end{subfigure}
+%	
+%	\caption{Illustrations of the velocity triangle acting on a cross section of a WT blade}
+%	\label{fig:blade_triangles}
+%\end{figure}
+
+
+\begin{figure*}[!t]
 	\centering
-	\begin{subfigure}[t]{.44\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{Graphics/RotorBladeElement.pdf}
-		\caption{Illustration of a blade cross section}
-		\label{fig:blade_vel_triangles}
-	\end{subfigure}%
-	\hspace{0.01cm}
-	\begin{subfigure}[t]{.55\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{Graphics/BladeVelocityTriangle.pdf}
-		\caption{Velocity triangle with the rotation induction factor $ a' $ included \textbf{TO DO: Ensret notation ift. om vindhastighed er U eller v!}}
-		\label{fig:blade_vel_triangle}
-	\end{subfigure}
-	
-	\caption{Illustrations of the velocity triangle acting on a cross section of a WT blade}
+	\subfloat[Blade cross section]{\includegraphics[width=.44\textwidth]{Graphics/RotorBladeElement.pdf}%
+		\label{fig:blade_vel_triangles}}
+	\hfil
+	\subfloat[Velocity triangle]{\includegraphics[width=.55\textwidth]{Graphics/BladeVelocityTriangle.pdf}%
+		\label{fig:blade_vel_triangle}}
+	\caption{Illustrations of a blade cross section and a velocity triangle on a blade section; \textbf{(a)} the blade cross section is made at some distance $ r $ from rotor center and rotates at a frequency $ \Omega $; \textbf{(b)} the velocity triangle acting on a cross section of a WT blade}
 	\label{fig:blade_triangles}
-\end{figure}
+\end{figure*}
 
 The resulting air speed is V with an \textit{inflow angle} $ \phi $. $ L $ and $ D $ is the lift and drag forces respectively. They are calculated from \cref{eq:lift} and \cref{eq:drag}. They include the \textit{chord length} $ c $ which is the length from the leading to the trailing edge of the blade and $ \phi $.
 \begin{align}
