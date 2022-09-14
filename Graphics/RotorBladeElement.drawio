@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-09-14T06:50:21.794Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33" etag="2WS-6kRZ2pAytcnZECkZ" version="20.3.0" type="github">
+<mxfile host="app.diagrams.net" modified="2022-09-14T07:19:50.677Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33" etag="XB4vA-yg3sktp3qIBTMG" version="20.3.0" type="github">
   <diagram id="sPunsnypAaiBYAq_dtAb" name="Page-1">
     <mxGraphModel dx="1185" dy="635" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
       <root>
@@ -43,13 +43,13 @@
             <mxPoint x="200" y="300" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="6_0IzfVlJxFTBLtl2Sgu-10" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;\begin{equation}&lt;br&gt;v(1-a)&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="6_0IzfVlJxFTBLtl2Sgu-10" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;\begin{equation}&lt;br&gt;v(1-a)&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="120" y="160" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="6_0IzfVlJxFTBLtl2Sgu-11" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;\begin{equation}&lt;br&gt;\Omega&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="6_0IzfVlJxFTBLtl2Sgu-11" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;\begin{equation}&lt;br&gt;\Omega&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="590" y="160" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="6_0IzfVlJxFTBLtl2Sgu-12" value="&lt;font style=&quot;font-size: 17px;&quot;&gt;\begin{equation}&lt;br&gt;r&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="6_0IzfVlJxFTBLtl2Sgu-12" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;\begin{equation}&lt;br&gt;r&lt;br&gt;\end{equation}&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="530" y="80" width="60" height="30" as="geometry" />
         </mxCell>
       </root>
