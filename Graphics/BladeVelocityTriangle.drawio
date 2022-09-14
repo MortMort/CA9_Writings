@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-09-14T07:02:45.107Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33" etag="GnFLCWytkLzarBqxKcVw" version="20.3.0" type="github">
+<mxfile host="app.diagrams.net" modified="2022-09-14T07:04:11.392Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33" etag="hxkD5IBZpWI0CB1gdqZv" version="20.3.0" type="github">
   <diagram id="4d93_hR6b8W55I3h4sD-" name="Page-1">
     <mxGraphModel dx="981" dy="526" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
       <root>
@@ -75,6 +75,9 @@
         </mxCell>
         <mxCell id="k4ere-3MM8fGe5aid2qk-23" value="\begin{equation}&lt;br&gt;\Omega \, r (1+a&#39;)&lt;br&gt;\end{equation}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
           <mxGeometry x="596" y="147" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="k4ere-3MM8fGe5aid2qk-24" value="Rotor plane" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="226" y="180" width="140" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
