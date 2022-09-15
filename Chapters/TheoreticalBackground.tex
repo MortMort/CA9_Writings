@@ -1,4 +1,4 @@
-\section{Theoretical Background} \label{sec:theory}
+%\section{Theoretical Background} \label{sec:theory}
 The purpose of this chapter is to go through the basic wind turbine (WT) theory. 
 
 \subsection{Aerodynamics and airfoil theory}
@@ -90,7 +90,11 @@ Blade element momentum theory is often used to model the forces acting along WT 
 
 The resulting air speed is V with an \textit{inflow angle} $ \phi $. $ L $ and $ D $ is the lift and drag forces respectively. They are calculated from \cref{eq:lift} and \cref{eq:drag}. They include the \textit{chord length} $ c $ which is the length from the leading to the trailing edge of the blade and $ \phi $.
 \begin{align}
-	L &= \dfrac{1}{2} \rho V^2 c \, C_L \label{eq:lift}\\
-	D &= \dfrac{1}{2} \rho V^2 c \, C_D \label{eq:drag}
+	L &= \dfrac{1}{2}\,  \rho \, V^2 c \, C_L \label{eq:lift}\\
+	D &= \dfrac{1}{2} \, \rho \, V^2 c \, C_D \label{eq:drag}
 \end{align}
-The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from table lookups which are typically found from simulations such as Xfoil \textbf{TO DO: Find ud af hvad Vestas bruger til at udregne disse coefficienter!}. In a typical scenario $ C_L $ is found from the angle of attack $ \alpha $ and $ C_D $ is subsequently found from $ C_L $.
+The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from table lookups which are typically found from simulations such as Xfoil \textbf{TO DO: Find ud af hvad Vestas bruger til at udregne disse coefficienter!}. In a typical scenario $ C_L $ is found from the angle of attack $ \alpha $ and $ C_D $ is subsequently found from $ C_L $. The thrust and torque vectors $ F_T $ and $ F_Q $ are then easily found as in \cref{eq:thrust} and \cref{eq:torque}
+\begin{align}
+	F_T &= L \, cos(\phi) + D \, sin(\phi) \label{eq:thrust} \\
+	F_Q &= L \, sin(\phi) + D \, cos(\phi) \label{eq:torque}
+\end{align}
