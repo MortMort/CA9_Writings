@@ -1,12 +1,12 @@
 \section{Theoretical Background} \label{sec:theory}
-The purpose of this chapter is to go through the preliminary wind turbine (WT) theory. 
+The purpose of this chapter is to go through the preliminary wind turbine (WT) theory. (Subject to change!)
 
 \subsection{Aerodynamics and airfoil theory}
-The sun delivers energy to the earth by heating up the surface and subsequently the air of the earth. Winds occur as a result of the pressure differences that occur due to the expansion and contraction of the air. \\
+The sun delivers energy to the earth by heating up the surface and subsequently the air of the earth. Winds occur as a result of the pressure differences that occur due to the expansion and contraction of the air. 
 
 WTs work because they are able to convert the wind's energy into a torque in the generator which then generates electrical energy. When the wind blows over the blades of a WT it delivers some of its energy to the blade, yielding both a thrust force and torque to the blade.
 
-In the simplest 1D momentum theory case the delivery of energy just results in a lowing of the wind speed following the rotor area. Due to mass retention an expansion would subsequently occur as seen in \cref{fig:betz}.
+In the simplest 1D momentum theory case the delivery of energy just results in a lowing of the wind speed following the rotor area. Due to mass retention an expansion would subsequently occur as depicted in \cref{fig:betz}.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{Graphics/FlowThroughRotor.pdf}
@@ -25,11 +25,11 @@ The time derivative of the mass can be expressed from the air density $ \rho $, 
 \begin{equation}\label{eq:mass_deriv}
 	\dot{m} = \rho A_d v_0
 \end{equation}
-Combining \cref{eq:mass_deriv} and \cref{eq:mass_deriv} yields:
+Combining \cref{eq:power} and \cref{eq:mass_deriv} yields:
 \begin{equation}\label{eq:power2}
 	P_{air} = \dfrac{1}{2} \rho A_d v_0^3
 \end{equation}
-A \textit{power coefficient} $ C_p $ is used to represent the percentage of the available power that is extracted from the wind:
+A \textit{power coefficient} $ C_p $ represents the percentage of the available power that is extracted from the wind:
 \begin{equation}\label{eq:power_w_Cp}
 	P_{T} = \dfrac{1}{2} \rho A_d v_0^3 C_p
 \end{equation}
@@ -53,7 +53,7 @@ When the air travels over the WT blade the air travels slower on one side than t
 	\caption{Illustration of the wind speed difference between the two sides of a WT blade along with an illustration of the induced pressure difference. The result is a lifting force one the blade.}
 	\label{fig:airfoil}
 \end{figure}
-Blade element momentum theory is often used to model the forces acting along WT blades. Blade element theory involves breaking a blade into small sections and determining the forces acting on that section. In \cref{fig:blade_vel_triangle} a cross section of a WT blade can be seen. In this figure, as it is also illustrated at the rotor blade in \cref{fig:betz}, the wind velocity that hits the rotor blades is lowered indicated by the \textit{axial induction factor} $ a $. What is not observed in \cref{fig:betz} is that some of the energy of the wind also goes into driving an airstream around the back of the rotors in the opposite direction of the blade rotation, indicated by the \textit{tangential induction factor} $ a' $. This is known as \textit{swirl losses}.
+Blade element momentum theory is often used to model the forces acting along WT blades. Blade element theory involves breaking a blade into small sections and determining the forces acting on each small section. In \cref{fig:blade_vel_triangle} a cross section of a WT blade can be seen. In this figure, as it is also illustrated at the rotor blade in \cref{fig:betz}, the wind velocity that hits the rotor blades is lowered indicated by the \textit{axial induction factor} $ a $. What is not observed in \cref{fig:betz} is that some of the energy of the wind also goes into driving an airstream around the back of the rotors in the opposite direction of the blade rotation, indicated by the \textit{tangential induction factor} $ a' $. This is known as \textit{swirl losses}.
 
 % This was an attempt to make two subfigures. It used the caption package which resulted in larger and changed fonts...
 %\begin{figure}[h]
@@ -88,12 +88,12 @@ Blade element momentum theory is often used to model the forces acting along WT 
 	\label{fig:blade_triangles}
 \end{figure*}
 
-The resulting air speed is V with an \textit{inflow angle} $ \phi $. $ L $ and $ D $ is the lift and drag forces respectively. They are calculated from \cref{eq:lift} and \cref{eq:drag}. They include the \textit{chord length} $ c $ which is the length from the leading to the trailing edge of the blade and $ \phi $.
+The resulting air speed is V with an \textit{inflow angle} $ \phi $. $ F_L $ and $ F_D $ are the lift and drag forces respectively. They are calculated from \cref{eq:lift} and \cref{eq:drag}. They include the \textit{chord length} $ c $ which is the length from the leading to the trailing edge of the blade.
 \begin{align}
-	L &= \dfrac{1}{2}\,  \rho \, V^2 c \, C_L \label{eq:lift}\\
-	D &= \dfrac{1}{2} \, \rho \, V^2 c \, C_D \label{eq:drag}
+	F_L &= \dfrac{1}{2}\,  \rho \, V^2 c \, C_L \label{eq:lift}\\
+	F_D &= \dfrac{1}{2} \, \rho \, V^2 c \, C_D \label{eq:drag}
 \end{align}
-The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from table lookups which are typically found from simulations such as Xfoil \textbf{TO DO: Find ud af hvad Vestas bruger til at udregne disse coefficienter!}. In a typical scenario $ C_L $ is found from the angle of attack $ \alpha $ and $ C_D $ is subsequently found from $ C_L $. The thrust and torque vectors $ F_T $ and $ F_Q $ are then easily found as in \cref{eq:thrust} and \cref{eq:torque}
+The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from table lookups which are typically found from simulations such as Xfoil (This sentence is subject to change!). In a typical scenario $ C_L $ is found from the angle of attack $ \alpha $ and $ C_D $ is subsequently found from $ C_L $. The thrust and torque vectors $ F_T $ and $ F_Q $ are then calculated from the Pythagorean theorem as in \cref{eq:thrust} and \cref{eq:torque}
 \begin{align}
 	F_T &= L \, cos(\phi) + D \, sin(\phi) \label{eq:thrust} \\
 	F_Q &= L \, sin(\phi) + D \, cos(\phi) \label{eq:torque}
