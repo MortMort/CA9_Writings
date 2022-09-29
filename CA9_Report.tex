@@ -372,6 +372,10 @@
 %\counterwithin*{equation}{subsection}	% Reset every subsection
 \numberwithin{equation}{section}		% Include section number in equation
 
+% Include section number in figure number. Also resets figure number on each section.
+\usepackage{chngcntr}
+\counterwithin{figure}{section}
+
 \usepackage{float}
 
 
@@ -615,7 +619,8 @@
 
 \clearpage
 \newpage
-\bibliographystyle{unsrt}
+%\bibliographystyle{unsrt}
+\bibliographystyle{IEEEtran}
 \bibliography{../RefLib/CA9_References}
 
 \clearpage
