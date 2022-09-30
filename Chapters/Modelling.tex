@@ -1,1 +1,39 @@
 \section{Modelling} \label{sec:mod} % Incl. Subsection "Component Models"
+
+\subsection{wtLin model}
+A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating linear model based on parameters extracted from Vestas Turbine Simulator (VTS). The tool specific turbine model files and an operating point to create individual components which can be connected in loops. Each component translates a range of inputs to a range of outputs. In this section the relevant component models contained in wtLin will be outlined.\\
+
+The drivetrain is modelled from newtons second law as such:
+\begin{equation}\label{eq:wtlin_comp_drivetrain}
+	(J_{gen} + J_{rot}) \dot{\Omega} = M_{rot} + M_{gen}
+\end{equation}
+The torques are related to the low-speed (rotor) side and thus the high-speed side inertias are mapped to the low speed side:
+\begin{equation}\label{eq:wtlin_comp_inertiamap}
+	J_{gen} = J_{genLss} = J_{genHss} N^2
+\end{equation}
+where $ N $ is the gear ratio
+
+There is also a flexible drivetrain model. Here the drivetrain is modeled as two free inertias coupled through a spring with stiffness $ K $ and a dampener with dampening $ B $. The rotor spins at angular velocity $ \Omega $ and the generator $ \omega = N^2 \Omega $
+\begin{align}\label{eq:wtlin_comp_drivetrain_flex}
+	J_{gen} \dot{\omega} & = -B \omega_L + K \epsilon - M_{gen} \\
+	J_{rot} \dot{\Omega} & = -B \omega_L -B - K \epsilon + M_{rot} \\
+	\epsilon & = \Omega - \omega_L \\
+	\omega & = N \omega_L
+\end{align}
+
+
+
+
+
+
+
+
+
+
+
+
+% Template:
+%\begin{equation}\label{eq:wtlin_comp_}
+%	
+%\end{equation}
+
