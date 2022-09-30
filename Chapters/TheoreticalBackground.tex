@@ -6,7 +6,7 @@ The sun delivers energy to the earth by heating up the surface and subsequently 
 
 WTs work because they are able to convert the wind's energy into a torque in the generator which then generates electrical energy. When the wind blows over the blades of a WT it delivers some of its energy to the blade, yielding both a thrust force and torque to the blade.
 
-In the simplest 1D momentum theory case the delivery of energy just results in a lowing of the wind speed following the rotor area. Due to mass retention an expansion would subsequently occur as depicted in \cref{fig:betz}.
+In the simplest 1D momentum theory case the delivery of energy just results in a lowing of the wind speed following the rotor area. Due to mass preservation an expansion would subsequently occur as depicted in \cref{fig:betz}.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{Graphics/FlowThroughRotor.pdf}
@@ -33,18 +33,18 @@ A \textit{power coefficient} $ C_p $ represents the percentage of the available 
 \begin{equation}\label{eq:power_w_Cp}
 	P_{T} = \dfrac{1}{2} \rho A_d v_0^3 C_p
 \end{equation}
-$ C_p $ is dependent on the rotor blade pitch $ \theta $ and the tip speed ratio $ \lambda $. In some of the operating range of a WT the goal is to reach an optimal $ C_p $ by adjusting $ \theta $ and  $ \lambda $ to their optimal values:
+$ C_p $ is dependent on the rotor blade pitch $ \theta $ and the tip speed ratio $ \lambda $. In the partial load region the goal is to reach a maximum $ C_p $ by adjusting $ \theta $ and  $ \lambda $ to their optimal values:
 \begin{equation}\label{eq:cp_optimal}
 	C_p^\star = C_p(\theta^\star, \lambda^\star)
 \end{equation}
- The achievable size of $ C_p^\star $ is a matter of the WT design. The \textit{Betz limit} is the highest, optimal $ C_p $ that can be theoretically achieved and can be calculated to be:
+The achievable size of $ C_p^\star $ is a matter of the WT design. The \textit{Betz limit} is the highest, optimal $ C_p $ that can be theoretically achieved and can be calculated to be:
 \begin{equation}\label{eq:betzlimit}
 	C_{pbetz} = 0.5962
 \end{equation}
-Thus efficiency is calculated from the Betz limit:
-\begin{equation}\label{eq:efficiency}
-	\eta = \dfrac{C_p}{C_{pbetz}}
-\end{equation}
+%Most often $ C_p $ is also the measure of efficiency for a WT, but a more intuitive efficiency is  calculate measure efficiency from the Betz limit extractable power:
+%\begin{equation}\label{eq:efficiency}
+%	\eta = \dfrac{C_p}{C_{pbetz}}
+%\end{equation}
 
 When the air travels over the WT blade the air travels slower on one side than the other as illustrated in \cref{fig:airfoil}. Due to mass conservation the air which moves slower on the underside of the blade expands, creating a higher pressure. Likewise the air moving faster on the upper upper side contracts creating in a lower pressure. Resultingly the blade moves upwards.
 \begin{figure}[h]
@@ -54,30 +54,7 @@ When the air travels over the WT blade the air travels slower on one side than t
 	\label{fig:airfoil}
 \end{figure}
 Blade element momentum theory is often used to model the forces acting along WT blades. Blade element theory involves breaking a blade into small sections and determining the forces acting on each small section. In \cref{fig:blade_vel_triangle} a cross section of a WT blade can be seen. In this figure, as it is also illustrated at the rotor blade in \cref{fig:betz}, the wind velocity that hits the rotor blades is lowered indicated by the \textit{axial induction factor} $ a $. What is not observed in \cref{fig:betz} is that some of the energy of the wind also goes into driving an airstream around the back of the rotors in the opposite direction of the blade rotation, indicated by the \textit{tangential induction factor} $ a' $. This is known as \textit{swirl losses}.
-
-% This was an attempt to make two subfigures. It used the caption package which resulted in larger and changed fonts...
-%\begin{figure}[h]
-%	\centering
-%	\begin{subfigure}[t]{.44\textwidth}
-%		\centering
-%		\includegraphics[width=1\linewidth]{Graphics/RotorBladeElement.pdf}
-%		\caption{Illustration of a blade cross section}
-%		\label{fig:blade_vel_triangles}
-%	\end{subfigure}%
-%	\hspace{0.01cm}
-%	\begin{subfigure}[t]{.55\textwidth}
-%		\centering
-%		\includegraphics[width=1\linewidth]{Graphics/BladeVelocityTriangle.pdf}
-%		\caption{Velocity triangle with the rotation induction factor $ a' $ included \textbf{TO DO: Ensret notation ift. om vindhastighed er U eller v!}}
-%		\label{fig:blade_vel_triangle}
-%	\end{subfigure}
-%	
-%	\caption{Illustrations of the velocity triangle acting on a cross section of a WT blade}
-%	\label{fig:blade_triangles}
-%\end{figure}
-
-
-\begin{figure*}[!t]
+\begin{figure*}[h]
 	\centering
 	\subfloat[Blade cross section]{\includegraphics[width=.44\textwidth]{Graphics/RotorBladeElement.pdf}%
 		\label{fig:blade_vel_triangles}}
@@ -87,16 +64,18 @@ Blade element momentum theory is often used to model the forces acting along WT 
 	\caption{Illustrations of a blade cross section and a velocity triangle on a blade section; \textbf{(a)} the blade cross section is made at some distance $ r $ from rotor center and rotates at a frequency $ \Omega $; \textbf{(b)} the velocity triangle acting on a cross section of a WT blade}
 	\label{fig:blade_triangles}
 \end{figure*}
-
-The resulting air speed is V with an \textit{inflow angle} $ \phi $. $ F_L $ and $ F_D $ are the lift and drag forces respectively. They are calculated from \cref{eq:lift} and \cref{eq:drag}. They include the \textit{chord length} $ c $ which is the length from the leading to the trailing edge of the blade.
+The resulting air speed is V with an \textit{inflow angle} $ \phi $. $ F_L $ and $ F_D $ are the lift and drag forces on the blade element respectively. They are calculated from \cref{eq:lift} and \cref{eq:drag}. They include the \textit{chord length} $ c $ which is the length from the leading to the trailing edge of the blade.
 \begin{align}
 	F_L &= \dfrac{1}{2}\,  \rho \, V^2 c \, C_L \label{eq:lift}\\
 	F_D &= \dfrac{1}{2} \, \rho \, V^2 c \, C_D \label{eq:drag}
 \end{align}
-The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from table lookups which are typically found from simulations such as Xfoil (This sentence is subject to change!). In a typical scenario $ C_L $ is found from the angle of attack $ \alpha $ and $ C_D $ is subsequently found from $ C_L $. The thrust and torque vectors $ F_T $ and $ F_Q $ are then calculated from the Pythagorean theorem as in \cref{eq:thrust} and \cref{eq:torque}
+The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from table lookups which are typically found from simulations such as Xfoil
+\todo{Hvad bruger Vestas til at finde $ C_L $ og $ C_D $?}. 
+In a typical scenario $ C_L $ and $ C_D $ are found from the angle of attack $ \alpha $. The thrust and torque vectors $ F_T $ and $ F_Q $ are then calculated from the Pythagorean theorem as in \cref{eq:thrust} and \cref{eq:torque}
+%\lipsum[11]\unsure{Is this correct?}\unsure{I'm unsure about also!}
 \begin{align}
 	F_T &= L \, cos(\phi) + D \, sin(\phi) \label{eq:thrust} \\
-	F_Q &= L \, sin(\phi) + D \, cos(\phi) \label{eq:torque}
+	F_Q &= L \, sin(\phi) - D \, cos(\phi) \label{eq:torque}
 \end{align}
 
 

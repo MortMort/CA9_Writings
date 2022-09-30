@@ -40,14 +40,19 @@
 }
 
 % Adding to-do notes in the text
-\usepackage{todonotes}
+\usepackage[textsize=small, textwidth=24mm]{todonotes}
+
 
 % Set margins - The IEEE margins are WAY too thin.. (The template mentions that it is
 % specifically a bad idea to do this but we do it anyway. Maybe something breaks?)
-\usepackage[letterpaper, left=25mm, right=25mm, bottom=25mm, top=25mm]{geometry}
+\usepackage[inner=20mm, outer=20mm, bottom=25mm, top=25mm, 
+			marginparwidth=25mm, 
+			marginparsep=-5mm]{geometry}
+
 % Set marginparwidth for todonotes (it doesn't change the margin width. It just lets the
 % text box have more space in the marings)
-\setlength{\marginparwidth}{2.1cm}
+%\setlength{\marginparwidth}{2cm}
+
 
 % Allows highlighting of equations with red box around
 \usepackage[skins,theorems]{tcolorbox}
