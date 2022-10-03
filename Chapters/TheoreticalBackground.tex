@@ -13,15 +13,11 @@ In the simplest 1D momentum theory case the delivery of energy just results in a
 	\caption{Illustration of how the wind in a control volume (CV) changes volume due to its reduction of speed}
 	\label{fig:betz}
 \end{figure}
-The energy in the wind can be expressed as kinetic energy:
-\begin{equation} \label{eq:energy}
-	E = \dfrac{1}{2} m v_0^2
-\end{equation}
-Subsequently the power can be calculated as the time derivative of the energy:
+The power of the wind can be expressed from the wind mass flow $ \dot{m} $ through a control volume:
 \begin{equation} \label{eq:power}
-	P = \dot{E} = \dfrac{1}{2} \dot{m} v_0^2
+	P = \dfrac{1}{2} \dot{m} v_0^2
 \end{equation}
-The time derivative of the mass can be expressed from the air density $ \rho $, the cross-sectional area $ A_d $ and the wind velocity $ v_0 $:
+The flow of mass can be expressed from the air density $ \rho $, the cross sectional area $ A_d $ and the wind speed $ v_0 $ as such:
 \begin{equation}\label{eq:mass_deriv}
 	\dot{m} = \rho A_d v_0
 \end{equation}
@@ -46,13 +42,14 @@ The achievable size of $ C_p^\star $ is a matter of the WT design. The \textit{B
 %	\eta = \dfrac{C_p}{C_{pbetz}}
 %\end{equation}
 
-When the air travels over the WT blade the air travels slower on one side than the other as illustrated in \cref{fig:airfoil}. Due to mass conservation the air which moves slower on the underside of the blade expands, creating a higher pressure. Likewise the air moving faster on the upper upper side contracts creating in a lower pressure. Resultingly the blade moves upwards.
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.5\linewidth]{Graphics/AirfoilAirflow.png}
-	\caption{Illustration of the wind speed difference between the two sides of a WT blade along with an illustration of the induced pressure difference. The result is a lifting force one the blade.}
-	\label{fig:airfoil}
-\end{figure}
+%When the air travels over the WT blade the air travels slower on one side than the other as illustrated in \cref{fig:airfoil}. Due to mass conservation the air which moves slower on the underside of the blade expands, creating a higher pressure. Likewise the air moving faster on the upper upper side contracts creating in a lower pressure. Resultingly the blade moves upwards.
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics[width=0.5\linewidth]{Graphics/AirfoilAirflow.png}
+%	\caption{Illustration of the wind speed difference between the two sides of a WT blade along with an illustration of the induced pressure difference. The result is a lifting force one the blade.}
+%	\label{fig:airfoil}
+%\end{figure}
+
 Blade element momentum theory is often used to model the forces acting along WT blades. Blade element theory involves breaking a blade into small sections and determining the forces acting on each small section. In \cref{fig:blade_vel_triangle} a cross section of a WT blade can be seen. In this figure, as it is also illustrated at the rotor blade in \cref{fig:betz}, the wind velocity that hits the rotor blades is lowered indicated by the \textit{axial induction factor} $ a $. What is not observed in \cref{fig:betz} is that some of the energy of the wind also goes into driving an airstream around the back of the rotors in the opposite direction of the blade rotation, indicated by the \textit{tangential induction factor} $ a' $. This is known as \textit{swirl losses}.
 \begin{figure*}[h]
 	\centering
