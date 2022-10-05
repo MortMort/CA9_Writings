@@ -4,36 +4,76 @@
 A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating linear model based on parameters extracted from Vestas Turbine Simulator (VTS). The tool specific turbine model files and an operating point to create individual components which can be connected in loops. Each component translates one or more inputs to one or more outputs. In this section the relevant component models contained in wtLin will be outlined.\\
 
 \subsubsection{Drivetrain (stiff)}
-The drivetrain is modelled from newtons second law???? as such:
+In the simple stiff drivetrain model it is assumed that there is no dampening or spring effects in the drivetrain between the rotor and the generator. As such if some torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the generator.
+
+The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law???? as such:
 \begin{equation}\label{eq:wtlin_comp_drivetrain}
-	(J_{gL} + J_{r}) \ddot{\theta}_r = M_{r} + M_{g}
+	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
 \end{equation}
 \begin{equation}\label{eq:wtlin_comp_drivetrain}
 	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
 \end{equation}
-The torques are related to the low-speed (rotor) side and thus the high-speed side inertias are mapped to the low speed side:
+The torques are related to the low-speed rotor side and thus the high-speed generator side inertias are mapped to the low speed side:
 \begin{equation} \label{eq:wtlin_comp_inertiamap}
 	J_{gL} = J_{gL} = J_{gH} \left(\dfrac{N_r}{N_g}\right)^2
 \end{equation}
-where $ N_r $ and $ N_g $ is the number of teeth on the rotor and generator side of the gearbox respectively.
+where $ N_r $ and $ N_g $ is the number of teeth on the rotor and generator side of the gearbox respectively. The rotor spins at angular velocity $ \dot{\theta}_r $.
 
 
 \subsubsection{Drivetrain (flexible)}
-There is also a flexible drivetrain model. Here the drivetrain is modelled as two free inertias coupled through a spring with stiffness $ K $ and a dampener with dampening $ B $. The rotor spins at angular velocity $ \ddot{\theta}_r $ and the generator $ \ddot{\theta}_g = N \ddot{\theta}_r $
+A more accurate drivetrain model includes dampening and spring effects in the drivetrain between the rotor and the generator. The drivetrain is modelled with a dampener and a spring is between the rotor and the gearbox and between the gearbox and the generator. The model is then reduced by translating the dampener and spring from the generator side to the rotor side of the gearbox. As such the model ends up consisting of two inertias coupled through a spring with stiffness $ K $ and a dampener with dampening $ B $ where $ K $ and $ B $ are a combination of both the rotor and generator side dampener and spring coefficients. \todo[]{Har Jesper modelleret drivetrain så at der også er fjeder og dæmper mellem gearbox og generator!?}
+
 \begin{align} \label{eq:wtlin_comp_drivetrain_flex}
-	J_{g} \ddot{\theta}_g & = -B \dot{\theta}_{gL} + K(\theta_r - \theta_{gL}) - M_{g} \\
-	J_{r} \ddot{\theta}_r & = -B \dot{\theta}_{gL} -B - K(\theta_r - \theta_{gL}) + M_{r} \\
-	\dot{\theta}_g & = \left(\dfrac{N_r}{N_g}\right) \dot{\theta}_{gL}
+	J_{g} \ddot{\theta}_g & = -B \dot{\theta}_{gL} + K(\theta_r - \theta_{gL}) - T_{g} \\
+	J_{r} \ddot{\theta}_r & = -B \dot{\theta}_{gL} -B - K(\theta_r - \theta_{gL}) + T_{r} \\
+	\dot{\theta}_g & = \left(\dfrac{N_g}{N_r}\right) \dot{\theta}_{gL}
 \end{align}
 
+\clearpage \newpage
+\subsubsection{Generator model}
+The most natural way to look at a generator is from the point of view (POV) of it \textit{generating} and outputting power when it is rotated by some mechanical torque. As such from this POV the input would be torque and rotational velocity and the output power would be the input to the converter. But with regards to rotor speed control the generator is on the contrary viewed as a source of torque. As such the inputs end up being rotational velocity and electrical power from the converter.
+
+In Vestas' turbine simulator (VTS) the generator efficiencies are defined in tables and are dependent on grid output power $ P_{grid} $ and generator speed $ \omega $. The output is three respective output efficiencies: 
+\begin{enumerate}
+	\item Mechanic efficiency: $ \eta_m(P_{grid},\omega) $
+	\item Electric efficiency: $ \eta_e(P_{grid},\omega) $
+	\item Auxiliary efficiency: $ \eta_a(P_{grid},\omega) $
+\end{enumerate}
+Where 
+\begin{equation}\label{eq:wtLin_gen_effi}
+	\eta(P_{grid},\omega) = \eta_m(P_{grid},\omega) + \eta_e(P_{grid},\omega) + \eta_a(P_{grid},\omega)
+\end{equation}
+
+From the total efficiency the output grid power is:
+\begin{equation}\label{eq:wtLin_gen_elec_pow}
+	P_{grid} = P_{gen} \eta(P_{grid},\omega)
+\end{equation}
+where $ P_{gen} $ is the power output of the generator.
+
+This leaves the power loss from generator to grid to be defined as:
+\begin{equation}\label{eq_wtLin_gen_pow_loss}
+	P_{loss}(P_{grid}, \omega) = P_{gen} - P_{grid}% = \dfrac{P_{grid}}{\eta(P_{grid}, \omega)} - P_{grid}
+\end{equation}
 
 
+Power in a rotational mechanical system can be defined as the product of torque and rotational velocity:
+\begin{equation}\label{eq:power_in_rot}
+	P_{gen} = T_{gen} \omega
+\end{equation}
+
+As such for the system at hand the torque can be defined by rearranging \cref{eq:power_in_rot} and combining it with \cref{eq:wtLin_gen_elec_pow}:
+\begin{equation}\label{key}
+	T_{gen}(P_{grid}, \omega) = \dfrac{P_{loss}(P_{grid}, \omega) + P_{grid}}{\omega}
+\end{equation}
 
 
+\subsubsection{Unity model converter}
+The converter is regarded as a source of electrical power which is input to the generator in order to control the rotational speed of the rotor.
 
-
-
-
+The dynamics of modern converters are way faster than the rotor and tower dynamics and therefore it can be modelled as a direct feed-through:
+\begin{equation}\label{eq:}
+	P_{conv} = P_{ref}
+\end{equation}
 
 
 
