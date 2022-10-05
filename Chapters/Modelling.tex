@@ -31,7 +31,7 @@ A more accurate drivetrain model includes dampening and spring effects in the dr
 
 \clearpage \newpage
 \subsubsection{Generator model}
-The most natural way to look at a generator is from the point of view (POV) of it \textit{generating} and outputting power when it is rotated by some mechanical torque. As such from this POV the input would be torque and rotational velocity and the output power would be the input to the converter. But with regards to rotor speed control the generator is on the contrary viewed as a source of torque. As such the inputs end up being rotational velocity and electrical power from the converter.
+When considering the generator of a WT the obvious point of view (POV) is to consider it as outputting power when it is rotated. As such from this POV the input would be torque and rotational velocity and the output power would be the input to the converter. But with regards to rotor speed control the generator is on the contrary viewed as a source of torque. As such the inputs end up being rotational velocity and electrical power from the converter.
 
 In Vestas' turbine simulator (VTS) the generator efficiencies are defined in tables and are dependent on grid output power $ P_{grid} $ and generator speed $ \omega $. The output is three respective output efficiencies: 
 \begin{enumerate}
@@ -43,28 +43,38 @@ Where
 \begin{equation}\label{eq:wtLin_gen_effi}
 	\eta(P_{grid},\omega) = \eta_m(P_{grid},\omega) + \eta_e(P_{grid},\omega) + \eta_a(P_{grid},\omega)
 \end{equation}
-
 From the total efficiency the output grid power is:
 \begin{equation}\label{eq:wtLin_gen_elec_pow}
-	P_{grid} = P_{gen} \eta(P_{grid},\omega)
+	P_{gen} \eta(P_{grid},\omega) = P_{grid}
 \end{equation}
-where $ P_{gen} $ is the power output of the generator.
+where $ P_{gen} $ is the electrical power output of the generator.
 
 This leaves the power loss from generator to grid to be defined as:
 \begin{equation}\label{eq_wtLin_gen_pow_loss}
 	P_{loss}(P_{grid}, \omega) = P_{gen} - P_{grid}% = \dfrac{P_{grid}}{\eta(P_{grid}, \omega)} - P_{grid}
 \end{equation}
-
-
-Power in a rotational mechanical system can be defined as the product of torque and rotational velocity:
-\begin{equation}\label{eq:power_in_rot}
+The power of a rotating machine can be defined as the product of torque and rotational velocity:
+\begin{equation}\label{eq:wtLin_power_in_rot}
 	P_{gen} = T_{gen} \omega
 \end{equation}
-
-As such for the system at hand the torque can be defined by rearranging \cref{eq:power_in_rot} and combining it with \cref{eq:wtLin_gen_elec_pow}:
+As such for the system at hand the torque can be defined by rearranging \cref{eq:power_in_rot} and combining it with \cref{eq:wtLin_gen_pow_loss}:
 \begin{equation}\label{key}
 	T_{gen}(P_{grid}, \omega) = \dfrac{P_{loss}(P_{grid}, \omega) + P_{grid}}{\omega}
 \end{equation}
+The linear model of the generator is gained through a taylor expansion. The notation is relaxed a bit such that $ P_{loss}(P, \omega) $ is simply expressed as $ P_{loss} $.
+\begin{equation}\label{eq:wtLin_taylor}
+	T_{gen}(P, \omega) \approx T_{gen}(P_o, \omega_o) + 
+	\left. \dfrac{\partial T_{gen}(P, \omega)}{\partial P} \right |_{P_o,\omega_o} (P-P_o) + 
+	\left. \dfrac{\partial T_{gen}(P, \omega)}{\partial \omega} \right |_{P_o,\omega_o} (\omega - \omega_o)
+\end{equation}
+To start the the generator torque sensitivity to the grid power change term is derived:
+\begin{align}\label{eq:wtLin_gen_1}
+	\dfrac{\partial T_{gen}(P, \omega)}{\partial P} &= \dfrac{\partial \left (\dfrac{P_{loss} + P}{\omega}\right )}{\partial P} \\
+	& = \dfrac{\partial \left ( \dfrac{P_{loss}}{\omega} + \dfrac{P}{\omega} \right )}{\partial P} \\
+	& \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial P} + \dfrac{\partial \left ( \dfrac{P}{\omega} \right )}{\partial P} \\
+	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{\partial \left ( \dfrac{1}{\omega} \right )}{\partial P} P_{loss}
+\end{align}
+
 
 
 \subsubsection{Unity model converter}
