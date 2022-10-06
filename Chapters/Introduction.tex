@@ -1,15 +1,17 @@
 \section{Introduction} \label{sec:intro}
 In this chapter a general introduction of the the xxxxx
 
-\subsection{State of affairs and motivation}
+\subsection{State of affairs and motivation} \label{sec:intro_stateofaffairs}
 The global average temperature of the earth is rising mainly attributed to the greenhouse effect caused primarily by carbon dioxide (CO2) emissions. The consequences of these temperature changes are aplenty and the more obvious signs of change are already starting to show. Record high temperatures, droughts, storms, floods and other extreme weather conditions and events are becoming more and more frequent. The main contributor of human CO2 emissions is the energy section which represents 76\% of emissions with 42\% resulting from electric energy production \cite{wri2018}. The energy demand on a global scale is still steadily increasing. Due to COVID-19 an unprecedented drop in energy use and CO2 emissions were observed in 2020. But primary energy demand increased again in 2021 by 5.8 \% which was 1.3 \% higher than in 2019 \cite{bp2022}. Fossil fuel still makes up 82 \% of the primary energy use in 2021 \cite{bp2022}. A transition from fossil energies to renewable energy sources is one of the most efficient remedies to lower CO2 emissions and solar and wind energy are widely accepted as some of the best green energy alternatives. Wind and solar reached a 10.2\% share of power generation in 2021 \cite{bp2022}. As of 2021 236 GW of wind power capacity is installed in Europe with 12\% being offshore. 17 GW was installed in 2021 alone with a 19 \% share being offshore wind\cite{Sesto1992}. \\
 
 Despite the higher levelized cost of energy (LCOE) og offshore wind turbines (WTs) compared to the onshore counterpart the trend towards offshore wind is increasing. There are sensible reasons for this. Offshore wind is on average 20\% faster than onshore. Turbulence is also less due to the lack of obstacles at sea which could potentially extend the expected WT lifetime \cite{Christiansen2013}. Furthermore wind farms at sea do not have the same clearance issues with regards to minimum distance from urban areas and houses. As a result visual and noise annoyances are also decreased. Issues with regards to offshore WTs is the shallow water debt requirement of most types of foundations. Above 50 meters water debt fixed-bottom offshore WTs start to become economically infeasible \cite{Lefebvre2012}. Shallow water debt sites will also eventually exhaust and it will become a necessity to install WTs at deeper waters. This is where the floating offshore wind turbine (FOWT) comes into play. Floating turbines have mainly been a research subject in the prototype stage since the first Blue H Technologies FOWT was started up in 2007. It was placed 21.3 km from the coast of Apulia, Italy and was a prototype installed in 113 meters waters to gather test data on wind and sea conditions. It was decommissioned at the end of 2008. Despite not having reached full commercial feasibility yet, the FOWT park scale is increasing. Kincardine, the largest floating WT project, was commissioned in 2021 off the coast of Scotland in 60-80 meter waters. The project features 5 Vestas V164-9.5 MW and one V80-2 MW turbine with a combined nominal output of 48 megawatts (MW). 
 
-\subsection{Wind turbine components}
+\subsection{Wind turbine components} \label{sec:intro_wtcomponents}
 In \cref{fig:wt_components} a digram of the main components of a WT is seen. Since this report is focused on rotor speed control the most relevant components are the: Blades and rotor, pitch system and generator. Almost all other components also play a role and most will more or less be mentioned throughout the report. Both onshore and fixed-bottom offshore turbines are connected to a firm foundation. Therefore the primary external loads are the wind and gravity. 
 
-When the wind, which is also pictured on the diagram, strikes the rotor blades a torque is generated which drives the turbine rotor around. The rotor spins the low-speed shaft which in turn spins the generator through the high-speed shaft. Depending on whether the turbine is operating below or above rated wind speed it will regulate the rotor rotational velocity with either the generator torque or the blade pitch angle. Control at below rated wind speed called partial load control (PLC) is done through regulating the generator torque. The blade pitch is sat at an optimal angle. Control at above rated wind speed called full load control (FLC) is done by regulating the blade pitch angle.
+When the wind, which is also pictured on the diagram, strikes the rotor blades a torque is generated which drives the turbine rotor around. The rotor spins the low-speed shaft which in turn spins the generator through the high-speed shaft. Depending on whether the turbine is operating below or above rated wind speed it will regulate the rotor rotational velocity with either the generator torque or the blade pitch angle. Control at below rated wind speed called partial load control (PLC) is done through regulating the generator torque with the blade pitch sat at an optimal angle. The generator torque is controlled through the \textit{converter}. Most modern wind turbines are full-scale converter based which means that all the output power of the generator is fed through a converter which is connected to the grid. This gives ultimate control of the power output of the turbine while allowing for control of the generator power. 
+
+Control at above rated wind speed called full load control (FLC) is done by regulating the blade pitch angle.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/WtComponents.png}
@@ -17,7 +19,7 @@ When the wind, which is also pictured on the diagram, strikes the rotor blades a
 	\label{fig:wt_components}
 \end{figure}
 
-\subsection{The floating offshore wind turbine}
+\subsection{The floating offshore wind turbine} \label{sec:intro_theFOWT}
 Floating turbines are characterized by having a floating foundation in contrast to the fixed-bottom foundation. Many foundation concepts exist and new ones are continuously proposed but four types are mainly used currently and are depicted in \cref{fig:floating_concepts}. Each floater type is categorized based on which force is the main driver in keeping the turbine upright in the face of external forces.
 \begin{figure}[h]
 	\centering
@@ -45,7 +47,7 @@ Because of the increased movement, the tower is reinforced to handle the greater
 
 
 
-\subsection{Problem definition}
+\subsection{Problem definition} \label{sec:intro_problemdef}
 Can a state-space controller, applied to a linear control model be used to reduce the fore-aft motion of a floating offshore wind turbine? (Subject to change!)
 
 

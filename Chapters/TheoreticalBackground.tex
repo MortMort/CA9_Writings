@@ -1,7 +1,7 @@
 \section{Theoretical Background} \label{sec:theory}
 The purpose of this chapter is to go through the preliminary wind turbine (WT) theory. (Subject to change!)
 
-\subsection{Aerodynamics and airfoil theory}
+\subsection{Aerodynamics and airfoil theory} \label{sec:theory_aero}
 The sun delivers energy to the earth by heating up the surface and subsequently the air of the earth. Winds occur as a result of the pressure differences that occur due to the expansion and contraction of the air. 
 
 WTs work because they are able to convert the wind's energy into a torque in the generator which then generates electrical energy. When the wind blows over the blades of a WT it delivers some of its energy to the blade, yielding both a thrust force and torque to the blade.
@@ -13,11 +13,11 @@ In the simplest 1D momentum theory case the delivery of energy just results in a
 	\caption{Illustration of how the wind in a control volume (CV) changes volume due to its reduction of speed}
 	\label{fig:betz}
 \end{figure}
-The power of the wind can be expressed from the wind mass flow $ \dot{m} $ through a control volume:
+The power of the \textit{free} wind $ v_0 $ can be expressed from the wind mass flow $ \dot{m} $ through a control volume:
 \begin{equation} \label{eq:power}
 	P = \dfrac{1}{2} \dot{m} v_0^2
 \end{equation}
-The flow of mass can be expressed from the air density $ \rho $, the cross sectional area $ A_d $ and the wind speed $ v_0 $ as such:
+The flow of mass can be expressed from the air density $ \rho $, the cross sectional area $ A_d $ of the CV  at the rotor and the free wind speed $ v_0 $ as such:
 \begin{equation}\label{eq:mass_deriv}
 	\dot{m} = \rho A_d v_0
 \end{equation}
@@ -29,10 +29,15 @@ A \textit{power coefficient} $ C_p $ represents the percentage of the available 
 \begin{equation}\label{eq:power_w_Cp}
 	P_{T} = \dfrac{1}{2} \rho A_d v_0^3 C_p
 \end{equation}
-$ C_p $ is dependent on the rotor blade pitch $ \theta $ and the tip speed ratio $ \lambda $. In the partial load region the goal is to reach a maximum $ C_p $ by adjusting $ \theta $ and  $ \lambda $ to their optimal values:
+$ C_p $ is dependent on the rotor blade pitch $ \theta $ and the tip speed ratio (TSR) $ \lambda $. In the partial load region the goal is to reach a maximum $ C_p $ by adjusting $ \theta $ and  $ \lambda $ to their optimal values:
 \begin{equation}\label{eq:cp_optimal}
 	C_p^\star = C_p(\theta^\star, \lambda^\star)
 \end{equation}
+The TSR is the ratio between the speed of the tip of the WT blade $ (\Omega R) $ where $ R $ is the distance from the center of the rotor and the blade tip and the incoming free wind $v_0$:
+\begin{equation}\label{eq:tipspeedratio}
+	\lambda = \dfrac{\Omega R}{v_0}
+\end{equation}
+
 The achievable size of $ C_p^\star $ is a matter of the WT design. The \textit{Betz limit} is the highest, optimal $ C_p $ that can be theoretically achieved and can be calculated to be:
 \begin{equation}\label{eq:betzlimit}
 	C_{pbetz} = 0.5962
@@ -76,4 +81,4 @@ In a typical scenario $ C_L $ and $ C_D $ are found from the angle of attack $ \
 \end{align}
 
 
-\subsection{Wind turbine controller}
+\subsection{Wind turbine controller} \label{sec:theory_ctrl}

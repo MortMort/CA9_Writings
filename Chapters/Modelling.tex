@@ -1,15 +1,18 @@
 \section{Modelling} \label{sec:mod} % Incl. Subsection "Component Models"
 
 \subsection{wtLin model}
-A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating linear model based on parameters extracted from Vestas Turbine Simulator (VTS). The tool specific turbine model files and an operating point to create individual components which can be connected in loops. Each component translates one or more inputs to one or more outputs. In this section the relevant component models contained in wtLin will be outlined.\\
+A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating a linear model based on parameters extracted from Vestas Turbine Simulator (VTS). The tool contains component models which can be connected in loops based on the input-output variables of each component model. A component can be in the form of both specific mechanical models such as a generator and other phenomena which are relevant for the system such as the interaction between the tower movement and the free wind.
+
+The tool takes in an operating point and a specific set of components and outputs a connected linear model at that operating point.
+
+In this section the relevant component models are derived.
 
 \subsubsection{Drivetrain (stiff)}
+As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox.
+
 In the simple stiff drivetrain model it is assumed that there is no dampening or spring effects in the drivetrain between the rotor and the generator. As such if some torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the generator.
 
 The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law???? as such:
-\begin{equation}\label{eq:wtlin_comp_drivetrain}
-	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
-\end{equation}
 \begin{equation}\label{eq:wtlin_comp_drivetrain}
 	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
 \end{equation}
@@ -33,25 +36,25 @@ A more accurate drivetrain model includes dampening and spring effects in the dr
 \subsubsection{Generator model}
 When considering the generator of a WT the obvious point of view (POV) is to consider it as outputting power when it is rotated. As such from this POV the input would be torque and rotational velocity and the output power would be the input to the converter. But with regards to rotor speed control the generator is on the contrary viewed as a source of torque. As such the inputs end up being rotational velocity and electrical power from the converter.
 
-In Vestas' turbine simulator (VTS) the generator efficiencies are defined in tables and are dependent on grid output power $ P_{grid} $ and generator speed $ \omega $. The output is three respective output efficiencies: 
+In Vestas' turbine simulator (VTS) the generator efficiencies are defined in tables and are dependent on grid output power $ P $ and generator speed $ \omega $. The output is three respective output efficiencies: 
 \begin{enumerate}
-	\item Mechanic efficiency: $ \eta_m(P_{grid},\omega) $
-	\item Electric efficiency: $ \eta_e(P_{grid},\omega) $
-	\item Auxiliary efficiency: $ \eta_a(P_{grid},\omega) $
+	\item Mechanic efficiency: $ \eta_m(P,\omega) $
+	\item Electric efficiency: $ \eta_e(P,\omega) $
+	\item Auxiliary efficiency: $ \eta_a(P,\omega) $
 \end{enumerate}
 Where 
 \begin{equation}\label{eq:wtLin_gen_effi}
-	\eta(P_{grid},\omega) = \eta_m(P_{grid},\omega) + \eta_e(P_{grid},\omega) + \eta_a(P_{grid},\omega)
+	\eta(P,\omega) = \eta_m(P,\omega) + \eta_e(P,\omega) + \eta_a(P,\omega)
 \end{equation}
 From the total efficiency the output grid power is:
 \begin{equation}\label{eq:wtLin_gen_elec_pow}
-	P_{gen} \eta(P_{grid},\omega) = P_{grid}
+	P_{gen} \eta(P,\omega) = P
 \end{equation}
 where $ P_{gen} $ is the electrical power output of the generator.
 
 This leaves the power loss from generator to grid to be defined as:
 \begin{equation} \label{eq_wtLin_gen_pow_loss}
-	P_{loss}(P_{grid}, \omega) = P_{gen} - P_{grid}% = \dfrac{P_{grid}}{\eta(P_{grid}, \omega)} - P_{grid}
+	P_{loss}(P, \omega) = P_{gen} - P% = \dfrac{P}{\eta(P, \omega)} - P
 \end{equation}
 The power of a rotating machine can be defined as the product of torque and rotational velocity:
 \begin{equation}\label{eq:wtLin_power_in_rot}
@@ -59,31 +62,38 @@ The power of a rotating machine can be defined as the product of torque and rota
 \end{equation}
 As such for the system at hand the torque can be defined by rearranging \cref{eq:wtLin_power_in_rot} and substituting in $ P_{gen} $ from \cref{eq_wtLin_gen_pow_loss}:
 \begin{equation}\label{key}
-	T_{gen}(P_{grid}, \omega) = \dfrac{P_{loss}(P_{grid}, \omega) + P_{grid}}{\omega}
+	T_{gen}(P, \omega) = \dfrac{P_{loss}(P, \omega) + P}{\omega}
 \end{equation}
-The linear model of the generator is gained through a taylor expansion. The notation is relaxed a bit such that $ P_{loss}( P_{grid}, \omega) $ is simply expressed as $ P_{loss} $.
+The linear model of the generator is gained through a taylor expansion. The notation is relaxed a bit such that $ P_{loss}( P, \omega) $ is simply expressed as $ P_{loss} $. It is assumed that the system is linearised around an operating point and thus the $ T_{gen}(P_o, \omega_o) $ part is equal to zero.
 \begin{equation}\label{eq:wtLin_taylor}
-	T_{gen}( P_{grid}, \omega) \approx T_{gen}(P_o, \omega_o) + 
-	\left. \dfrac{\partial T_{gen}( P_{grid}, \omega)}{\partial P_{grid}} \right |_{P_o,\omega_o} ( P_{grid}-P_o) + 
-	\left. \dfrac{\partial T_{gen}( P_{grid}, \omega)}{\partial \omega} \right |_{P_o,\omega_o} (\omega - \omega_o)
+	T_{gen}( P, \omega) \approx T_{gen}(P_o, \omega_o) + 
+	\left. \dfrac{\partial T_{gen}( P, \omega)}{\partial P} \right |_{P_o,\omega_o} ( P-P_o) + 
+	\left. \dfrac{\partial T_{gen}( P, \omega)}{\partial \omega} \right |_{P_o,\omega_o} (\omega - \omega_o)
 \end{equation}
-Below the the generator torque sensitivity to the grid power change term is derived. From \cref{eq:wtLin_gen_1_1} to \cref{eq:wtLin_gen_1_2} the \textit{sum rule} is used to split the derivative. From \cref{eq:wtLin_gen_1_2} to \cref{eq:wtLin_gen_1_3} the first fractions in the denominators of the partial derivatives of the two terms are treated as a product of two functions thus the \textit{product rule} is used. The assumption is that the grid power is completely disconnected from the generator through the converter. Thus from \cref{eq:wtLin_gen_1_3} to \cref{eq:wtLin_gen_1_4} $ \, \dfrac{\partial \, \omega^{-1}}{\partial P_{grid}} = 0 $.
+Below the the generator torque sensitivity to the grid power change term from \cref{eq:wtLin_taylor} is derived. From \cref{eq:wtLin_gen_1_1} to \cref{eq:wtLin_gen_1_2} the \textit{sum rule} is used to split the derivative. From \cref{eq:wtLin_gen_1_2} to \cref{eq:wtLin_gen_1_3} the first fractions in the denominators of the partial derivatives of the two terms are treated as a product of two functions thus the \textit{product rule} is used. The assumption is that the grid power is completely disconnected from the generator through the converter. Thus from \cref{eq:wtLin_gen_1_3} to \cref{eq:wtLin_gen_1_4} $ \, \dfrac{\partial \, \omega^{-1}}{\partial P} = 0 $.
 \begin{align} 
-	\dfrac{\partial T_{gen}( P_{grid}, \omega)}{\partial P_{grid}} &= \dfrac{\partial \left (\dfrac{P_{loss} +  P_{grid}}{\omega}\right )}{\partial P_{grid}} \label{eq:wtLin_gen_1_1} \\
-	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial P_{grid}} + \dfrac{\partial \left ( \dfrac{ P_{grid}}{\omega} \right )}{\partial P_{grid}} \label{eq:wtLin_gen_1_2} \\
-	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P_{grid}} + \dfrac{\partial \left ( \dfrac{1}{\omega} \right )}{\partial P_{grid}} P_{loss} + \dfrac{1}{\omega} \cdot \dfrac{\partial P_{grid}}{\partial P_{grid}} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial P_{grid}}  P_{grid} \label{eq:wtLin_gen_1_3} \\
-	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P_{grid}} + \dfrac{1}{\omega} \label{eq:wtLin_gen_1_4}
+	\dfrac{\partial T_{gen}( P, \omega)}{\partial P} &= \dfrac{\partial \left (\dfrac{P_{loss} +  P}{\omega}\right )}{\partial P} \label{eq:wtLin_gen_1_1} \\
+	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial P} + \dfrac{\partial \left ( \dfrac{ P}{\omega} \right )}{\partial P} \label{eq:wtLin_gen_1_2} \\
+	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{\partial \left ( \dfrac{1}{\omega} \right )}{\partial P} P_{loss} + \dfrac{1}{\omega} \cdot \dfrac{\partial P}{\partial P} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial P}  P \label{eq:wtLin_gen_1_3} \\
+	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{1}{\omega} \label{eq:wtLin_gen_1_4}
 \end{align}
 
-The generator torque sensitivity to rotational velocity change is derived:
+
+The generator torque sensitivity to rotational velocity change from \cref{eq:wtLin_taylor} is then derived:
 \begin{align}
-	\dfrac{\partial T_{gen}(P_{grid}, \omega)}{\partial \omega} & = \dfrac{\partial \left (\dfrac{P_{loss} +  P_{grid}}{\omega}\right )}{\partial \omega} \\
+	\dfrac{\partial T_{gen}(P, \omega)}{\partial \omega} & = \dfrac{\partial \left (\dfrac{P_{loss} +  P}{\omega}\right )}{\partial \omega} \\
 	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial \omega} + \dfrac{\partial \left (\dfrac{P}{\omega} \right )}{\partial \omega} \\
 	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega} + \dfrac{\partial \left (\dfrac{1}{\omega} \right)}{\partial \omega} P_{loss} + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial \omega} P \\
 	& = \dfrac{1}{\omega} \cdot  \dfrac{\partial P_{loss}}{\partial \omega} - \dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} \\
 	& = -\dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega}
 \end{align}
+The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\dfrac{N_r}{N_g} \right ) \omega $. This yields the final linear generator model evaluated at the operating point $ (P_o, \omega_o) $:
 
+\begin{equation}
+	T_{gen}( P, \omega_L) \approx \left. \left ( \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{1}{\omega_L} \right ) \right |_{P_o,\omega_{L_o}} + \left ( -\dfrac{1}{\omega_L^2}(P + P_{loss}) + \left. \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}}{\partial \omega_L} \right ) \right |_{P_o,\omega_{L_o}} (\omega_L - \omega_{L_o})
+\end{equation}
+
+Presently the generator model in wtLin is implemented assuming a stiff drivetrain such that $ \Omega = \omega_L $ and as such the input to the generator model is $ \Omega $ \todo[]{Er det muligt at ændre modellen så at den tager højde for et flexibelt drivetrain? Giver det overhovedet mening?}
 
 \subsubsection{Unity model converter}
 The converter is regarded as a source of electrical whose output is the power which is input to the generator.
@@ -94,7 +104,25 @@ The dynamics of modern converters are way faster than the rotor and tower dynami
 \end{equation}
 In other words the converter is treated as a \textit{black box} system which, when given a power reference, delivers a power equal to said power reference instantly.
 
+\subsubsection{Aerodynamic torque}
+In \cref{eq:power_w_Cp} the extractable power from the free wind was defined. When combining this equation with the definition of power in a mechanical system the torque on the rotor can be expressed:
+\begin{equation}\label{eq:wtLin_Mrot_lambda}
+	M_{rot}(\Omega, \lambda) = \dfrac{1}{2} \rho A_d v_0^3 \, C_p(\theta, \lambda) \dfrac{1}{\Omega}
+\end{equation}
 
+The TSR is dependent on $ \Omega $ and $ v_0 $ and thus the rotor torque ends up being dependent on $ \theta $, $ \Omega $ and $ v_0 $:
+\begin{equation}\label{eq:wtLin_Mrot_wind}
+	M_{rot}(\theta, \Omega, v_0) = \dfrac{1}{2} \rho A_d v_0^3 \, C_p(\theta, \Omega, v_0) \dfrac{1}{\Omega}
+\end{equation}
+
+The model is then linearised at an operating point $ (\theta_o, \Omega_o, v_{0_o}) $:
+
+\begin{align}
+	M_{rot}(\theta, \Omega, v_0) \approx M_{rot}(\theta_o, \Omega_o, v_{0_o}) 
+	& + \left. \dfrac{\partial M_{rot}(\theta, \Omega, v_0)}{\partial \theta} \right |_{\theta_o, \Omega_o, v_{0_o}} ( \theta-\theta_o) \\
+	& + \left. \dfrac{\partial M_{rot}(\theta, \Omega, v_0)}{\partial \Omega} \right |_{\theta_o, \Omega_o, v_{0_o}} ( \Omega-\Omega_o) \\
+	& + \left. \dfrac{\partial M_{rot}(\theta, \Omega, v_0)}{\partial v_0} \right |_{\theta_o, \Omega_o, v_{0_o}} ( v_0 - v_{0_o})
+\end{align}
 
 % Template:
 %\begin{equation}\label{eq:wtlin_comp_}
