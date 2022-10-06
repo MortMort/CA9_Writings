@@ -3,16 +3,16 @@
 \textbf{Executed by: Martin Therkildsen} \\
 \textbf{Date: 05/10/2022}
 
-\subsubsection{Objective}
-This test aims to document the behaviour of the floating Vestas Turbine Simulator (VTS) model in the first semi-successful preliminary frequency sweep test. It is desired to get an understanding of how the floating turbine is operating when the different rotor frequencies are induced and how these frequencies translate into the structure of the turbine.
+\subsubsection*{Objective}
+This test aims to document the behaviour of the floating Vestas Turbine Simulator (VTS) model in the first semi-successful preliminary frequency sweep test. It is desired to get an understanding of how the floating turbine is operating when the different rotor frequencies are induced and how these frequencies translate into the structure of the turbine. 
 
-\subsubsection{Background}
+\subsubsection*{Background}
 A Vestas matlab tool called SysIdFrqSweep is able to generate Design Load Cases (DLCs) which make a variable such as the rotor speed include a constant frequency as to analyse how such a frequency translates to the rest of the system mainly of interest the y-direction foundation translation and tower pitch angle. Essentially it should be possible to make a bode plot when enough simulations are run at enough frequencies. This could be used to tune the linear model to match the VTS model as closely as possible. As such bode plots would also be made for the linear model and compared.
 
-\subsubsection{Test subject}
+\subsubsection*{Test subject}
 The test subject is a specific floating turbine setup which is simulated with VTS. The turbine is a V164 8MW on a floating semi-submersible platform.
 
-\subsubsection{Equipment/Software used and test setup}
+\subsubsection*{Equipment/Software used and test setup}
 The software used for this test is:
 \begin{itemize}
 	\item \textbf{fat1}: Vestas' simulation prepping software
@@ -23,7 +23,7 @@ The software used for this test is:
 \end{itemize}
 
 
-\subsubsection{Test procedure}
+\subsubsection*{Test procedure}
 SysIdFrqSweep is used to generate in this test to generatoe 10 different frequencies which are to be applied to the rotor speed. These frequencies are merely put on top of the rotational velocity of the turbine rotor. The rotor will still act according to the simulated physical environment. As such when the tower pitches and moves around the rotor speed will still change accordingly.
 
 The generated rotor frequencies which are generated  are: $0.01, 0.02 ... 0.1$.
@@ -37,7 +37,7 @@ Errors occurred on frequencies 0.01 and 0.03 and as such these could not be plot
 In Matlab a script made by me extracts the data from the .int files by using a LaC matlab tool. A subset of data is made by fourier transforming all the data such that ffts can also be plotted. The data is then plotted in figures as results.
 
 
-\subsubsection{Results and Comments}
+\subsubsection*{Results and Comments}
 Since there are 8 different frequencies the data is plotted in sets of four frequencies. Not all all plots of all frequencies are included. 
 
 The first two plots are plots of the free wind speed, blade pitch angle 1, rotor angular velocity and generator torques for the two sets of four frequencies respectively. Frequencies 0.02 to 0.06 are seen in \cref{fig:tjj0_f02to06VfreeToMgen} and frequencies 0.07 to 0.1 are seen in \cref{fig:tjj0_f07to1VfreeToMgen}. The time is restricted to a 100 second window. It is seen that the wind speed is set unrealistically at a constant wind speed such that this disturbance would not interfere with the observations of the system frequencies. Only one blade pitch is plotted since it is deemed redundant to plot all pitch angles as they will all have the same angle at only slightly different amplitudes and slightly different phases. When observing the angular velocities it becomes evident that it is not a trivial task to read out the frequencies added on top of the rotor angular velocity in the timeseries. When observing the rotor angular velocity fft plots in \cref{fig:tjj0_f02to06OmegaFFT} and \cref{fig:tjj0_f07to1_OmegaFFT} the frequencies are apparent as pins at each of the respective frequencies. The frequency content observed at around 0.034 Hz is the natural frequency of the tower-foundation structure in the water.
@@ -107,4 +107,4 @@ It is widely evident that the turbine is pitching and translating in the water, 
 %\end{figure}
 
 
-\subsubsection{Sources of error and insecurities}
+\subsubsection*{Sources of error and insecurities}
