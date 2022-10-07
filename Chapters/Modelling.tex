@@ -155,10 +155,29 @@ There is an interaction between the tower fore-aft movement and the wind speed w
 $ v_{0_{rot}} $ is \underline{not} the rotor wind which is the wind speed at the rotor plane but the free wind modified by the turbine velocity.
 
 
-\subsubsection{Fore-aft tower motion}
-While most literature makes use of the DOF notation seen in \cref{fig:fowt_coordinates}, vestas uses another notation. Most importantly \textbf{x} and \textbf{y} are interchanged and in
+\subsubsection{Fore-aft tower model}
+The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation seen is as seen in \cref{fig:fowt_coordinates}. This notation will hereinafter be denoted the \textit{"normal DOF notation"}. Vestas uses another notation which will be denoted the \textit{Vestas DOF notation}: Most importantly \textbf{x} and \textbf{y} are interchanged and surge in the normal DOF notation is called \textit{tilt} in Vestas DOF notation. This document for the most part adopts the normal DOF notation and one is thus directed to \cref{fig:fowt_coordinates} if in doubt about which movement is the subject of discussion.
 
-The fore-aft tower motion is both the x-axis translation (surge) 
+The fore-aft tower motion is both the surge direction translation and the pitch angle rotation. The fore-aft movement is modelled by a mass-spring-damper system:
+\begin{equation}\label{eq:wtlin_comp_fore-aft_ay1}
+	\ddot{p}_y M = F_{rot} - F_d + F_s
+\end{equation}
+when isolating $ \ddot{p}_y $ this becomes:
+\begin{equation}\label{eq:wtlin_comp_fore-aft_ay2}
+	\ddot{p}_y = \dfrac{F_{rot} - B \dot{p}_y + K p_y}{M}
+\end{equation}
+We then define:
+\begin{align}
+	\dot{v}_y & = \ddot{p}_y \label{eq:wtlin_comp_fore-aft_ay} \\
+	\dot{p}_y & = v_y \label{eq:wtlin_comp_fore-aft_vy}
+\end{align}
+which yields us the total system:
+\begin{align}
+	\dot{v}_y & = \dfrac{F_{rot} - B \dot{p}_y + K p_y}{M} \label{eq:wtlin_comp_fore-aft_1} \\
+	\dot{p}_y & = v_y \label{eq:wtlin_comp_fore-aft_2}
+\end{align}
+which is a two state system.
+
 
 % Template:
 %\begin{equation}\label{eq:wtlin_comp_}
@@ -173,9 +192,9 @@ Converter with time constant (maybe used?): $ P_{conv} $
 
 Flexible drivetrain: $ \Omega $ and $ \omega_L $
 
-Fore-aft tower model: $ \ddot{p}_y $ and $ \dot{p}_y $
+Fore-aft tower model: $ \dot{p}_y $ and $ p_y $
 
-Side-side tower model (maybe used?): $ \ddot{p}_x $ and $ \dot{p}_x $
+Side-side tower model (maybe used?): $ \dot{p}_x $ and $ p_x $
 
 Pitch model with dynamics (maybe used?): $ \theta $
 
@@ -185,8 +204,16 @@ PLC: $ P_{ref} $
 
 State vector: 
 \begin{equation}\label{key}
-	x = [\Omega, \omega_L, \ddot{p}_y, \dot{p}_y, \ddot{p}_x, \dot{p}_x, \theta, \theta_{ref}, P_{ref}]^T
+	x = [\Omega, \omega_L, \dot{p}_y, p_y, \dot{p}_x, p_x, \theta, \theta_{ref}, P_{ref}]^T
 \end{equation}
+
+wtLin matlab state vector:
+\begin{equation}\label{key}
+	x = [(), (), \theta, p_y, \dot{p}_y, \Omega, p_x, \dot{p}_x]^T
+\end{equation}
+
+At dømme ud fra ovenstående state vektor som næsten passer i længden med state vektoren i wtLin så vil jeg sige at de states som mangler navn i wtLin må være $ \omega $ og enten $ P_{ref} $ eller $ \theta_{ref} $.
+
 \textbf{Inputs:}
 
 
