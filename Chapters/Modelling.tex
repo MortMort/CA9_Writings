@@ -1,18 +1,21 @@
 \section{Modelling} \label{sec:mod} % Incl. Subsection "Component Models"
+The purpose of this section is to outline the model of the system. The model is intended to be used as a control model for minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are exceedingly slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. In stead such components are modelled with algebraic equations. 
+
+Modelling is approached from a component point of view where parts of the system are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the component contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) through wtLin.
+
 
 \subsection{wtLin model}
-A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating a linear model based on parameters extracted from Vestas Turbine Simulator (VTS). The tool contains component models which can be connected in loops based on the input-output variables of each component model. A component can be in the form of both specific mechanical models such as a generator and other phenomena which are relevant for the system such as the interaction between the tower movement and the free wind.
+A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating a linear model based on parameters extracted from VTS. The tool contains component models which can be connected in loops based on the input-output variables of each component model. A component can be in the form of both specific mechanical models such as a generator and other phenomena which are relevant for the system such as the interaction between the tower movement and the free wind.
 
 The tool takes in an operating point and a specific set of components and outputs a connected linear model at that operating point.
 
 In this section the relevant component models are derived.
 
+
 \subsubsection{Drivetrain (stiff)}
-As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox.
+As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In the simple stiff drivetrain model it is assumed that there is no dampening or spring effects in the drivetrain between the rotor and the generator. As such if some torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the generator.
 
-In the simple stiff drivetrain model it is assumed that there is no dampening or spring effects in the drivetrain between the rotor and the generator. As such if some torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the generator.
-
-The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law???? as such:
+The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law for rotation as such:
 \begin{equation}\label{eq:wtlin_comp_drivetrain}
 	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
 \end{equation}
@@ -90,19 +93,22 @@ The generator torque sensitivity to rotational velocity change from \cref{eq:wtL
 The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\dfrac{N_r}{N_g} \right ) \omega $. This yields the final linear generator model evaluated at the operating point $ (P_o, \omega_o) $:
 
 \begin{equation}
-	T_{gen}( P, \omega_L) \approx \left. \left ( \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{1}{\omega_L} \right ) \right |_{P_o,\omega_{L_o}} + \left ( -\dfrac{1}{\omega_L^2}(P + P_{loss}) + \left. \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}}{\partial \omega_L} \right ) \right |_{P_o,\omega_{L_o}} (\omega_L - \omega_{L_o})
+	T_{gen}( P, \omega_L) \approx \left. \left ( \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{1}{\omega_L} \right ) \right |_{P_o,\omega_{L_o}} (P - P_0)+ 
+	\left ( -\dfrac{1}{\omega_L^2}(P + P_{loss}) + \left. \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}}{\partial \omega_L} \right ) \right |_{P_o,\omega_{L_o}} (\omega_L - \omega_{L_o})
 \end{equation}
 
-Presently the generator model in wtLin is implemented assuming a stiff drivetrain such that $ \Omega = \omega_L $ and as such the input to the generator model is $ \Omega $ \todo[]{Er det muligt at ændre modellen så at den tager højde for et flexibelt drivetrain? Giver det overhovedet mening?}
+Presently the generator model in wtLin is implemented assuming a stiff drivetrain such that $ \Omega = \omega_L $ and as such the input to the generator model is $ \Omega $. Furthermore $P_{loss}$ is still just a function of $ \omega_L $ and $ P $. \todo[]{Er det muligt at ændre modellen så at den tager højde for et flexibelt drivetrain? Giver det overhovedet mening?}
+
 
 \subsubsection{Unity model converter} \label{sec:wtLin_conv_unity}
-The converter is regarded as a source of electrical whose output is the power which is input to the generator.
+The converter is regarded as a source of electrical power whose output is the power which is input to the generator.
 
-The dynamics of modern converters are way faster than the rotor and tower dynamics and therefore it is simply modelled as a direct feed-through:
+The dynamics of modern converters are way faster than the rotor and tower dynamics and therefore it is simply modelled as an algebraic equation as a direct feed-through:
 \begin{equation}\label{eq:wtLin_comp_convdft}
 	P_{conv} = P_{ref}
 \end{equation}
 In other words the converter is treated as a \textit{black box} system which, when given a power reference, delivers a power equal to said power reference instantly.
+
 
 \subsubsection{Aerodynamic torque} \label{sec:wtLin_aero_torque}
 In \cref{sec:theory_aero} the rotor torque was defined for a blade by integrating over the torque component of each blade element based on a combination of the lift and drag forces. When calculating the total stationary torque it is convenient to use the pre-calculated power coefficient values $ C_P $ to determine the torque \cite{Knudsen2013}.
@@ -133,8 +139,21 @@ In \cref{sec:wtLin_aero_torque} the stationary rotor torque was calculated based
 \begin{equation} \label{eq:wtLin_aero_thrust}
 	F_T = \dfrac{1}{2} A \rho A_d v_0^2 C_T(\theta, \Omega, v_0)
 \end{equation}
-Just like $ C_P $ table lookups of $ C_T $ are extracted from VTS. $ C_T $ like $ C_P $ is a mapping from the pitch angle, rotor velocity and free wind speed to a total stationary rotor thrust.
+Just like for $ C_P $, table lookups of $ C_T $ are extracted from VTS. $ C_T $ like $ C_P $ is a mapping from the pitch angle, rotor velocity and free wind speed to a total stationary rotor thrust.
 
+
+\subsubsection{Rotor wind}
+There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's POV. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity $ v_y $.
+\begin{equation}\label{eq:wtlin_comp_rotorwind}
+	v_{0_{rot}} = v_{0} - v_y
+\end{equation}
+$ v_{0_{rot}} $ is \underline{not} the rotor wind which is the wind speed at the rotor plane but the free wind modified by the turbine velocity.
+
+
+\subsubsection{Fore-aft tower motion}
+While most literature makes use of the DOF notation seen in \cref{fig:fowt_coordinates}, vestas uses another notation. Most importantly \textbf{x} and \textbf{y} are interchanged and in
+
+The fore-aft tower motion is both the x-axis translation (surge) 
 
 % Template:
 %\begin{equation}\label{eq:wtlin_comp_}
