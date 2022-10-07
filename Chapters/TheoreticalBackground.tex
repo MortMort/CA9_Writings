@@ -75,10 +75,11 @@ The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from ta
 \todo{Hvad bruger Vestas til at finde $ C_L $ og $ C_D $?}. 
 In a typical scenario $ C_L $ and $ C_D $ are found from the angle of attack $ \alpha $. The thrust and torque vectors $ F_T $ and $ F_Q $ are then calculated from the Pythagorean theorem as in \cref{eq:thrust} and \cref{eq:torque}
 %\lipsum[11]\unsure{Is this correct?}\unsure{I'm unsure about also!}
-\begin{align}
+\begin{align}\
 	F_T &= L \, cos(\phi) + D \, sin(\phi) \label{eq:thrust} \\
 	F_Q &= L \, sin(\phi) - D \, cos(\phi) \label{eq:torque}
 \end{align}
+The total thrust and torque of a blade can then be calculated by integrating the above over the length of the rotor blade.
 
 
 \subsection{Wind turbine controller} \label{sec:theory_ctrl}
