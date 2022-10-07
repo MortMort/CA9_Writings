@@ -90,14 +90,16 @@ The generator torque sensitivity to rotational velocity change from \cref{eq:wtL
 	& = \dfrac{1}{\omega} \cdot  \dfrac{\partial P_{loss}}{\partial \omega} - \dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} \\
 	& = -\dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega}
 \end{align}
-The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\dfrac{N_r}{N_g} \right ) \omega $. This yields the final linear generator model evaluated at the operating point $ (P_o, \omega_o) $:
-
+The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\dfrac{N_r}{N_g} \right ) \omega $. This yields the final linear generator model evaluated at the operating point $ (P_o, \omega_o) $. Furthermore $P_{loss}$ is still just a function of $ \omega_L $ and $ P $:
 \begin{equation}
-	T_{gen}( P, \omega_L) \approx \left. \left ( \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{1}{\omega_L} \right ) \right |_{P_o,\omega_{L_o}} (P - P_0)+ 
-	\left ( -\dfrac{1}{\omega_L^2}(P + P_{loss}) + \left. \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}}{\partial \omega_L} \right ) \right |_{P_o,\omega_{L_o}} (\omega_L - \omega_{L_o})
+	\begin{split}
+		T_{gen}(P, \omega_L) 	& \approx \left. \left ( \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}(P, \omega)}{\partial P} + \dfrac{1}{\omega_L} \right ) \right |_{P_o,\omega_{L_o}} (P - P_0) \\ 
+		& + \left ( -\dfrac{1}{\omega_L^2}(P + P_{loss}(P, \omega)) + \left. \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}(P, \omega)}{\partial \omega_L} \right ) \right |_{P_o,\omega_{L_o}} (\omega_L - \omega_{L_o})
+	\end{split}
 \end{equation}
 
-Presently the generator model in wtLin is implemented assuming a stiff drivetrain such that $ \Omega = \omega_L $ and as such the input to the generator model is $ \Omega $. Furthermore $P_{loss}$ is still just a function of $ \omega_L $ and $ P $. \todo[]{Er det muligt at ændre modellen så at den tager højde for et flexibelt drivetrain? Giver det overhovedet mening?}
+
+Presently the generator model in wtLin is implemented assuming a stiff drivetrain such that $ \Omega = \omega_L $ and as such the input to the generator model is $ \Omega $.  \todo[]{Er det muligt at ændre modellen så at den tager højde for et flexibelt drivetrain? Giver det overhovedet mening?}
 
 
 \subsubsection{Unity model converter} \label{sec:wtLin_conv_unity}
@@ -160,3 +162,29 @@ The fore-aft tower motion is both the x-axis translation (surge)
 %	
 %\end{equation}
 
+\subsection{Sum-up of full model}
+
+\subsubsection{Inputs, states and outputs}
+\textbf{States:}
+Converter with time constant (maybe used?): $ P_{conv} $
+
+Flexible drivetrain: $ \Omega $ and $ \omega_L $
+
+Fore-aft tower model: $ \ddot{p}_y $ and $ \dot{p}_y $
+
+Side-side tower model (maybe used?): $ \ddot{p}_x $ and $ \dot{p}_x $
+
+Pitch model with dynamics (maybe used?): $ \theta $
+
+FLC: $ \theta_{ref} $
+
+PLC: $ P_{ref} $
+
+State vector: 
+\begin{equation}\label{key}
+	x = [\Omega, \omega_L, \ddot{p}_y, \dot{p}_y, \ddot{p}_x, \dot{p}_x, \theta, \theta_{ref}, P_{ref}]^T
+\end{equation}
+\textbf{Inputs:}
+
+
+\textbf{Outputs:}
