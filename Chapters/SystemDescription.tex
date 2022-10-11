@@ -1,1 +1,24 @@
 \section{System description} \label{sec:sys-descr}
+System description contains information about the simulation environment e.g. the turbine is not subject to turbulence nor waves.
+
+
+\noindent \textbf{About inducing a frequency on the rotor speed}\\
+A frequency is induced on the rotor speed by applying a test sine wave on the generator speed reference  (prf\#TP\_TestSine\_GenSpdRef)
+
+A custom set of DLCs are made by the SysIdFreqSweep tool. In each DLC the third line says something like this:
+
+\textit{"0.1 2 14 0 OverrideCSVParameter ProdCtrl Px\_TestSine\_GenSpdRef\_Period 100 -200 rho 1.225 time 0.01 1800 10 400"} \\
+here 
+\begin{itemize}
+	\item "OverrideCSVParameter" means that a CSV parameter should be overwritten with this DLC
+	\item "ProdCtrl" means that it's the "ProdCtrl" CSV file which contains the paramter which should be overwritten
+	\item "Px\_TestSine\_GenSpdRef\_Period 100" means that the "Px\_TestSine\_GenSpdRef\_Period" tag should be set to 100
+\end{itemize}. 
+Furthermore the simulation folder contains a file called "\_CtrlParamChanges.txt". In this files specific parameters can further be set to chosen values. In this file the following parameters are set:
+\begin{itemize}
+	\item Px\_TestSine\_GenSpdRef\_SelectType 	= 1
+	\item Px\_TestSine\_GenSpdRef\_Ampl			= 2.1 [rpm]
+\end{itemize}
+The first parameter sets the selected generator speed reference to be \textbf{added} to the controller-specified generator speed in stead of \textbf{overriding} it.
+
+In the second parameter 2.1 i is equivalent to 5\% of the average generator speed (in rad/s) which lies around 40-41 rad/s.
