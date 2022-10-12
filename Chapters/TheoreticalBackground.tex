@@ -81,22 +81,26 @@ In a typical scenario $ C_L $ and $ C_D $ are found from the angle of attack $ \
 \end{align}
 The total thrust and torque of a blade can then be calculated by integrating the above over the length of the rotor blade.
 
+¡
+\subsection{Wind turbine control} \label{sec:theory_ctrl}
+This section includes a walk through of the main functionality of WT control. The standard WT control scheme is explained with regards to different operation regions. Furthermore the challenges presented in FOWT control are examined and some known solutions to the floating control problem are presented. 
 
-\subsection{Wind turbine controller} \label{sec:theory_ctrl}
-This section includes a walk through of the main functionality of wind turbine control. 
-
-\subsubsection{Control regions} 
+\subsubsection{Control regions} \label{sec:theyry_ctrl_regions}
 Wind turbine control is split into two main stages of control called partial load control (PLC) and full load control (FLC). In a variable-speed-variable-pitch (VPVP) WT the PLC can be split into three subregions leaving a total for four operating regions. PLC is related to wind speed between cut-in wind speed and rated wind speed. In all three PLC regions the generator power reference is regulated to achieve the most optimal power with a PI controller based on a generator speed set-point. The FLC region is related to above rated wind speed to cut-out wind speed. In this region the pitch angle reference is regulated based on a generator speed setpoint which is set at the . Furthermore each of the four regions are associated with a specific wind speed range. A visualization of these operating regions can be found in figure \cref{fig:control_regions}. Below is a short description of the four regions focused on the parameters which are relevant to the control objective which is firstly maximisation of the turbine power output (PLC) and secondly limitation of the power output to nominal power (FLC)
 
 \begin{itemize}
-	\item In \textbf{Region 1} the pitch angle is set to the optimal angle based on the tip speed ratio which in this region is \underline{not} optimal, meaning that $ C_p \neq C_p^* $. The generator power is set by the PI controller to whatever achieves the minimum rotor speed.
-	\item In \textbf{Region 2} the pitch angle is set to the optimal angle based on the wind speed. The tip speed ratio is optimal based on the generator speed which is controlled to the optimal value by means of the generator power. The rotor speed is proportional to the wind speed. The power output of the turbine is proportional to the third power of the wind speed. This makes sense in relation to \cref{eq:power_w_Cp}.
+	\item In \textbf{Region 1} the pitch angle reference is set to the optimal angle based on the tip speed ratio which in this region is \underline{not} optimal, meaning that $ C_p \neq C_p^* $. The generator power is set by the PLC PI controller to whatever achieves the minimum rotor speed.
+	\item In \textbf{Region 2} the pitch angle reference is set to the optimal angle based on the wind speed. The tip speed ratio is optimal based on the generator speed which is controlled to the optimal value by means of the generator power. The rotor speed is proportional to the wind speed. The power output of the turbine is proportional to the third power of the wind speed. This makes sense in relation to \cref{eq:power_w_Cp}.
 	\item In \textbf{Region 3} like in region 1 the angle is set to the optimal angle based on the tip speed which is not optimal. The generator power is set by the PI controller to whatever achieves the maximum allowed rotor speed. The power output of the turbine increases proportional to the wind speed.
-	\item In \textbf{Region 4} 
+	\item In \textbf{Region 4} the pitch angle reference is no longer set at an optimal value. It is now set by the FLC PI controller which tracks a constant nominal power output reference. In FLC the power output and rotor speed is ideally close to constant while the pitch angle changes to counteract changes in turbulence.
 \end{itemize}
 
 
 
+\medskip
+\medskip
+\medskip
+\medskip
 
 
 
