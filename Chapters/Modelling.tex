@@ -34,10 +34,15 @@ A more accurate drivetrain model includes dampening and spring effects in the dr
 	J_{r} \ddot{\theta}_r & = -B \dot{\theta}_{gL} -B - K(\theta_r - \theta_{gL}) + T_{r} \label{eq:wtlin_comp_drivetrain_flex_2}
 \end{align}
 \todo[inline]{I dæmper-termet. Skal det ikke være $ B(\dot{\theta_{gL}}-\dot{\theta_r}) $ eller lign?}
-Recall that
+Recall the relationship between derivatives:
 \begin{align}
 	\dot{\Omega} & = \ddot{\theta}_r \\
-	\dot{\omega}_{L} & = \ddot{\theta}_{L} \\
+	\dot{\omega}_{L} & = \ddot{\theta}_{gL} \\
+	\dot{\theta}_g & = \omega \\
+	\dot{\theta}_r & = \Omega
+\end{align}
+and
+\begin{align}
 	\dot{\theta}_g & = \omega \\
 	\dot{\theta}_r & = \Omega
 \end{align}
@@ -138,7 +143,7 @@ In other words the converter is treated as a \textit{black box} system which, wh
 
 
 \subsubsection{Aerodynamic torque} \label{sec:wtLin_aero_torque}
-In \cref{sec:theory_aero} the rotor torque was defined for a blade by integrating over the torque component of each blade element based on a combination of the lift and drag forces. When calculating the total stationary torque it is convenient to use the pre-calculated power coefficient values $ C_P $ to determine the torque \cite{Knudsen2013}.
+In \cref{sec:theory_aero} the rotor torque was defined for a blade from integrating over the torque component of each blade element based on a combination of the lift and drag forces. When calculating the total stationary torque it is convenient to use the pre-calculated power coefficient values $ C_P $ to determine the torque \cite{Knudsen2013}.
 
 In \cref{eq:power_w_Cp} the extractable power from the free wind was defined. When combining this equation with the definition of power in a mechanical system the torque on the rotor can be expressed:
 \begin{equation}\label{eq:wtLin_Mrot_lambda}
@@ -178,15 +183,18 @@ $ v_{0_{rot}} $ is \underline{not} the rotor wind which is the wind speed at the
 \subsubsection{Fore-aft tower model}
 The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation seen is as seen in \cref{fig:fowt_coordinates}. This notation will hereinafter be denoted the \textit{"normal DOF notation"}. Vestas uses another notation which will be denoted the \textit{Vestas DOF notation}: Most importantly \textbf{x} and \textbf{y} are interchanged and surge in the normal DOF notation is called \textit{tilt} in Vestas DOF notation. This document for the most part adopts the normal DOF notation and one is thus directed to \cref{fig:fowt_coordinates} if in doubt about which movement is the subject of discussion.
 
-The fore-aft tower motion is both the surge direction translation and the pitch angle rotation. The fore-aft movement is modelled by a mass-spring-damper system:
+The fore-aft movement is modelled by a mass-spring-damper system:
 \begin{equation}\label{eq:wtlin_comp_fore-aft_ay1}
-	\ddot{p}_y T = F_{rot} - F_d + F_s
+	\ddot{p}_y m = F_{rot} - F_d + F_s
 \end{equation}
+where $ p_y $ is the heave translation position, $ F_{rot} $ is the rotor force and $ F_d $ and $ F_s $ are the damper and spring forces respectively.
 
-when isolating $ \ddot{p}_y $ this becomes:
+when isolating $ \ddot{p}_y $ and expanding $ F_d $ and $ F_s $, \cref{eq:wtlin_comp_fore-aft_ay1} becomes:
 \begin{equation}\label{eq:wtlin_comp_fore-aft_ay2}
-	\ddot{p}_y = \dfrac{F_{rot} - B \dot{p}_y + K p_y}{T}
+	\ddot{p}_y = \dfrac{F_{rot} - b \dot{p}_y - k p_y}{m}
 \end{equation}
+where $ b $ and $ k $ are the damper and spring coefficients respectively.
+
 We then define:
 \begin{align}
 	\dot{v}_y & = \ddot{p}_y \label{eq:wtlin_comp_fore-aft_ay} \\
@@ -194,10 +202,39 @@ We then define:
 \end{align}
 which yields the fore-aft tower model:
 \begin{align}
-	\dot{v}_y & = \dfrac{F_{rot} - B v_y + K p_y}{T}  \label{eq:wtlin_comp_fore-aft_1} \\
+	\dot{v}_y & = \dfrac{F_{rot} - b v_y - k p_y}{m}  \label{eq:wtlin_comp_fore-aft_1} \\
 	\dot{p}_y & = v_y \label{eq:wtlin_comp_fore-aft_2}
 \end{align}
+Furthermore the fore-aft tower model transfer function (TF) from rotor thrust $ F_{rot} $ to heave translation $ p_y $ can be written on the standard second order TF form (seen in \cref{eq:std_tf}) in the laplace domain as seen below:
+\begin{equation}\label{eq:wtLin_fore_aft_tf}
+	\dfrac{p_y}{F_{rot}} = \dfrac{\dfrac{1}{m}}{s^2 + \dfrac{b}{m} s + \dfrac{k}{m}}
+\end{equation}
+From comparison to the standard TF it can be derived that:
+\begin{align}
+	k & = (2 \pi f_{eig})^2 m \label{eq:wtLin_fore_aft_tf_k} \\
+	b & = 2 \zeta \sqrt{k m} \label{eq:wtLin_fore_aft_tf_b}
+\end{align}
 
+
+\begin{equation}
+	v_y s= \dfrac{F_{rot} - b v_y + k p_y}{m}
+\end{equation}
+which becomes
+\begin{equation}
+	p_y s^2 = \dfrac{F_{rot} - b p_y s + k p_y}{m}
+\end{equation}
+which becomes
+\begin{equation}
+	p_y = \dfrac{F_{rot} - b p_y s + k p_y}{m s^2}
+\end{equation}
+\begin{equation}
+	p_y = \dfrac{F_{rot} - b p_y s + k p_y}{m s^2}
+\end{equation}
+
+The second order TF standard form:
+\begin{equation}\label{eq:std_tf}
+	T(s) = \dfrac{\omega_n^2}{s^2 + 2 \zeta \omega_n s + \omega_n^2}
+\end{equation}
 
 \subsubsection{Side-side tower model}
 

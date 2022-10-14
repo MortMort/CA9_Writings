@@ -79,15 +79,21 @@ In a typical scenario $ C_L $ and $ C_D $ are found from the angle of attack $ \
 	F_T &= L \, cos(\phi) + D \, sin(\phi) \label{eq:thrust} \\
 	F_Q &= L \, sin(\phi) - D \, cos(\phi) \label{eq:torque}
 \end{align}
-The total thrust and torque of a blade can then be calculated by integrating the above over the length of the rotor blade.
+The total thrust and torque of a blade can then be calculated by integrating the above over the length of the rotor blade \cite{Knudsen2013}.
 
-¡
+
 \subsection{Wind turbine control} \label{sec:theory_ctrl}
 This section includes a walk through of the main functionality of WT control. The standard WT control scheme is explained with regards to different operation regions. Furthermore the challenges presented in FOWT control are examined and some known solutions to the floating control problem are presented. 
 
 \subsubsection{Control regions} \label{sec:theyry_ctrl_regions}
-Wind turbine control is split into two main stages of control called partial load control (PLC) and full load control (FLC). In a variable-speed-variable-pitch (VPVP) WT the PLC can be split into three subregions leaving a total for four operating regions. PLC is related to wind speed between cut-in wind speed and rated wind speed. In all three PLC regions the generator power reference is regulated to achieve the most optimal power with a PI controller based on a generator speed set-point. The FLC region is related to above rated wind speed to cut-out wind speed. In this region the pitch angle reference is regulated based on a generator speed setpoint which is set at the . Furthermore each of the four regions are associated with a specific wind speed range. A visualization of these operating regions can be found in figure \cref{fig:control_regions}. Below is a short description of the four regions focused on the parameters which are relevant to the control objective which is firstly maximisation of the turbine power output (PLC) and secondly limitation of the power output to nominal power (FLC)
-
+Wind turbine control is split into two main stages of control called partial load control (PLC) and full load control (FLC). In a modern variable-speed-variable-pitch (VPVP) WT such as the one at hind in this project the PLC can be split into three subregions leaving a total of four operating regions. PLC is related to wind speed between cut-in wind speed and rated wind speed. In all three PLC regions the generator power reference is regulated with a PI controller based on a generator speed setpoint to achieve the most optimal power output. The FLC region is related to above rated wind speed to cut-out wind speed. In this region the pitch angle reference is regulated based on a generator speed set-point which is set such that a constant power output is tracked. Furthermore each of the four regions are associated with a specific wind speed range. A visualization of these operating regions can be found in figure \cref{fig:operating_regions}. The figure is simply illustrative and especially the width of the regions are out of proportion. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\linewidth]{Graphics/OperatingRegions.pdf}
+	\caption{A visualisation of the wind turbine control operating regions. Specific wind speeds are purposefully not included since these are turbine specific. The figure is illustrative and not correctly scaled.}
+	\label{fig:operating_regions}
+\end{figure}
+Below is a short description of the four regions focused on the parameters which are relevant to the control objective which is firstly maximisation of the turbine power output (PLC) and secondly limitation of the power output to nominal power (FLC)
 \begin{itemize}
 	\item In \textbf{Region 1} the pitch angle reference is set to the optimal angle based on the tip speed ratio which in this region is \underline{not} optimal, meaning that $ C_p \neq C_p^* $. The generator power is set by the PLC PI controller to whatever achieves the minimum rotor speed.
 	\item In \textbf{Region 2} the pitch angle reference is set to the optimal angle based on the wind speed. The tip speed ratio is optimal based on the generator speed which is controlled to the optimal value by means of the generator power. The rotor speed is proportional to the wind speed. The power output of the turbine is proportional to the third power of the wind speed. This makes sense in relation to \cref{eq:power_w_Cp}.
@@ -95,6 +101,24 @@ Wind turbine control is split into two main stages of control called partial loa
 	\item In \textbf{Region 4} the pitch angle reference is no longer set at an optimal value. It is now set by the FLC PI controller which tracks a constant nominal power output reference. In FLC the power output and rotor speed is ideally close to constant while the pitch angle changes to counteract changes in turbulence.
 \end{itemize}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Graphics/GraphicalWtController.PNG}
+	\caption{An overview of the controllers. Figure from \cite{Pao2009}}
+	\label{fig:controller_overview}
+\end{figure}
+
+\subsubsection{PLC}
+In partial load control 
+
+- Cut in -> Nominal
+- Power output maximation from C\_P maximation (C\_p\_max)
+	- Pitch angle sat at optimal value. Rotor speed regulated to optain optimal omega
+- Classic region 2 controller: Torque controller t\_g = KOmega\^2.
+- Lower rotor speed limit sat on region 1 to stay clear of 1P and 3P frequencies. GET A DAMN PLOT!!
+
+
+\todo[inline]{Indsæt figur af CP(theta, omega)!)}
 
 
 \medskip
@@ -114,6 +138,43 @@ Wind turbine control is split into two main stages of control called partial loa
 	\item FUll FLC explanation
 	\item FATD - fixed-bottom and floating
 \end{enumerate}
+
+\subsubsection{FOWT challenges}
+This section concerns the challenges that are persistent in FOWT design and control.
+
+
+
+A challenge that both fixed-bottom and FOWT has to deal with is frequency separation with regards to the operating frequencies of the turbine and the periodic disturbances and exciting forces that affect the turbine. Wind and waves will excite the tower at specific frequencies and it is important that such frequencies do not overlap with the turbine modes. Turbine towers are flexible and can as such oscillate. If a disturbance such as waves or the wind excite the WT at the same frequency as the natural frequency of the tower it will cause the tower to oscillate resulting in an increase in fatigue loads. Therefore towers are designed such that their first and second modes do not overlap with especially the 1P and 3P frequencies. 1P is the rotor rotational frequency and 3P is the third multiple of 1P corresponding to the three blades of conventional horizontal WTs.
+
+Vibrations in structures are activated by dynamic periodic forces - like wind, people, traffic and rotating machinery
+
+\begin{itemize}
+	\item \textbf{1P} oscillations are typically activated by the periodic force acting on the WT due to the rotor and generator torque.
+	\item \textbf{3P} oscillations are typically activated by wind streams going through the rotor plane which strike the rotor blades every time they pass which intuitively is three times for every full rotor rotation.
+\end{itemize}
+Modern WT towers with a \textit{soft-stiff} tower design are designed such that their first eigenfrequency ends up between the 1P and 3P frequencies and the second eigenfrequency ends up above the 3P frequency. Naturally due to varying rotational frequency both 1P and 3P cover a range of frequencies as illustrated in \cref{fig:1p_and3p}. In the diagram the natural frequency of FOWTs can be observed in frequencies way lower than 1P. The dotted line resembles the location of the second tower mode. In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bottom and floating WTs is found. It is apparent that the first tower mode in a conventional fixed-bottom turbine is due to the flexion of the tower while in the floating structure it is due to the tilting of the whole turbine structure.
+
+\todo[]{Måske også inkludere Campbell diagrammet? Måske bliver det for mange figurer?}
+
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Graphics/1Pand3PvsTwrStiff.PNG}
+	\caption{Illustration of the frequency spans of the tower modes with different designs and for floaters as well as 1P and 3P.}
+	\label{fig:1p_and3p}
+\end{figure}
+
+In \cref{fig:eigen_and_1p3p} an illustration of the first and second tower mode is found. 
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Graphics/1P3PandEigenFloater.png}
+	\caption{Illustration of the 1st and 2nd tower mode of both fixed-bottom and floater turbines. With floating structure the 1st mode is shiften down way past the 1P frequency}
+	\label{fig:eigen_and_1p3p}
+\end{figure}
+
 
 
 
