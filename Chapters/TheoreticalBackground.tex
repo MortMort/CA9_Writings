@@ -109,16 +109,26 @@ Below is a short description of the four regions focused on the parameters which
 \end{figure}
 
 \subsubsection{PLC}
-In partial load control 
+In partial load control...\\
 
+(inspired by PLC section from Thea):
 - Cut in -> Nominal
 - Power output maximation from C\_P maximation (C\_p\_max)
-	- Pitch angle sat at optimal value. Rotor speed regulated to optain optimal omega
+- Pitch angle sat at optimal value. Rotor speed regulated to optain optimal omega
 - Classic region 2 controller: Torque controller t\_g = KOmega\^2.
 - Lower rotor speed limit sat on region 1 to stay clear of 1P and 3P frequencies. GET A DAMN PLOT!!
 
 
 \todo[inline]{Indsæt figur af CP(theta, omega)!)}
+
+
+
+\subsubsection{FLC}
+
+
+
+\subsubsection{FATD}
+Introduction to the conventional fore-aft tower damper.
 
 
 \medskip
@@ -131,43 +141,35 @@ In partial load control
 
 \begin{enumerate}
 	\item The different stages of control depending on wind speed
-	\item \begin{itemize}
-		\item 
-		\end{itemize}
 	\item Full PLC explanation
 	\item FUll FLC explanation
-	\item FATD - fixed-bottom and floating
+	\item Fore-aft tower damper (FATD) - fixed-bottom and floating
 \end{enumerate}
 
-\subsubsection{FOWT challenges}
-This section concerns the challenges that are persistent in FOWT design and control.
+\subsection{Eigenfrequencies and operating speeds}
+When working with WT control it is relevant to understand the relationship between the eigenfrequencies of the WT tower and the forces that excite the turbine structure.
 
-
-
-A challenge that both fixed-bottom and FOWT has to deal with is frequency separation with regards to the operating frequencies of the turbine and the periodic disturbances and exciting forces that affect the turbine. Wind and waves will excite the tower at specific frequencies and it is important that such frequencies do not overlap with the turbine modes. Turbine towers are flexible and can as such oscillate. If a disturbance such as waves or the wind excite the WT at the same frequency as the natural frequency of the tower it will cause the tower to oscillate resulting in an increase in fatigue loads. Therefore towers are designed such that their first and second modes do not overlap with especially the 1P and 3P frequencies. 1P is the rotor rotational frequency and 3P is the third multiple of 1P corresponding to the three blades of conventional horizontal WTs.
-
-Vibrations in structures are activated by dynamic periodic forces - like wind, people, traffic and rotating machinery
-
+A problem that both fixed-bottom and floating WTs have to deal with is frequency separation with regards to the natural frequencies of components and the periodic disturbances and exciting forces. Wind and waves as well as the rotating rotor will excite the tower at specific frequencies and it is important that such frequencies do not overlap with the turbine modes. Turbine towers are flexible and can as such oscillate. If a disturbance such as waves or the wind excite the WT at the same frequency as the natural frequency of the tower it will cause the tower to oscillate resulting in an increase in fatigue loads. Therefore towers are designed such that their first and second modes do not overlap with especially the 1P and 3P frequencies. 1P is the rotor rotational frequency and 3P known as the \textit{blade passing frequency} is the third multiple of 1P corresponding to the three blades of conventional horizontal WTs.
 \begin{itemize}
 	\item \textbf{1P} oscillations are typically activated by the periodic force acting on the WT due to the rotor and generator torque.
-	\item \textbf{3P} oscillations are typically activated by wind streams going through the rotor plane which strike the rotor blades every time they pass which intuitively is three times for every full rotor rotation.
+	\item \textbf{3P} oscillations are typically activated by the turbulence inflow going through the rotor plane which strike the rotor blades every time they pass which intuitively is three times for every full rotor rotation.
 \end{itemize}
-Modern WT towers with a \textit{soft-stiff} tower design are designed such that their first eigenfrequency ends up between the 1P and 3P frequencies and the second eigenfrequency ends up above the 3P frequency. Naturally due to varying rotational frequency both 1P and 3P cover a range of frequencies as illustrated in \cref{fig:1p_and3p}. In the diagram the natural frequency of FOWTs can be observed in frequencies way lower than 1P. The dotted line resembles the location of the second tower mode. In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bottom and floating WTs is found. It is apparent that the first tower mode in a conventional fixed-bottom turbine is due to the flexion of the tower while in the floating structure it is due to the tilting of the whole turbine structure.
 
-\todo[]{Måske også inkludere Campbell diagrammet? Måske bliver det for mange figurer?}
-
-
-
+A Campbell diagram such as the one seen in figure \cref{fig:campbell} is useful for visualizing the relationship between the allowed eigenfrequency of a component and the 1P and 3P frequencies. On the x-axis is the operating frequency of the turbine in revolutions per minute [rpm]. On the y-axis is the eigenfrequency in Hz. Lines are drawn for $ \pm 5 \% $ of both 1P and 3P. For any given turbine the box drawn between the 1P and 3P regions must not touch the lines drawn for the 1P and 3P regions. It becomes apparent why a clear operating region for the turbine rotor speed is defined. For a tower whose operating region is situated between 1P and 3P: If the lower boundary of the rotational speed is lowered the allowable eigenfrequency range decreases. At some point the operating region will have to cross the 1P lines which as explained will cause resonance and as a result increased fatigue loads. \cite{Valentine2015}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Graphics/CampbellDiagram.PNG}
+	\caption{The Campbell Diagram with the rotation frequency on the x-axis and the eigenfrequency on the y-axis. Figure from \cite{Valentine2015}}
+	\label{fig:campbell}
+\end{figure}
+Modern WT towers with a \textit{soft-stiff} tower design are designed such that their first eigenfrequency ends up between the 1P and 3P frequencies and the second eigenfrequency ends up above the 3P frequency. As illustrated in the Campbell Diagram due to varying rotational frequency both 1P and 3P cover a range of frequencies. This is further illustrated in \cref{fig:1p_and3p} which furthermore highlights the possible eigenfrequency ranges of tower designs. In the diagram the natural frequency of FOWTs can be observed in frequencies way lower than 1P. The dotted line  just below the 3P frequency resembles the approximate location of the second tower mode. Its location close to 3P can cause unwanted oscillations.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1Pand3PvsTwrStiff.PNG}
-	\caption{Illustration of the frequency spans of the tower modes with different designs and for floaters as well as 1P and 3P.}
+	\caption{Illustration of the frequency regions of the tower modes with different designs and for floaters as well as 1P and 3P.}
 	\label{fig:1p_and3p}
 \end{figure}
-
-In \cref{fig:eigen_and_1p3p} an illustration of the first and second tower mode is found. 
-
-
+In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bottom and floating WTs is found. It is apparent that the first tower mode in a conventional fixed-bottom turbine is due to the flexion of the tower while in the floating structure it is due to the tilting of the whole turbine structure. As such the conventional first tower mode of a fixed bottom turbine becomes the second mode of a floating turbine.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1P3PandEigenFloater.png}
@@ -176,6 +178,9 @@ In \cref{fig:eigen_and_1p3p} an illustration of the first and second tower mode 
 \end{figure}
 
 
+\subsection{FOWT challenges and control}
+This section concerns the challenges that are persistent in FOWT design and control.
 
 
 
+- Mention the use of a floater tuned FATD controller.
