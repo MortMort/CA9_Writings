@@ -7,7 +7,7 @@ The sun delivers energy to the earth by heating up the surface and subsequently 
 WTs work because they are able to convert the wind's energy into a torque in the generator which then generates electrical energy. When the wind blows over the blades of a WT it delivers some of its energy to the blade, yielding both a thrust force and torque to the blade.
 
 In the simplest 1D momentum theory case the delivery of energy just results in a lowing of the wind speed following the rotor area. Due to mass preservation an expansion would subsequently occur as depicted in \cref{fig:betz}.
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.8\linewidth]{Graphics/FlowThroughRotor.pdf}
 	\caption{Illustration of how the wind in a control volume (CV) changes volume due to its reduction of speed}
@@ -48,7 +48,7 @@ The achievable size of $ C_p^\star $ is a matter of the WT design. The \textit{B
 %\end{equation}
 
 %When the air travels over the WT blade the air travels slower on one side than the other as illustrated in \cref{fig:airfoil}. Due to mass conservation the air which moves slower on the underside of the blade expands, creating a higher pressure. Likewise the air moving faster on the upper upper side contracts creating in a lower pressure. Resultingly the blade moves upwards.
-%\begin{figure}[h]
+%\begin{figure}[ht]
 %	\centering
 %	\includegraphics[width=0.5\linewidth]{Graphics/AirfoilAirflow.png}
 %	\caption{Illustration of the wind speed difference between the two sides of a WT blade along with an illustration of the induced pressure difference. The result is a lifting force one the blade.}
@@ -56,7 +56,7 @@ The achievable size of $ C_p^\star $ is a matter of the WT design. The \textit{B
 %\end{figure}
 
 Blade element momentum theory is often used to model the forces acting along WT blades. Blade element theory involves breaking a blade into small sections and determining the forces acting on each small section. In \cref{fig:blade_vel_triangle} a cross section of a WT blade can be seen. In this figure, as it is also illustrated at the rotor blade in \cref{fig:betz}, the wind velocity that hits the rotor blades is lowered indicated by the \textit{axial induction factor} $ a $. What is not observed in \cref{fig:betz} is that some of the energy of the wind also goes into driving an airstream around the back of the rotors in the opposite direction of the blade rotation, indicated by the \textit{tangential induction factor} $ a' $. This is known as \textit{swirl losses}.
-\begin{figure*}[h]
+\begin{figure*}[ht]
 	\centering
 	\subfloat[Blade cross section]{\includegraphics[width=.44\textwidth]{Graphics/RotorBladeElement.pdf}%
 		\label{fig:blade_vel_triangles}}
@@ -87,7 +87,7 @@ This section includes a walk through of the main functionality of WT control. Th
 
 \subsubsection{Control regions} \label{sec:theyry_ctrl_regions}
 Wind turbine control is split into two main stages of control called partial load control (PLC) and full load control (FLC). In a modern variable-speed-variable-pitch (VPVP) WT such as the one at hind in this project the PLC can be split into three subregions leaving a total of four operating regions. PLC is related to wind speed between cut-in wind speed and rated wind speed. In all three PLC regions the generator power reference is regulated with a PI controller based on a generator speed setpoint to achieve the most optimal power output. The FLC region is related to above rated wind speed to cut-out wind speed. In this region the pitch angle reference is regulated based on a generator speed set-point which is set such that a constant power output is tracked. Furthermore each of the four regions are associated with a specific wind speed range. A visualization of these operating regions can be found in figure \cref{fig:operating_regions}. The figure is simply illustrative and especially the width of the regions are out of proportion. 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.9\linewidth]{Graphics/OperatingRegions.pdf}
 	\caption{A visualisation of the wind turbine control operating regions. Specific wind speeds are purposefully not included since these are turbine specific. The figure is illustrative and not correctly scaled.}
@@ -101,7 +101,7 @@ Below is a short description of the four regions focused on the parameters which
 	\item In \textbf{Region 4} the pitch angle reference is no longer set at an optimal value. It is now set by the FLC PI controller which tracks a constant nominal power output reference. In FLC the power output and rotor speed is ideally close to constant while the pitch angle changes to counteract changes in turbulence.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/GraphicalWtController.PNG}
 	\caption{An overview of the controllers. Figure from \cite{Pao2009}}
@@ -156,21 +156,21 @@ A problem that both fixed-bottom and floating WTs have to deal with is frequency
 \end{itemize}
 
 A Campbell diagram such as the one seen in figure \cref{fig:campbell} is useful for visualizing the relationship between the allowed eigenfrequency of a component and the 1P and 3P frequencies. On the x-axis is the operating frequency of the turbine in revolutions per minute [rpm]. On the y-axis is the eigenfrequency in Hz. Lines are drawn for $ \pm 5 \% $ of both 1P and 3P. For any given turbine the box drawn between the 1P and 3P regions must not touch the lines drawn for the 1P and 3P regions. It becomes apparent why a clear operating region for the turbine rotor speed is defined. For a tower whose operating region is situated between 1P and 3P: If the lower boundary of the rotational speed is lowered the allowable eigenfrequency range decreases. At some point the operating region will have to cross the 1P lines which as explained will cause resonance and as a result increased fatigue loads. \cite{Valentine2015}.
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Graphics/CampbellDiagram.PNG}
 	\caption{The Campbell Diagram with the rotation frequency on the x-axis and the eigenfrequency on the y-axis. Figure from \cite{Valentine2015}}
 	\label{fig:campbell}
 \end{figure}
 Modern WT towers with a \textit{soft-stiff} tower design are designed such that their first eigenfrequency ends up between the 1P and 3P frequencies and the second eigenfrequency ends up above the 3P frequency. As illustrated in the Campbell Diagram due to varying rotational frequency both 1P and 3P cover a range of frequencies. This is further illustrated in \cref{fig:1p_and3p} which furthermore highlights the possible eigenfrequency ranges of tower designs. In the diagram the natural frequency of FOWTs can be observed in frequencies way lower than 1P. The dotted line  just below the 3P frequency resembles the approximate location of the second tower mode. Its location close to 3P can cause unwanted oscillations.
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1Pand3PvsTwrStiff.PNG}
 	\caption{Illustration of the frequency regions of the tower modes with different designs and for floaters as well as 1P and 3P.}
 	\label{fig:1p_and3p}
 \end{figure}
 In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bottom and floating WTs is found. It is apparent that the first tower mode in a conventional fixed-bottom turbine is due to the flexion of the tower while in the floating structure it is due to the tilting of the whole turbine structure. As such the conventional first tower mode of a fixed bottom turbine becomes the second mode of a floating turbine.
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1P3PandEigenFloater.png}
 	\caption{Illustration of the 1st and 2nd tower mode of both fixed-bottom and floater turbines. With floating structure the 1st mode is shiften down way past the 1P frequency}

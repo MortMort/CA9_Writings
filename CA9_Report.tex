@@ -382,10 +382,11 @@
 \numberwithin{equation}{section}		% Include section number in equation
 
 % Include section number in figure number. Also resets figure number on each section.
-\usepackage{chngcntr}
 \counterwithin{figure}{section}
 
-\usepackage{float}
+
+% This float package was originall not uncommented here. It resulted in a lot of warnings though so i commented it out. Might cause problems but i haven't found any yet.
+%\usepackage{float}
 
 
 
