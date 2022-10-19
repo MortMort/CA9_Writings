@@ -4,7 +4,7 @@ The purpose of this section is to outline the model of the system. The model is 
 Modelling is approached from a component point of view where parts of the system are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the component contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) through the wtLin tool.
 
 
-\subsection{wtLin component models}
+\subsection{wtLin component models} \label{sec:mod_wtLincomps}
 A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating a linear model based on simple component models and parameters extracted from VTS. The tool contains component models which can be connected in loops based on the input-output variables of each component model. A component can be in the form of mechanical models such as a generator or a converter but can also be models of other phenomena which are relevant for the system such as the interaction between the tower movement and the free wind.
 
 The tool takes as input an operating point and a specific set of components. It outputs a connected linear model at that operating point.
@@ -180,7 +180,7 @@ There is an interaction between the tower fore-aft movement and the wind speed w
 $ v_{0_{rot}} $ is \underline{not} the rotor wind which is the wind speed at the rotor plane but the free wind modified by the turbine velocity.
 
 
-\subsubsection{Fore-aft tower model}
+\subsubsection{Fore-aft tower model} \label{sec:mod_wtLin_foreaft_mod}
 The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation seen is as seen in \cref{fig:fowt_coordinates}. This notation will hereinafter be denoted the \textit{"normal DOF notation"}. Vestas uses another notation which will be denoted the \textit{Vestas DOF notation}: Most importantly \textbf{x} and \textbf{y} are interchanged and surge in the normal DOF notation is called \textit{tilt} in Vestas DOF notation. This document for the most part adopts the normal DOF notation and one is thus directed to \cref{fig:fowt_coordinates} if in doubt about which movement is the subject of discussion.
 
 The fore-aft movement is modelled by a mass-spring-damper system:
@@ -355,3 +355,11 @@ At dømme ud fra ovenstående state vektor som næsten passer i længden med sta
 
 
 \textbf{Outputs:}
+
+\subsection{Fore-aft tower model fitting} \label{sec:mod_foreaft_fitting}
+As described in \hyperref[sec:mod_wtLin_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:mod_wtLin_foreaft_mod} the wtLin component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This is obviously a seriously simplified model which consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behavior of the system best possible is far from intuitive. When writing the model equation on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the relevant tuning results.\\
+
+Setting the natural frequency around the eigenfrequency of the turbine is a good place to start. A first guess for the effective mass $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. Many factors of course affect the dampening of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theo_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction.
+
+A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:wtLin_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:wtLin_aero_thrust}. Thus the only dampening components are from the other mentioned forces.
+
