@@ -83,7 +83,7 @@ The total thrust and torque of a blade can then be calculated by integrating the
 
 
 \subsection{Wind turbine control} \label{sec:theory_ctrl}
-This section includes a walk through of the main functionality of WT control. The standard WT control scheme is explained with regards to different operation regions. Furthermore the challenges presented in FOWT control are examined and some known solutions to the floating control problem are presented. 
+This section includes a walk-through of the main functionality of WT control. The standard WT control scheme is explained with regards to different operation regions. Furthermore the challenges presented in FOWT control are examined and some known solutions to the floating control problem are presented. 
 
 \subsubsection{Control regions} \label{sec:theyry_ctrl_regions}
 Wind turbine control is split into two main stages of control called partial load control (PLC) and full load control (FLC). In a modern variable-speed-variable-pitch (VPVP) WT such as the one at hind in this project the PLC can be split into three subregions leaving a total of four operating regions. PLC is related to wind speed between cut-in wind speed and rated wind speed. In all three PLC regions the generator power reference is regulated with a PI controller based on a generator speed setpoint to achieve the most optimal power output. The FLC region is related to above rated wind speed to cut-out wind speed. In this region the pitch angle reference is regulated based on a generator speed set-point which is set such that a constant power output is tracked. Furthermore each of the four regions are associated with a specific wind speed range. A visualization of these operating regions can be found in figure \cref{fig:operating_regions}. The figure is simply illustrative and especially the width of the regions are out of proportion. 
@@ -116,7 +116,9 @@ In partial load control...\\
 - Power output maximation from C\_P maximation (C\_p\_max)
 - Pitch angle sat at optimal value. Rotor speed regulated to optain optimal omega
 - Classic region 2 controller: Torque controller t\_g = KOmega\^2.
-- Lower rotor speed limit sat on region 1 to stay clear of 1P and 3P frequencies. GET A DAMN PLOT!!
+- Vestas region 2 controller: PI controller with omega as input and torque as output.
+- PLC operating regions 1 and 3: Further explain. Lower rotor speed limit sat on region 1 to stay clear of 1P and 3P frequencies. Rated rotational speed achieved in region 3, but not rated power.
+- Region 1 and 3 also uses PI controller for control of generator torque from rotor speed input.
 
 
 \todo[inline]{Indsæt figur af CP(theta, omega)!)}
