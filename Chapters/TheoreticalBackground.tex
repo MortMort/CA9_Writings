@@ -93,12 +93,12 @@ Wind turbine control is split into two main stages of control called partial loa
 	\caption{A visualisation of the wind turbine control operating regions. Specific wind speeds are purposefully not included since these are turbine specific. The figure is illustrative and not correctly scaled.}
 	\label{fig:operating_regions}
 \end{figure}
-Below is a short description of the four regions focused on the parameters which are relevant to the control objective which is firstly maximisation of the turbine power output (PLC) and secondly limitation of the power output to nominal power (FLC)
+Below is a short description of the four regions focused on the parameters which are relevant to the control objective which is firstly maximisation of the turbine power output (PLC) and secondly limitation of the power output to nominal power (FLC). Below short descriptions are given to each of the WT operating regions as observed in \cref{fig:operating_regions}.
 \begin{itemize}
 	\item In \textbf{Region 1} the pitch angle reference is set to the optimal angle based on the tip speed ratio which in this region is \underline{not} optimal, meaning that $ C_p \neq C_p^* $. The generator power is set by the PLC PI controller to whatever achieves the minimum rotor speed.
 	\item In \textbf{Region 2} the pitch angle reference is set to the optimal angle based on the wind speed. The tip speed ratio is optimal based on the generator speed which is controlled to the optimal value by means of the generator power. The rotor speed is proportional to the wind speed. The power output of the turbine is proportional to the third power of the wind speed. This makes sense in relation to \cref{eq:power_w_Cp}.
 	\item In \textbf{Region 3} like in region 1 the angle is set to the optimal angle based on the tip speed which is not optimal. The generator power is set by the PI controller to whatever achieves the maximum allowed rotor speed. The power output of the turbine increases proportional to the wind speed.
-	\item In \textbf{Region 4} the pitch angle reference is no longer set at an optimal value. It is now set by the FLC PI controller which tracks a constant nominal power output reference. In FLC the power output and rotor speed is ideally close to constant while the pitch angle changes to counteract changes in turbulence.
+	\item In \textbf{Region 4} the pitch angle reference is no longer set at an optimal value. It is now set by the FLC PI controller which tracks a constant nominal rotor speed reference. In FLC the power output and rotor speed is ideally close to constant while the pitch angle changes to counteract changes in wind speed.
 \end{itemize}
 
 \begin{figure}[ht]
@@ -114,11 +114,14 @@ In partial load control...\\
 (inspired by PLC section from Thea):
 - Cut in -> Nominal
 - Power output maximation from C\_P maximation (C\_p\_max)
-- Pitch angle sat at optimal value. Rotor speed regulated to optain optimal omega
+- Pitch angle sat at optimal value. Rotor speed regulated with power reference to optain optimal omega. (In thea's report it's defined as a torque controller)
 - Classic region 2 controller: Torque controller t\_g = KOmega\^2.
-- Vestas region 2 controller: PI controller with omega as input and torque as output.
+- Vestas region 2 controller: PI controller with omega as input and torque OR power as output.
 - PLC operating regions 1 and 3: Further explain. Lower rotor speed limit sat on region 1 to stay clear of 1P and 3P frequencies. Rated rotational speed achieved in region 3, but not rated power.
-- Region 1 and 3 also uses PI controller for control of generator torque from rotor speed input.
+- Region 1 and 3 also uses PI controller for control of generator torque from rotor speed input (opskriv ligninger).
+- Torque (or power) controller tuning (Sluggish = too slow, aggressive = instability w. regard to natural frequencies?)
+- Gain scheduling is implemented by Vestas "to maintain dynamic properties throughout operating range". This gain scheduling contribution is multiplied with the generator speed error before entering the PI controller which sets a power reference. This will not be investigated further. 
+
 
 
 \todo[inline]{Indsæt figur af CP(theta, omega)!)}
@@ -127,7 +130,11 @@ In partial load control...\\
 
 \subsubsection{FLC}
 
-
+(inspired by FLC section from Thea):
+- rated -> cut-out wind speed
+- PI collective pitch controller used to set pitch blade reference based on constant rotor speed reference setpoint.
+- PI controller equations
+- Gain scheduling included to compensate for the pitch-dependent sensitivity (called aerodynamic gain by Thea). (In Thea it's dtau/dtheta. Vestas denotes it as dpower/dtheta). It's calculated based on pitch reference set by the FLC pitch PI controller and multiplied with the pitch reference before being input in the pitch controller system.
 
 \subsubsection{FATD}
 Introduction to the conventional fore-aft tower damper.
