@@ -26,14 +26,18 @@ Combining \cref{eq:power} and \cref{eq:mass_deriv} yields:
 	P_{air} = \dfrac{1}{2} \rho A_d v_0^3
 \end{equation}
 A \textit{power coefficient} $ C_p $ represents the percentage of the available power that is extracted from the wind:
+\begin{equation}\label{eq:Cp}
+	C_p = \dfrac{P_T}{P_{air}}
+\end{equation}
+Such that the extracted power $ P_T $ is defined:
 \begin{equation}\label{eq:power_w_Cp}
 	P_{T} = \dfrac{1}{2} \rho A_d v_0^3 C_p
 \end{equation}
-$ C_p $ is dependent on the rotor blade pitch $ \theta $ and the tip speed ratio (TSR) $ \lambda $. In the partial load region the goal is to reach a maximum $ C_p $ by adjusting $ \theta $ and  $ \lambda $ to their optimal values:
+$ C_p $ is dependent on the rotor blade pitch $ \theta $ and the tip speed ratio (TSR) $ \lambda $. In the partial load region the main goal is to reach a maximum $ C_p $ by adjusting $ \theta $ and  $ \lambda $ to their optimal values:
 \begin{equation}\label{eq:cp_optimal}
 	C_p^\star = C_p(\theta^\star, \lambda^\star)
 \end{equation}
-The TSR is the ratio between the speed of the tip of the WT blade $ (\Omega R) $ where $ R $ is the distance from the center of the rotor and the blade tip and the incoming free wind $v_0$:
+Where $ * $ denotes the optimal value of a parameter with regards to $ C_p $. This will be further explained in \cref{sec:theory_ctrl}. The TSR is the ratio between the speed of the tip of the WT blade $ (\Omega R) $ where $ R $ is the distance from the center of the rotor and the blade tip and the incoming free wind $v_0$:
 \begin{equation}\label{eq:tipspeedratio}
 	\lambda = \dfrac{\Omega R}{v_0}
 \end{equation}
@@ -74,7 +78,6 @@ The resulting air speed is V with an \textit{inflow angle} $ \phi $. $ F_L $ and
 The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from table lookups which are typically found from simulations such as Xfoil
 \todo{Hvad bruger Vestas til at finde $ C_L $ og $ C_D $?}. 
 In a typical scenario $ C_L $ and $ C_D $ are found from the angle of attack $ \alpha $. The thrust and torque vectors $ F_T $ and $ F_Q $ are then calculated from the Pythagorean theorem as in \cref{eq:thrust} and \cref{eq:torque}
-%\lipsum[11]\unsure{Is this correct?}\unsure{I'm unsure about also!}
 \begin{align}\
 	F_T &= L \, cos(\phi) + D \, sin(\phi) \label{eq:thrust} \\
 	F_Q &= L \, sin(\phi) - D \, cos(\phi) \label{eq:torque}
@@ -86,7 +89,7 @@ The total thrust and torque of a blade can then be calculated by integrating the
 This section includes a walk-through of the main functionality of WT control. The standard WT control scheme is explained with regards to different operation regions. Furthermore the challenges presented in FOWT control are examined and some known solutions to the floating control problem are presented. 
 
 \subsubsection{Control regions} \label{sec:theyry_ctrl_regions}
-Wind turbine control is split into two main stages of control called partial load control (PLC) and full load control (FLC). In a modern variable-speed-variable-pitch (VPVP) WT such as the one at hind in this project the PLC can be split into three subregions leaving a total of four operating regions. PLC is related to wind speed between cut-in wind speed and rated wind speed. In all three PLC regions the generator power reference is regulated with a PI controller based on a generator speed setpoint to achieve the most optimal power output. The FLC region is related to above rated wind speed to cut-out wind speed. In this region the pitch angle reference is regulated based on a generator speed set-point which is set such that a constant power output is tracked. Furthermore each of the four regions are associated with a specific wind speed range. A visualization of these operating regions can be found in figure \cref{fig:operating_regions}. The figure is simply illustrative and especially the width of the regions are out of proportion. 
+Wind turbine control is split into two main stages of control called partial load control (PLC) and full load control (FLC). In a modern variable-speed-variable-pitch (VPVP) WT such as the one at hand in this project the PLC can be further split into three subregions leaving a total of four operating regions. PLC is related to wind speed between cut-in wind speed and rated wind speed. In all three PLC regions the generator power reference is regulated with a PI controller based on a generator speed setpoint to achieve the most optimal power output. The FLC region is related to above rated wind speed to cut-out wind speed. In this region the pitch angle reference is regulated based on a generator speed set-point which is set such that a constant power output is tracked. Furthermore each of the four regions are associated with a specific wind speed range. A visualization of these operating regions can be found in figure \cref{fig:operating_regions}. The figure is simply illustrative and especially the width of the regions are out of proportion. 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.9\linewidth]{Graphics/OperatingRegions.pdf}
@@ -95,8 +98,8 @@ Wind turbine control is split into two main stages of control called partial loa
 \end{figure}
 Below is a short description of the four regions focused on the parameters which are relevant to the control objective which is firstly maximisation of the turbine power output (PLC) and secondly limitation of the power output to nominal power (FLC). Below short descriptions are given to each of the WT operating regions as observed in \cref{fig:operating_regions}.
 \begin{itemize}
-	\item In \textbf{Region 1} the pitch angle reference is set to the optimal angle based on the tip speed ratio which in this region is \underline{not} optimal, meaning that $ C_p \neq C_p^* $. The generator power is set by the PLC PI controller to whatever achieves the minimum rotor speed.
-	\item In \textbf{Region 2} the pitch angle reference is set to the optimal angle based on the wind speed. The tip speed ratio is optimal based on the generator speed which is controlled to the optimal value by means of the generator power. The rotor speed is proportional to the wind speed. The power output of the turbine is proportional to the third power of the wind speed. This makes sense in relation to \cref{eq:power_w_Cp}.
+	\item In \textbf{Region 1} the pitch angle reference is set to the optimal angle based on the tip speed ratio which in this region is \underline{not} optimal, meaning that $ C_p \neq C_p^* $ (where $ * $ denotes an optimal parameter value with regards to $ C_p $). The generator power is set by the PLC PI controller to whatever achieves the minimum rotor speed.
+	\item In \textbf{Region 2} the pitch angle reference is set to the optimal angle. The tip speed ratio is optimal based on the generator speed which is controlled to the optimal value by means of the generator power. The rotor speed is proportional to the wind speed. The power output of the turbine is proportional to the third power of the wind speed. This makes sense in relation to \cref{eq:power_w_Cp}.
 	\item In \textbf{Region 3} like in region 1 the angle is set to the optimal angle based on the tip speed which is not optimal. The generator power is set by the PI controller to whatever achieves the maximum allowed rotor speed. The power output of the turbine increases proportional to the wind speed.
 	\item In \textbf{Region 4} the pitch angle reference is no longer set at an optimal value. It is now set by the FLC PI controller which tracks a constant nominal rotor speed reference. In FLC the power output and rotor speed is ideally close to constant while the pitch angle changes to counteract changes in wind speed.
 \end{itemize}
@@ -120,11 +123,55 @@ In partial load control...\\
 - PLC operating regions 1 and 3: Further explain. Lower rotor speed limit sat on region 1 to stay clear of 1P and 3P frequencies. Rated rotational speed achieved in region 3, but not rated power.
 - Region 1 and 3 also uses PI controller for control of generator torque from rotor speed input (opskriv ligninger).
 - Torque (or power) controller tuning (Sluggish = too slow, aggressive = instability w. regard to natural frequencies?)
-- Gain scheduling is implemented by Vestas "to maintain dynamic properties throughout operating range". This gain scheduling contribution is multiplied with the generator speed error before entering the PI controller which sets a power reference. This will not be investigated further. 
+- Gain scheduling is implemented by Vestas "to maintain dynamic properties throughout operating range". This gain scheduling contribution is multiplied with the generator speed error before entering the PI controller which sets a power reference. This will not be investigated further. \\
 
+As previously mentioned the partial load control (PLC) is active from cut-in wind speed to nominal wind speed. The highest priority of the \textbf{region 2} controller is to maximize $ C_p $ such that $ C_p(\theta, \lambda) = C_p^*(\theta^*, \lambda^*) $. Two actuators could potentially be utilized to achieve this: Rotor pitch angle and generator torque. When observing a 3D plot of $ C_p(\theta, \lambda) $ such as the one in \cref{fig:cp_plot3d} it becomes apparent that maximisation of $ C_p $ will occur for specific values of $ \theta $ and $ \lambda $. In \cref{fig:cp_plot2d} the 3D plot is seen from above and thus only colours are indicators of the size of $ C_p $. Black lines are drawn on the plot which indicate a typical path from cut-in wind speed to cut-out wind speed starting in the top left corner where the tip speed ratio is very high due to the proportionally big difference between the minimum rotor speed and the low incoming wind speed and ending in the bottom right corner with the very high pitch angle. Furthermore the operating regions are drawn along the lines. It becomes obvious that all of regions 2 is centred at the $ C_p^*(\theta^*, \lambda^*) $ which is marked by a black dot in the middle of the darkest red region.
+\begin{figure*}[ht]
+	\centering
+	
+	\subfloat[$ C_p $ vs. $ \theta $ and $ \lambda $ (3D)]
+	{\includegraphics[width=.53\textwidth]{Graphics/Cp3dPlotV2.png}%
+		\label{fig:cp_plot3d}}
+	\hfil
+	\subfloat[$ C_p $ vs. $ \theta $ and $ \lambda $ (2D)]
+	{\includegraphics[width=.42\textwidth]{Graphics/Cp2dPlotRegions.png}%
+		\label{fig:cp_plot2d}}
+	
+	\caption{Typical $ C_p $ plot drawn agains varying $ \theta $ and $ \lambda $; \textbf{(a)} 3D plot; \textbf{(b)} 2D plot where the operating regions are illustrated along the well}
+	\label{fig:cp_plot}
+\end{figure*}
 
+$ \theta $ is determined from table lookups based on $ \lambda $. When $ \theta $ as such is sat at a specific values it cannot be utilized as an actuator to control the rotor speed such that $ \lambda(v_0, \Omega) = \lambda^*(v_0, \Omega^*) $ but the generator power can. Thus the primary concern is setting the generator power such that the rotor speed tracks an optimal speed based on the the wind speed. The rotor speed can be described as such:
+\begin{equation}\label{eq:plc_rotor_speed}
+	J \dot{\Omega} = T_r(\theta, v_0) - T_g(P_g, \omega)
+\end{equation}
+where $ J $ is the total inertia of all parts connected to the drivetrain, $ T_r $ the rotor torque and $ T_g $ the generator torque referred to the rotor side of the drivetrain. From this equation it becomes apparent that if $ \theta $ is sat at a fixed optimal angle the generator torque must be used to control the set-point rotor speed that makes $ C_p = C_p^* $.
 
-\todo[inline]{Indsæt figur af CP(theta, omega)!)}
+While there are numerous generator torque controllers in use in the wind industry the classical WT torque controller is defined as in \cref{eq:gen_torque_ctrl} where the generator torque is calculated based on the rotor speed.
+\begin{equation}\label{eq:gen_torque_ctrl}
+	T_g = K \Omega^2
+\end{equation}
+with the \textit{generator constant} being defined as such \cite{Pao2009}:
+\begin{equation}\label{eq:gen_torque_const}
+	K = \dfrac{1}{2} \rho \pi R^5 \dfrac{C_{p\_max}}{\lambda^{*3}}
+\end{equation}
+This causes the rotor speed to tend towards the optimal rotor speed. This is more readily visible when considering \cref{eq:omega_dot}. Consider when $ \frac{C_p}{\lambda^3} $ is greater than the optimal counterpart $ \frac{C_p^*}{\lambda^{*3}} $ then $ \dot{\omega} > 0 $ which will increase $ \omega $ until an increase in the $ \lambda^3 $ term will bring the two terms closer. If $ \theta $ is sat at $ \theta^* $ then when $ \lambda^3 = \lambda^{*3} $ then $ C_p = C_p^* $ which is exactly the tracking goal.
+\begin{equation}\label{eq:omega_dot}
+	\dot{\Omega} = \dfrac{1}{2 J} \rho \pi R^5 \omega^2 \left( \dfrac{C_p}{\lambda^3} - \dfrac{C_p^*}{\lambda^{*3}} \right)
+\end{equation}
+\cref{eq:omega_dot} is derived by combining equations \cref{eq:power2}, \cref{eq:Cp}, \cref{eq:tipspeedratio}, \cref{eq:plc_rotor_speed} and \cref{eq:gen_torque_ctrl} and \cref{eq:mech_torque}.
+\begin{equation}\label{eq:mech_torque}
+	T_r = \dfrac{P}{\Omega}
+\end{equation}
+\cref{eq:mech_torque} simply states the relationship between mechanical power $ P_T $, rotor speed $ \Omega $ and torque $ T_r $\\
+\smallskip
+Unlike the conventional torque controller, Vestas utilizes a PI controller structure for its region 2 control. The PI controller input is the rotor speed error multiplied with a gain scheduling contribution which is dependent on the wind speed. The rotor speed reference is calculated by multiplying the wind speed with some gain $ K $. The nature of the gain $ K $ which translates the wind speed to a rotor speed reference is not further explored. The mentioned gain scheduling component is present to account for the non-linearity of the system throughout the wind operating range.
+
+In \textbf{region 1} achieving $ C_p = C_p^* $ is disregarded in favour of maintaining a minimum rotor speed $ \underline{\omega}_g $. This is done to avoid the 3P frequency overlapping with the eigenfrequency of the system. This concept is further explored in \cref{sec:eigenfreq}. As such only $ \theta = \theta^* $ in this region.
+
+\textbf{Region 3} is characterized by the rotor speed reaching nominal output speed $ \bar{\omega} $. Thus like in region 1 optimal $ C_p $ is disregarded to maintain the nominal rotor speed. The output power has not reached nominal output power. Thus $ \theta = \theta^* $ and $ P_g $ is sat such that $ \omega = \bar{\omega} $. As the wind increases $ C_p $ is decreased while $ P $ increases towards nominal power output. 
+
+In both region 1 and 3 the PI controller is utilized. The rotor speed reference is simply sat at $ \underline{\omega}_g $ in region 1 and $ \bar{\omega} $ in region 3.
 
 
 
@@ -155,7 +202,7 @@ Introduction to the conventional fore-aft tower damper.
 	\item Fore-aft tower damper (FATD) - fixed-bottom and floating
 \end{enumerate}
 
-\subsection{Eigenfrequencies and operating speeds}
+\subsection{Eigenfrequencies and operating speeds} \label{sec:eigenfreq}
 When working with WT control it is relevant to understand the relationship between the eigenfrequencies of the WT tower and the forces that excite the turbine structure.
 
 A problem that both fixed-bottom and floating WTs have to deal with is frequency separation with regards to the natural frequencies of components and the periodic disturbances and exciting forces. Wind and waves as well as the rotating rotor will excite the tower at specific frequencies and it is important that such frequencies do not overlap with the turbine modes. Turbine towers are flexible and can as such oscillate. If a disturbance such as waves or the wind excite the WT at the same frequency as the natural frequency of the tower it will cause the tower to oscillate resulting in an increase in fatigue loads. Therefore towers are designed such that their first and second modes do not overlap with especially the 1P and 3P frequencies. 1P is the rotor rotational frequency and 3P known as the \textit{blade passing frequency} is the third multiple of 1P corresponding to the three blades of conventional horizontal WTs.
