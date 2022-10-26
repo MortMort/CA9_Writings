@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-10-26T07:11:49.165Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15" etag="cNhTBp4IeXdm05zdsbHr" version="20.5.1" type="github">
+<mxfile host="app.diagrams.net" modified="2022-10-26T07:13:11.755Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15" etag="HR7pT3V6VMp_-xNlMZfF" version="20.5.1" type="github">
   <diagram id="a3xZA2T98DMr3OQ_kxMm" name="Page-1">
     <mxGraphModel dx="1181" dy="602" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="1" shadow="0">
       <root>
@@ -98,7 +98,7 @@
             <mxPoint x="250" y="290" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ugAM1dZhjCBh_IslMjay-45" value="$$\theta_{ref}$$" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ugAM1dZhjCBh_IslMjay-41">
+        <mxCell id="ugAM1dZhjCBh_IslMjay-45" value="$$\theta_{ref}$$" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" vertex="1" connectable="0" parent="ugAM1dZhjCBh_IslMjay-41">
           <mxGeometry x="-0.0775" relative="1" as="geometry">
             <mxPoint x="15" as="offset" />
           </mxGeometry>
@@ -239,6 +239,12 @@
         </mxCell>
         <mxCell id="ugAM1dZhjCBh_IslMjay-68" value="Drivetrain" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="1">
           <mxGeometry x="304" y="15" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ugAM1dZhjCBh_IslMjay-69" value="$$\omega$$" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="370" y="114" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ugAM1dZhjCBh_IslMjay-70" value="$$\Omega$$" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="220" y="115" width="60" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
