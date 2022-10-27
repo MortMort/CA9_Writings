@@ -91,7 +91,7 @@ This section includes a walk-through of the main functionality of WT control. Th
 Furthermore the challenges presented in FOWT control are examined and some known solutions to the floating control problem are presented.
 
 \medskip
-In figure \cref{fig:controller_overview} a simplified illustration is seen of the Vestas turbine controller setup. It yields an overview of the main controllers that handle rotor/generator speed control and power control. The following section is focused on the responsibility of the partial load controller (PLC) and the full load controller (FLC). The depicted "Pitch Controller" and "Power Controller" of the diagram are black boxes from the POV of this report. Their dynamics are not explored and they are largely assumed to handle references in a correct manner such that it is not necessary to further consider them. 
+In figure \cref{fig:controller_overview} a simplified illustration is seen of the Vestas turbine controller setup. It yields an overview of the main controllers that handle rotor/generator speed control and power control. The following section is focused on the responsibility of the partial load controller (PLC) and the full load controller (FLC). The depicted "Pitch Controller" and "Power Controller" of the diagram are black boxes from the point of view (POV) of this report. Their dynamics are not explored and they are largely assumed to handle references in a correct manner such that it is not necessary to further consider them. 
 
 Since the Vestas turbine at hand has a full scale converter all of the power delivery from the generator to the grid is handled by the electrical converter. The mentioned power reference given by the PLC is translated into the generator power $ P_g $ while mentions of output power is regarded as the power delivered to the grid $ P $.
 
@@ -189,13 +189,13 @@ The FLC PI controller parameters $ K_{flc,P} $ and $ K_{flc,I} $ are tuned such 
 
 
 \subsubsection{FATD}
-The conventional fore-aft tower damper is a separate controller responsible for dampening the fore-aft tower motion in FLC. The exciting forces that act on the WT such as the wind can cause the tower to oscillate resulting in increased fatigue loads on the tower. This phenomena will be further examined in \cref{sec:eigenfreq}. Therefore the FATD is implemented to counteract the motion of the tower in the surge/pitch direction. In the simplest case it takes as input the horizontal acceleration at the nacelle and outputs a collective pitch angle contribution $ \theta_{FATD} $ which is added to the pitch reference. The important consideration with regards to the tuning of the FATD is the coupling of rotor speed control and fore-aft motion control. The FATD pitch controller can not be so aggressive that its pitch contribution results in poor rotor speed tracking.
+The conventional fore-aft tower damper is a separate controller responsible for dampening the fore-aft tower motion in FLC. The exciting forces that act on the WT such as the wind can cause the tower to oscillate resulting in increased fatigue loads on the tower. This phenomena will be further examined in \cref{sec:eigenfreq}. Therefore the FATD is implemented to counteract the motion of the tower in the surge/pitch direction. In the simplest case it takes as input the horizontal acceleration at the nacelle and outputs a collective pitch angle contribution $ \theta_{FATD} $ which is added to the pitch reference:
+\begin{equation}\label{eq:fatd}
+	\theta_{ref} = \theta_{flc} + \theta_{fatd}
+\end{equation}
+The important consideration with regards to the tuning of the FATD is the coupling of rotor speed control and fore-aft motion control. The FATD pitch controller can not be so aggressive that its pitch contribution results in poor rotor speed tracking.
 
-The Vestas implementation of the FATD uses a heavily filtered version of the nacelle fore-aft movement sensor measurement....
-
-
-
-
+The Vestas implementation of the FATD includes heavily filtering of the nacelle fore-aft movement sensor measurement. Thus the filtered input position or velocity input to the FATD controller no longer represents the actual velocity or position directly. The reason for this is simply that the tuned filter setup has proven to work better with the used controller than using measurement signals which more directly represent the actual sensor measurements.
 
 
 \subsection{Eigenfrequencies and operating speeds} \label{sec:eigenfreq}
@@ -231,7 +231,7 @@ In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bo
 
 
 \subsection{FOWT challenges and control} \label{sec:theo_fowt_challenges}
-This section concerns the challenges that are persistent in FOWT design and control.
+This section concerns the challenges that are persistent in FOWT design and control. \textbf{I have yet to start this section. Move on :)}
 
 
 
