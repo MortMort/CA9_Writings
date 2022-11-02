@@ -1,155 +1,88 @@
 \section{Modelling} \label{sec:mod} % Incl. Subsection "Component Models"
-The purpose of this section is to outline the linear model of the system. The model is intended to be used as a control model with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. In stead such components are modelled with algebraic equations. 
-
-Modelling is approached from a component point of view where parts of the system are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) through the wtLin tool.
+The purpose of this section is to outline the linear model of the system. The model is intended to be used as a control model with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. In stead such components models are either completely left out or modelled with algebraic equations. 
 
 
-\subsection{wtLin component models} \label{sec:mod_wtLincomps}
-A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating linear models of their turbines based on simple component models and parameters extracted from VTS parts files. The tool's component models can be connected in loops based on the input-output variables of each component model in a manner chosen by the user. A component can be in the form of mechanical models such as a generator or a converter but can also be models of other phenomena which are relevant for the system such as the interaction between the tower movement and the free wind.
-
-The tool takes as input an operating point and a specific set of components. It outputs a connected linear state-space model at that operating point.
-
-In this section the relevant component models are derived. At the end the components are connected such that the flow of information in the model becomes apparent. 
 
 
-%\subsubsection{Drivetrain (stiff)}
-%As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In the simple stiff drivetrain model it is assumed that there is no dampening or spring effects in the drivetrain between the rotor and the generator. As such if some torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor.
+%\subsection{wtLin component models} \label{sec:compcomps}
+%\sout{A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating linear models of their turbines based on simple component models and parameters extracted from VTS parts files. The tool's component models can be connected in loops based on the input-output variables of each component model in a manner chosen by the user. A component can be in the form of a physical system such as a generator or a converter but can also be models of physics which are relevant for the system such as the interaction between the tower movement and the free wind.
 %
-%The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law for rotation as such:
-%\begin{equation}\label{eq:wtlin_comp_drivetrain}
-%	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
-%\end{equation}
-%The torques are related to the low-speed rotor side and thus the high-speed generator side inertias are mapped to the low speed side:
-%\begin{equation} \label{eq:wtlin_comp_inertiamap}
-%	J_{gL} = J_{gH} \left(\dfrac{N_r}{N_g}\right)^2
-%\end{equation}
-%where $ N_r $ and $ N_g $ is the number of teeth on the rotor and generator side of the gearbox respectively. The rotor spins at angular velocity $ \dot{\theta}_r $.
+%The tool takes as input an operating point and a specific set of components. It outputs a connected linear state-space model at that operating point.
 %
-%Given $ \dot{\Omega} = \ddot{\theta}_r $ the model becomes:
-%\begin{equation}\label{key}
-%	 \dot{\Omega} = \dfrac{T_{r} + T_{g}}{J_{gL} + J_{r}}
-%\end{equation}
-%
-%
-%The component inputs are $ \{T_r, T_g\} $ and the output is $ \{\Omega\} $ 
+%In this section the relevant component models are derived. At the end the components are connected such that the flow of information in the model becomes apparent.}
 
+\subsection{Component models}
+A component approach to modelling is adopted where system parts are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) with a tool developed by the LaC department called wtLin.
 
-\subsubsection{Drivetrain (flexible)}
+\subsubsection{Drivetrain (stiff)}
+As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In a simple \textit{stiff drivetrain} model dampening or spring effects are left out. As such when a torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor. In the appendix in \cref{sec:mod_drt_flex} a model of a flexible drivetrain can be found. Due to the relatively fast dynamics of the drivetrain in relation to the WT eigenfrequency these dynamics can be left out. 
 
-\textbf{BEMÆRKNING! Jeg har indtil videre ikke fået snakket med Jesper om hvor vidt flexibelt drivetrain bliver modelleret med en fjeder og dæmper på både den ene og den anden side af gearet. Modellen som fremgår på den første ligning er stadig det rigtige resultat, men hvordan den udledes afhænger af modelopbygningen. Dermed tag "between the rotor and the gearbox and between the gearbox and the generator" med et gran salt for nu.}
-
-\medskip
-As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. The flexible drivetrain is modelled with a dampener and a spring between the rotor and the gearbox and between the gearbox and the generator. The model is then reduced by translating the dampener and spring from the generator side to the rotor side of the gearbox. As such the model ends up consisting of two inertias coupled through a spring with stiffness $ K $ and a dampener with dampening $ B $ where $ K $ and $ B $ are a combination of both the rotor and generator side dampener and spring coefficients. Due to the introduced spring and damper it is necessary to model both the rotor and and generator angle.
-\begin{align} 
-	J_{g} \ddot{\theta}_{gL} & = B (\dot{\theta}_r - \dot{\theta}_{gL}) + K(\theta_r - \theta_{gL}) - T_{g} \label{eq:wtlin_comp_drivetrain_flex_1} \\
-	J_{r} \ddot{\theta}_r & = B (\dot{\theta}_{gL} - \dot{\theta}_r ) - K(\theta_r - \theta_{gL}) + T_{r} \label{eq:wtlin_comp_drivetrain_flex_2}
-\end{align}
-Recall the relationship between derivatives:
-\begin{align}
-	\dot{\Omega} & = \ddot{\theta}_r \\
-	\dot{\omega}_{L} & = \ddot{\theta}_{gL} \\
-	\dot{\theta}_g & = \omega \\
-	\dot{\theta}_r & = \Omega
-\end{align}
-%and
-%\begin{align}
-%	\dot{\theta}_g & = \omega \\
-%	\dot{\theta}_r & = \Omega
-%\end{align}
-and
-\begin{equation}\label{eq:wtlin_comp_drivetrain_flex_mod_3}
-	\dot{\theta}_g = \left(\dfrac{N_g}{N_r}\right) \dot{\theta}_{gL} 
+The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law for rotation as such:
+\begin{equation}\label{eq:wtlin_comp_drivetrain}
+	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
 \end{equation}
-Which leaves the flexible drivetrain model as:
-%\begin{align} 
-%	\dot{\omega}_{gL} & = \dfrac{-B \dot{\theta}_{gL} + K(\theta_r - \theta_{gL}) - T_{g}}{J_{g}} \label{eq:wtlin_comp_drivetrain_flex_mod_1} \\
-%	\dot{\Omega} & = \dfrac{-B \dot{\theta}_{gL} -B - K(\theta_r - \theta_{gL}) + T_{r}}{J_{r}} \label{eq:wtlin_comp_drivetrain_flex_mod_2} \\
-%\end{align}
-\begin{align} 
-	\dot{\omega} & = \dfrac{-B \left(\dfrac{N_r}{N_g}\right)\omega + K(\theta_r - \left(\dfrac{N_r}{N_g}\right) \theta_{g}) - T_{g}}{J_{g} \left(\dfrac{N_r}{N_g}\right) } \label{eq:wtlin_comp_drivetrain_flex_mod_1} \\
-	\dot{\Omega} & = \dfrac{-B \left(\dfrac{N_r}{N_g}\right) \omega -B - K(\theta_r - \left(\dfrac{N_r}{N_g}\right) \theta_{g}) + T_{r}}{J_{r}} \label{eq:wtlin_comp_drivetrain_flex_mod_2} % \\
-%	\dot{\theta}_g & = \omega \\
-%	\dot{\theta}_r & = \Omega
-\end{align}
-The model is observed to be linear and thus no linearisation is necessary.
-
-The component inputs are $ \{T_g, T_r\} $ and the outputs are $ \{\omega, \Omega\} $. 
-
-\subsubsection{Generator model} \label{sec:wtlin_generator}
-When considering the generator of a WT the obvious point of view (POV) is to consider it as outputting power when its rotor is rotated. As such from this POV the input would be torque and rotational velocity and the output power would be the input to the converter. But with regards to rotor speed control the generator is on the contrary viewed as a source of torque. As such the inputs end up being rotational velocity and electrical power from the converter.
-
-In Vestas' turbine simulator (VTS) the generator efficiencies are defined in tables and are dependent on grid output power $ P $ and generator speed $ \omega $. The output is three respective output efficiencies: 
-\begin{enumerate}
-	\item Mechanic efficiency: $ \eta_m(P,\omega) $
-	\item Electric efficiency: $ \eta_e(P,\omega) $
-	\item Auxiliary efficiency: $ \eta_a(P,\omega) $
-\end{enumerate}
-Where 
-\begin{equation}\label{eq:wtLin_gen_effi}
-	\eta(P,\omega) = \eta_m(P,\omega) + \eta_e(P,\omega) + \eta_a(P,\omega)
+The torques are related to the low-speed rotor side and thus the high-speed generator side inertias are mapped to the low speed side:
+\begin{equation} \label{eq:wtlin_comp_inertiamap}
+	J_{gL} = J_{g} \left(\dfrac{N_r}{N_g}\right)^2
 \end{equation}
-From the total efficiency the output grid power is:
-\begin{equation}\label{eq:wtLin_gen_elec_pow}
-	P_{gen} \eta(P,\omega) = P
-\end{equation}
-where $ P_{gen} $ is the electrical power output of the generator.
+where $ N_r $ and $ N_g $ is the number of teeth on the rotor and generator side of the gearbox respectively. The rotor spins at angular velocity $ \dot{\theta}_r $.
 
-This leaves the power loss from generator to grid to be defined as:
-\begin{equation} \label{eq:wtLin_gen_pow_loss}
-	P_{loss}(P, \omega) = P_{gen} - P = \dfrac{P}{\eta(P, \omega)} - P
+Given $ \dot{\Omega} = \ddot{\theta}_r $ the model becomes:
+\begin{equation}\label{key}
+	 \dot{\Omega} = \dfrac{T_{r} + T_{g}}{\left(\dfrac{N_r}{N_g}\right)^2 J_{g} + J_{r}}
 \end{equation}
+
+The component inputs are $ \{T_r, T_g\} $ and the output is $ \{\Omega\} $ 
+
+
+
+\subsubsection{Generator model} \label{sec:comp_generator}
+The generator is mechanically connected to the drivetrain and is electrically connected to the converter. It is used to control the rotor speed during PLC by means of the generator torque. The generator is not just a direct feed-through because 
+
+While the generator model in wtLin includes the generator efficiencies they are left out here for simplicity. In the appendix in \cref{sec:comp_generator_eff} the generator model is derived including efficiencies. No generator dynamics are modelled and as such it is simply an algebraic equation.
+
 The power of a rotating machine can be defined as the product of torque and rotational velocity:
-\begin{equation}\label{eq:wtLin_power_in_rot}
-	P_{gen} = T_g \omega
+\begin{equation}\label{eq:comp_power_in_rot}
+	P_{g} = T_g \left( \dfrac{N_g}{N_r} \right)\omega_L
 \end{equation}
-As such for the system at hand the torque can be defined by rearranging \cref{eq:wtLin_power_in_rot} and substituting in $ P_{gen} $ from \cref{eq:wtLin_gen_pow_loss}. This leaves the non-linear generator model to be:
-\begin{equation}\label{eq:wtLin_gen_torque}
-	T_g(P, \omega) = \dfrac{P_{loss}(P, \omega) + P}{\omega}
+The non linear generator model is then defined by rearranging \cref{eq:comp_power_in_rot}:
+\begin{equation}\label{eq:comp_gen_torque}
+	T_g(P_g, \omega) = \dfrac{P_g}{\omega}
 \end{equation}
-\cref{eq:wtLin_power_in_rot} is the non-linear model of the generator. It contains $ P_{loss}(P,\omega) $ which from \cref{eq:wtLin_gen_pow_loss} is dependent on $ \eta(P, \omega) $. The $ \eta $ function is extracted from VTS and linearized.
-
-The linear model of the generator is obtained through a taylor expansion. The notation is relaxed a bit such that $ P_{loss}( P, \omega) $ is simply expressed as $ P_{loss} $. It is assumed that the system is linearised around an equilibrium operating point and thus the $ T_g(P_o, \omega_o) $ part is equal to zero.
-\begin{equation}\label{eq:wtLin_taylor}
-	T_g( P, \omega) \approx T_g(P_o, \omega_o) + 
-	\left. \dfrac{\partial T_g( P, \omega)}{\partial P} \right |_{P_o,\omega_o} ( P-P_o) + 
-	\left. \dfrac{\partial T_g( P, \omega)}{\partial \omega} \right |_{P_o,\omega_o} (\omega - \omega_o)
+The linear model of the generator is obtained through a taylor expansion:
+\begin{equation}\label{eq:comp_gen_taylor}
+	T_g( P_g, \omega) \approx T_g(P_{g_o}, \omega_o) + 
+	\left. \dfrac{\partial T_g( P_g, \omega)}{\partial P_g} \right |_{P_{g_o},\omega_o} ( P_g-P_{g_o}) + 
+	\left. \dfrac{\partial T_g( P_g, \omega)}{\partial \omega} \right |_{P_{g_o},\omega_o} (\omega - \omega_o)
 \end{equation}
-Below the the generator torque sensitivity to the grid power change term from \cref{eq:wtLin_taylor} is derived. From \cref{eq:wtLin_gen_1_1} to \cref{eq:wtLin_gen_1_2} the \textit{sum rule} is used to split the derivative into two added derivatives. From \cref{eq:wtLin_gen_1_2} to \cref{eq:wtLin_gen_1_3} the first fractions in the denominators of the partial derivatives of the two terms are treated as a product of two functions thus the \textit{product rule} is used. The assumption is that the grid power is completely disconnected from the generator through the converter. Thus from \cref{eq:wtLin_gen_1_3} to \cref{eq:wtLin_gen_1_4} $ \, \frac{\partial \, \omega^{-1}}{\partial P} = 0 $.
+Below the the generator torque sensitivity to the grid power change term from \cref{eq:comp_gen_taylor} is derived.
 \begin{align} 
-	\dfrac{\partial T_g( P, \omega)}{\partial P} &= \dfrac{\partial \left (\dfrac{P_{loss} +  P}{\omega}\right )}{\partial P} \label{eq:wtLin_gen_1_1} \\
-	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial P} + \dfrac{\partial \left ( \dfrac{ P}{\omega} \right )}{\partial P} \label{eq:wtLin_gen_1_2} \\
-	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{\partial \left ( \dfrac{1}{\omega} \right )}{\partial P} P_{loss} + \dfrac{1}{\omega} \cdot \dfrac{\partial P}{\partial P} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial P}  P \label{eq:wtLin_gen_1_3} \\
-	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{1}{\omega} \label{eq:wtLin_gen_1_4}
+	\dfrac{\partial T_g( P_g, \omega)}{\partial P_g} &= \dfrac{\partial \left (\dfrac{P_g}{\omega}\right )}{\partial P_g} \label{eq:comp_gen_1_1} \\
+	& = \dfrac{1}{\omega} \dfrac{\partial P_g}{\partial P_g} \label{eq:comp_gen_1_2}
 \end{align}
-
-
-The generator torque sensitivity to rotational velocity change from \cref{eq:wtLin_taylor} is then derived:
+The generator torque sensitivity to rotational velocity change from \cref{eq:comp_gen_taylor} is then derived:
 \begin{align}
-	\dfrac{\partial T_g(P, \omega)}{\partial \omega} & = \dfrac{\partial \left (\dfrac{P_{loss} +  P}{\omega}\right )}{\partial \omega} \\
-	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial \omega} + \dfrac{\partial \left (\dfrac{P}{\omega} \right )}{\partial \omega} \\
-	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega} + \dfrac{\partial \left (\dfrac{1}{\omega} \right)}{\partial \omega} P_{loss} + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial \omega} P \\
-	& = \dfrac{1}{\omega} \cdot  \dfrac{\partial P_{loss}}{\partial \omega} - \dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} \\
-	& = -\dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega}
+	\dfrac{\partial T_g(P_g, \omega)}{\partial \omega} & = \dfrac{\partial \left (\dfrac{P_g}{\omega}\right )}{\partial \omega} \\
+	& = P_g \dfrac{\partial \left (\dfrac{1}{\omega}\right )}{\partial \omega} \\
+	& = -P_g \, \dfrac{1}{\omega^2}
 \end{align}
-The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\frac{N_r}{N_g} \right ) \omega $. This yields the final linear generator model evaluated at the operating point $ (P_o, \omega_o) $. Furthermore $P_{loss}$ is still just a function of $ \omega_L $ and $ P $:
+The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\frac{N_r}{N_g} \right ) \omega $ and since the generator model is implemented assuming a stiff drivetrain then $ \omega_L = \Omega $. This yields the final linear generator model evaluated at the operating point $ (P_{g_o}, \Omega_o) $:
 \begin{equation}
 	\begin{split}
-		T_g(P, \omega_L) 	& \approx \left. \left ( \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}(P, \omega_L)}{\partial P} + \dfrac{1}{\omega_L} \right ) \right |_{P_o,\omega_{L_o}} (P - P_0) \\ 
-		& + \left ( -\dfrac{1}{\omega_L^2}(P + P_{loss}(P, \omega_L)) + \left. \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}(P, \omega_L)}{\partial \omega_L} \right ) \right |_{P_o,\omega_{L_o}} (\omega_L - \omega_{L_o})
+		T_g(P_g, \Omega) 	& \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
+		& \left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 	\end{split}
 \end{equation}
-The calculation of the power loss and derivation of the power loss sensitivity to grid power are left out here, but are calculated in wtLin at an operating point. In the wtLin tool these sensitivities are calculated based on the extracted tables of efficiency $ \eta $.
+When the model is linearised in a FLC operating point P is constant and therefore the first part is also zero. The second part is the \textit{negative damping} term which yields and increase in the generator torque when the rotational speed decreases which even further decreases the rotational speed.
 
-Presently the generator model in wtLin is implemented assuming a stiff drivetrain such that $ \Omega = \omega_L $.
-
-The component model input is $ \{\Omega\} $ and the output is $ \{T_g\} $
+The component model input is $ \{P, \Omega\} $ and the output is $ \{T_g\} $
 
 
-\subsubsection{Unity model converter} \label{sec:wtLin_conv_unity}
-The converter is regarded as a source of electrical power whose output is the power which is input to the generator.
+\subsubsection{Unity model converter} \label{sec:comp_conv_unity}
+The converter connects the generator with the grid and it is controlled by the power controller. It handles the power flow from the generator to the grid.
 
 The dynamics of modern converters are much faster than the rotor and tower dynamics and therefore it is simply modelled as an algebraic equation as a direct feed-through:
-\begin{equation}\label{eq:wtLin_comp_convdft}
+\begin{equation}\label{eq:comp_convdft}
 	P_{conv} = P_{ref}
 \end{equation}
 In other words the converter is treated as a \textit{black box} system which, when given a power reference, delivers a power equal to said power reference instantly.
@@ -157,15 +90,15 @@ In other words the converter is treated as a \textit{black box} system which, wh
 The input is $ \{P_{conv}\} $ and the output is $ \{P_{ref}\} $
 
 
-\subsubsection{Aerodynamic torque} \label{sec:wtLin_aero_torque}
-In \cref{sec:theory_aero} the rotor torque was defined for a blade from integrating over the torque component of each blade element based on a combination of the lift and drag forces. When calculating the total stationary torque it is convenient to use the pre-calculated power coefficient values $ C_P $ to determine the torque \cite{Knudsen2013}. wtLin extracts tables of both $ C_p $ and $ C_T $ from parts files present in the VTS files.
+\subsubsection{Aerodynamic torque} \label{sec:comp_aero_torque}
+In \cref{sec:theory_aero} the rotor torque was defined for a blade from integrating over the torque component of each blade element based on a combination of the lift and drag forces. When calculating the total stationary torque it is convenient to use the pre-calculated power coefficient values $ C_P $ to determine the torque \cite{Knudsen2013}. Tables of both $ C_p $ and $ C_T $ are extracted and linearised at the operating point with wtLin.
 
 In \cref{eq:power_w_Cp} the extractable power from the free wind was defined. When combining this equation with the definition of power in a mechanical system the torque on the rotor can be expressed:
-\begin{equation}\label{eq:wtLin_Mrot_lambda}
+\begin{equation}\label{eq:comp_Mrot_lambda}
 	T_r(\Omega, \lambda) = \dfrac{1}{2} \rho A_d v_0^3 \, C_p(\theta, \lambda) \dfrac{1}{\Omega}
 \end{equation}
 The TSR is dependent on $ \Omega $ and $ v_0 $ and thus the rotor torque model ends up being dependent on $ \theta $, $ \Omega $ and $ v_0 $:
-\begin{equation}\label{eq:wtLin_Mrot_wind}
+\begin{equation}\label{eq:comp_Mrot_wind}
 	T_r(\theta, \Omega, v_0) = \dfrac{1}{2} \rho A_d v_0^3 \, C_p(\theta, \Omega, v_0) \dfrac{1}{\Omega}
 \end{equation}
 The model is linearised at an operating point with a taylor expansion $ (\theta_o, \Omega_o, v_{0_o}) $:
@@ -175,14 +108,14 @@ The model is linearised at an operating point with a taylor expansion $ (\theta_
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v_0)}{\partial \Omega} \right |_{\theta_o, \Omega_o, v_{0_o}} ( \Omega-\Omega_o) \\
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v_0)}{\partial v_0} \right |_{\theta_o, \Omega_o, v_{0_o}} ( v_0 - v_{0_o})
 \end{align}
-The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:wtlin_generator]{\textbf{generator component model section}}. Retrieving the linear model with the \textit{jacobian()} Matlab functions is furthermore a trivial task.
+The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving the linear model with the \textit{jacobian()} Matlab functions is furthermore a trivial task.
 
 The component inputs are $ \{\theta, \Omega, v_0\} $ and the output is $ \{T_r\} $
 
-\subsubsection{Aerodynamic thrust} \label{sec:wtLin_aero_thrust}
-In \cref{sec:wtLin_aero_torque} the stationary rotor torque was calculated based on the pre-calculated power coefficient table. Likewise the stationary rotor thrust force $ F_T $ can be calculated from the pre-calculated thrust table $ C_T $. Thus the model of the stationary aerodynamic rotor thrust force ends up being:
-\begin{equation} \label{eq:wtLin_aero_thrust}
-	F_T(\theta, \Omega, v_0) = \dfrac{1}{2} A \rho A_d v_0^2 C_T(\theta, \Omega, v_0)
+\subsubsection{Aerodynamic thrust} \label{sec:comp_aero_thrust}
+In \cref{sec:comp_aero_torque} the stationary rotor torque was calculated based on the pre-calculated power coefficient table. Likewise the stationary rotor thrust force $ F_T $ can be calculated from the pre-calculated thrust table $ C_T $. Thus the model of the stationary aerodynamic rotor thrust force ends up being:
+\begin{equation} \label{eq:comp_aero_thrust}
+	F_T(\theta, \Omega, v_0) = \dfrac{1}{2} \rho A_d v_0^2 C_T(\theta, \Omega, v_0)
 \end{equation}
 $ C_T $ is a mapping from the pitch angle, rotor velocity and free wind speed to a total stationary rotor thrust.
 
@@ -192,8 +125,8 @@ The component inputs are $ \{\theta, \Omega, v_0 \} $ and the output is $ \{F_T\
 
 
 \subsubsection{Rotor wind}
-There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's POV. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity $ v_y $.
-\begin{equation}\label{eq:wtlin_comp_rotorwind}
+There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's POV. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the heave (\textbf{y}) direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
+\begin{equation}\label{eq:comp_rotorwind}
 	v_{0_{rot}} = v_{0} - v_y
 \end{equation}
 $ v_{0_{rot}} $ is \underline{not} the rotor wind which is the wind speed at the rotor plane but the free wind modified by the turbine velocity.
@@ -201,48 +134,48 @@ $ v_{0_{rot}} $ is \underline{not} the rotor wind which is the wind speed at the
 The component inputs are $ \{v_0, v_y\} $ and the output is $ \{v_{0_{rot}}\} $
 
 
-\subsubsection{Fore-aft tower model} \label{sec:mod_wtLin_foreaft_mod}
-The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation is the same as seen in \cref{fig:fowt_coordinates}. This notation will hereinafter be denoted the \textit{"normal DOF notation"}. Vestas uses another notation which will be denoted the \textit{Vestas DOF notation}: Most importantly \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} in the normal DOF notation is called \textit{tilt} in Vestas DOF notation. This document \underline{for the most part} adopts the normal DOF notation when discussing the DOFs and one is thus directed to \cref{fig:fowt_coordinates} if in doubt about which movement is the subject of discussion. The wtLin tool adopts the Vestas DOF notation and thus the equations presented make use of this notation as well.
+\subsubsection{Fore-aft tower model} \label{sec:comp_foreaft_mod}
+The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation is the same as seen in \cref{fig:fowt_coordinates}. This notation will hereinafter be denoted the \textit{"normal DOF notation"}. Vestas uses another notation which will be denoted the \textit{Vestas DOF notation}: Most importantly \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} in the normal DOF notation is called \textit{tilt} in Vestas DOF notation. This document \underline{for the most part} adopts the normal DOF notation when discussing the DOFs and one is thus directed to \cref{fig:fowt_coordinates} if in doubt about which movement is the subject of discussion. Since Vestas and the wtLin tool adopts the Vestas DOF notation the equations presented make use of this notation as well.
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\linewidth]{Graphics/wtLinForeAftMotionModel.pdf}
+	\includegraphics[width=0.95\linewidth]{Graphics/wtLinForeAftMotionModel.pdf}
 	\caption{Illustration of the mass spring damper approximation of the fore-aft tower movement}
 	\label{fig:wtLin_fore-aft_diagram}
 \end{figure}
-The fore-aft movement is modelled by a mass-spring-damper system such as the one seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model in every regard. It assumes a stiff nacelle-tower-foundation structure. The stability and dynamics coming from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. The governing equations for the mass-spring-damper system are:
-\begin{equation}\label{eq:wtlin_comp_fore-aft_ay1}
+The fore-aft movement is modelled by a mass-spring-damper system whose movement is defined at nacelle height. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model in every regard. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ M $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
+\begin{equation}\label{eq:comp_fore-aft_ay1}
 	\ddot{p}_y m = F_{rot} - F_d + F_s
 \end{equation}
 where $ p_y $ is the heave translation position, $ F_{rot} $ is the rotor force and $ F_d $ and $ F_s $ are the damper and spring forces respectively.
 
-when isolating $ \ddot{p}_y $ and expanding $ F_d $ and $ F_s $, \cref{eq:wtlin_comp_fore-aft_ay1} becomes:
-\begin{equation}\label{eq:wtlin_comp_fore-aft_ay2}
+when isolating $ \ddot{p}_y $ and expanding $ F_d $ and $ F_s $, \cref{eq:comp_fore-aft_ay1} becomes:
+\begin{equation}\label{eq:comp_fore-aft_ay2}
 	\ddot{p}_y = \dfrac{F_{rot} - b \dot{p}_y - k p_y}{m}
 \end{equation}
 where $ b $ and $ k $ are the damper and spring coefficients respectively.
 
 We then define:
 \begin{align}
-	\dot{v}_y & = \ddot{p}_y \label{eq:wtlin_comp_fore-aft_ay} \\
-	\dot{p}_y & = v_y \label{eq:wtlin_comp_fore-aft_vy}
+	\dot{v}_y & = \ddot{p}_y \label{eq:comp_fore-aft_ay} \\
+	\dot{p}_y & = v_y \label{eq:comp_fore-aft_vy}
 \end{align}
 which yields the fore-aft tower model:
 \begin{align}
-	\dot{v}_y & = \dfrac{F_{rot} - b v_y - k p_y}{m}  \label{eq:wtlin_comp_fore-aft_1} \\
-	\dot{p}_y & = v_y \label{eq:wtlin_comp_fore-aft_2}
+	\dot{v}_y & = \dfrac{F_{rot} - b v_y - k p_y}{m}  \label{eq:comp_fore-aft_1} \\
+	\dot{p}_y & = v_y \label{eq:comp_fore-aft_2}
 \end{align}
 Furthermore the fore-aft tower model transfer function (TF) from rotor thrust $ F_{rot} $ to heave translation $ p_y $ can be written on the standard second order TF form (seen in \cref{eq:std_tf}) in the laplace domain as seen below:
-\begin{equation}\label{eq:wtLin_fore_aft_tf}
+\begin{equation}\label{eq:comp_fore_aft_tf}
 	\dfrac{p_y}{F_{rot}} = \dfrac{\dfrac{1}{m}}{s^2 + \dfrac{b}{m} s + \dfrac{k}{m}}
 \end{equation}
 From comparison to the standard TF it can be derived that:
 \begin{align}
-	k & = (2 \pi f_{eig})^2 m \label{eq:wtLin_fore_aft_tf_k} \\
-	b & = 2 \zeta \sqrt{k m} \label{eq:wtLin_fore_aft_tf_b}
+	k & = (2 \pi f_{eig})^2 m \label{eq:comp_fore_aft_tf_k} \\
+	b & = 2 \zeta \sqrt{k m} \label{eq:comp_fore_aft_tf_b}
 \end{align}
-where $ f_{eig} $ represents the eigenfrequency of the system while $ \zeta $ is the damping factor. 
+where $ f_{eig} $ represents the natural frequency of the system while $ \zeta $ is the damping factor. 
 
-This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. 
+This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any parts files of VTS. They need to be tuned such that the response of the total model fits the best with the real system: The VTS simulation.
 
 \medskip
 The second order TF standard form:
@@ -250,9 +183,7 @@ The second order TF standard form:
 	T(s) = \dfrac{\omega_n^2}{s^2 + 2 \zeta \omega_n s + \omega_n^2}
 \end{equation}
 
-The component inputs are $ \{ \} $ and the outputs are $ \{ \} $
-
-
+The component input is $ \{F_{rot} \} $ and the output is $ \{p_y, v_y\} $
 
 %
 %\subsubsection{Side-side tower model}
@@ -260,31 +191,19 @@ The component inputs are $ \{ \} $ and the outputs are $ \{ \} $
 %
 %The component inputs are $ \{ \} $ and the outputs are $ \{ \} $
 
-\subsubsection{Pitch system dynamics} \label{sec:mod_wtLin_pitch}
-The pitch system dynamics are modelled with a simple first order low-pass filter which in the frequency domain is:
-\begin{equation}\label{eq:wtLin_pitch_freq}
-	\theta(s) = \dfrac{1}{\tau_{pit} s + 1} (\theta_{ref}(s) + \theta_{fatd}(s))
+\subsubsection{Pitch system dynamics} \label{sec:comp_pitch}
+The pitch system consists of the local pitch controller and the mechanical and electrical parts that make out the pitching system. The pitch controller takes the pitch reference $ \theta_{ref} $ and the FATD contribution $ \theta_{fatd} $ as input and outputs a voltage in a range which through the electrical and mechanical system translates to a pitch position. 
+
+While the pitch system dynamics are not fast by ordinary standards they can be assumed to be fast enough with regards to the control objective to be left out. Therefore the pitch system is simply modelled as a direct feed-through. In the appendix in \cref{sec:comp_pitch_dyn} pitch system dynamics are approximated with a single order low-pass filter. 
+\begin{equation}\label{eq:comp_pitch_freq}
+	\theta = \theta_{ref} + \theta_{fatd}
 \end{equation}
-where $ \tau_{pit} $ is a time-constant which suits the response of the pitching system at the operating point. In VTS the pitch system dynamics are modelled from a table which takes in the flap-wise bending moment of the blade and a pitch angle and outputs a pitch angle rate of change. As such wtLin uses the operating point and a user defined flap-wise bending moment to calculate $ \tau_{pit} $.
-
-In the time domain the model becomes:
-\begin{equation}\label{eq:wtLin_pitch_time}
-	\dot{\theta} =\dfrac{(\theta_{ref}(s) + \theta_{fatd}(s)) - \theta}{\tau_{pit}}
-\end{equation}
-
-% The calculation of the time-domain version:
-%\begin{align}\label{eq:wtLin_pitch}
-%	\theta(s) & = \dfrac{1}{\tau_{pit} s + 1} (\theta_{ref}(s) + \theta_{fatd}(s)) \\
-%	(\tau_{pit} s + 1) \theta(s) & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
-%	\tau_{pit}\theta s + \theta(s)  & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
-%	\tau_{pit}\dot{\theta} + \theta  & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
-%	\dot{\theta} & =\dfrac{(\theta_{ref}(s) + \theta_{fatd}(s)) - \theta}{\tau_{pit}}
-%\end{align}
-
 The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is $ \{\theta \} $
 
 
-\subsubsection{Full Load Controller (FLC)} \label{sec:mod_wtLin_FLC}
+\subsubsection{Full Load Controller (FLC)} \label{sec:comp_flc}
+
+
 The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}.
 \begin{figure}[ht]
 	\centering
@@ -292,39 +211,35 @@ The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}.
 	\caption{Block diagram of the PI controller on the \textit{$T_i$} form.}
 	\label{fig:PIcontroller}
 \end{figure}
-The controller model is therefore:
-\begin{equation}\label{eq:wtlin_comp_flc_1}
-	\theta_{ref}(s) = (K_{p \theta} + K_{p \theta} \dfrac{1}{T_{i \theta} s}) e(s)
+When including the sensitivity gain scheduling the laplace domain controller is therefore:
+\begin{equation}\label{eq:comp_flc}
+	\theta_{ref}(s) = K_{gs,dP/d\theta} (K_{p, \theta} + K_{p, \theta} \dfrac{1}{T_{i, \theta} s}) e(s)
 \end{equation}
-which is reduced to the form:
-\begin{equation}\label{eq:wtlin_comp_flc_2}
-	\theta_{ref}(s) = K_{p \theta}\dfrac{T_{i \theta} s + 1}{T_{i \theta} s} e(s)
-\end{equation}
-Gain scheduling is present in the turbine controller and the specific gain scheduling value is applied based on the operating point:
-\begin{equation}\label{eq:wtlin_comp_flc_3}
-	\theta_{ref}(s) = K_{gs \theta} K_{p \theta} \dfrac{T_{i \theta} s + 1}{T_{i \theta} s} e(s)
+%The time domain FLC controller is derived:
+%\begin{align}
+%	\theta_{ref}(s) & = K_{gs,dP/d\theta} K_{p, \theta} \dfrac{T_{i, \theta} s + 1}{T_{i, \theta} s} e(s) \\
+%	\theta_{ref}(s) & = K_{gs,dP/d\theta} K_{p, \theta} (\dfrac{T_{i, \theta} s}{T_{i, \theta} s} + \dfrac{1}{T_{i, \theta} s}) e(s) \\
+%	\theta_{ref}(s) & = K_{gs,dP/d\theta} K_{p, \theta} e(s) +  K_{gs,dP/d\theta} K_{p, \theta} \dfrac{1}{T_{i, \theta} s} e(s) \\
+%	\theta_{ref}(s) s & = K_{gs,dP/d\theta} K_{p, \theta} e(s) s +  K_{gs,dP/d\theta} K_{p, \theta} \dfrac{1}{T_{i, \theta}} e(s)
+%\end{align}
+The time domain model can be derived by rearranging and taking the inverse laplace transform which yields:
+\begin{equation}\label{eq:comp_flc_time}
+	\dot{\theta}_{ref} = K_{gs,dP/d\theta} (K_{p, \theta} \dot{e} + K_{p, \theta} \dfrac{1}{T_{i, \theta}} e)
 \end{equation}
 
-In the time domain FLC controller is then represented as (SUBJECT TO CHANGE! I'm not done working on this..):
-\begin{align}
-	\theta_{ref}(s) & = K_{gs \theta} K_{p \theta} \dfrac{T_{i \theta} s + 1}{T_{i \theta} s} e(s) \\
-	\theta_{ref}(s) & = K_{gs \theta} K_{p \theta} (\dfrac{T_{i \theta} s}{T_{i \theta} s} + \dfrac{1}{T_{i \theta} s}) e(s) \\
-	\theta_{ref}(s) & = K_{gs \theta} K_{p \theta} e(s) +  K_{gs \theta} K_{p \theta} \dfrac{1}{T_{i \theta} s}e(s) \\
-	\theta_{ref}(s) s & = K_{gs \theta} K_{p \theta} e(s) s +  K_{gs \theta} K_{p \theta} \dfrac{1}{T_{i \theta}}e(s) \\
-	\dot{\theta}_{ref} & = K_{gs \theta} K_{p \theta} \dot{e} +  K_{gs \theta} K_{p \theta} \dfrac{1}{T_{i \theta}}e
-\end{align}
 
-The component inputs are $ \{e \} $ and the outputs are $ \{\theta_{ref} \} $
+The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 
 
-\subsubsection{Partial Load Controller (PLC)}
-The PLC is a PI-controller on the same form as the \hyperref[sec:mod_wtLin_FLC]{\textbf{FLC}} controller:
-\begin{equation}\label{eq:wtlin_comp_flc}
-	P_{ref}(s) = K_{gs P} K_{p P} \dfrac{T_{i P} s + 1}{T_{i P} s} e(s)
+\subsubsection{Partial Load Controller (PLC)} \label{sec:comp_plc}
+The PLC is a PI-controller on the same form as the \hyperref[sec:comp_flc]{\textbf{FLC}} controller:
+\begin{equation}\label{eq:comp_plc}
+	P_{ref}(s) = K_{gs} (K_{p, P} + K_{p, P} \dfrac{1}{T_{i, P} s}) e(s)
 \end{equation}
+
 Which likewise in the time domain is:
-\begin{equation}\label{key}
-	\dot{P}_{ref} = K_{gs P} K_{p P} \dot{e} +  K_{gs P} K_{p P} \dfrac{1}{T_{i P}}e
+\begin{equation}\label{eq:comp_plc_time}
+	\dot{P}_{ref} = K_{gs P} K_{p, P} \dot{e} +  K_{gs P} K_{p, P} \dfrac{1}{T_{i, P}}e
 \end{equation}
 
 The component inputs are $ \{e \} $ and the outputs are $ \{P_{ref} \} $
@@ -332,14 +247,14 @@ The component inputs are $ \{e \} $ and the outputs are $ \{P_{ref} \} $
 %\subsubsection{Fore-aft tower damper (FATD)}
 %Vestas has a controller is in place called Fore-aft Tower Damper which is responsible for reducing the WT fore-aft tower motion. The same controller is used for both fixed-bottom WTs and FOWTs but the tuning is vastly different. The purpose of this report is to explore the possibilities with regards to the design and tuning of a fore-aft motion dampening controller. The purpose of the Vestas FATD controller is thus exactly the same as that of the controller which is intended to be designed in this report. Including the FATD in the modelling of the system thus might seem unnecessary since it ought to be turned off such that the designed controller will perform the task. The reason for including the FATD controller is that it stabilizes the system such that the SysIdFreqSweep Vestas tool has a better shot at functioning properly.
 %
-%It outputs an angle $ \theta_{fatd} $ which is added to the pitch angle reference $ \theta{ref} $ before entering the \hyperref[sec:mod_wtLin_pitch]{\textbf{pitch system}}. The FATD is a state-space controller on the form:
-%\begin{equation}\label{eq:wtLin_fatd}
+%It outputs an angle $ \theta_{fatd} $ which is added to the pitch angle reference $ \theta{ref} $ before entering the \hyperref[sec:comp_pitch]{\textbf{pitch system}}. The FATD is a state-space controller on the form:
+%\begin{equation}\label{eq:comp_fatd}
 %	\theta_{fatd} = K_{fatd}u = \begin{bmatrix} k_{pos} & k_{vel} \end{bmatrix} \begin{bmatrix} p_y \\ v_y \end{bmatrix} = k_{pos} p_y + k_{vel} v_y
 %\end{equation}
 
 
 % Template:5
-%\begin{equation}\label{eq:wtlin_comp_}
+%\begin{equation}\label{eq:comp_}
 %	
 %\end{equation}
 
@@ -352,7 +267,7 @@ SUBJECT TO CHANGE! This section is not in any way finished. Just skip this and g
 \textbf{States of the wtLin model:}
 Converter with time constant (maybe used?): $ P_{conv} $
 
-Flexible drivetrain: $ \Omega $ and $ \omega_L $
+Flexible drivetrain: $ \Omega $ and $ \left( \dfrac{N_g}{N_r} \right)\omega_L $
 
 Fore-aft tower model: $ \dot{p}_y $ and $ p_y $
 
@@ -366,7 +281,7 @@ PLC: $ P_{ref} $
 
 State vector: 
 \begin{equation}\label{key}
-	x = [\Omega, \omega_L, \dot{p}_y, p_y, \dot{p}_x, p_x, \theta, \theta_{ref}, P_{ref}]^T
+	x = [\Omega, \left( \dfrac{N_g}{N_r} \right)\omega_L, \dot{p}_y, p_y, \dot{p}_x, p_x, \theta, \theta_{ref}, P_{ref}]^T
 \end{equation}
 
 wtLin matlab state vector:
@@ -382,9 +297,9 @@ At dømme ud fra ovenstående state vektor som næsten passer i længden med sta
 \textbf{Outputs:}
 
 \subsection{Fore-aft tower model fitting} \label{sec:mod_foreaft_fitting}
-As described in \hyperref[sec:mod_wtLin_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:mod_wtLin_foreaft_mod} the wtLin component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This is obviously a seriously simplified model which consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behavior of the system best possible is far from intuitive. When writing the model equation on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the relevant tuning results.\\
+As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:comp_foreaft_mod} the wtLin component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This is obviously a seriously simplified model which consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behavior of the system best possible is far from intuitive. When writing the model equation on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the relevant tuning results.\\
 
 Setting the natural frequency around the eigenfrequency of the turbine is a good place to start. A first guess for the effective mass $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. Many factors of course affect the dampening of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theo_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction.
 
-A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:wtLin_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:wtLin_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.... \textbf{This is where i left off. I'm not done at all}
+A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.... \textbf{This is where i left off. I'm not done at all}
 
