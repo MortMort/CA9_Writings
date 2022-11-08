@@ -156,7 +156,7 @@ This causes the rotor speed to tend towards the optimal rotor speed. This is mor
 \end{equation}
 \cref{eq:omega_dot} is derived by combining equations \cref{eq:power2}, \cref{eq:Cp}, \cref{eq:tipspeedratio}, \cref{eq:plc_rotor_speed} and \cref{eq:gen_torque_ctrl} and \cref{eq:mech_torque}.
 \begin{equation}\label{eq:mech_torque}
-	T_r = \dfrac{P}{\Omega}
+	T_r = \dfrac{P_T}{\Omega}
 \end{equation}
 \cref{eq:mech_torque} simply states the relationship between mechanical power $ P_T $, rotor speed $ \Omega $ and torque $ T_r $.
 
@@ -187,7 +187,13 @@ FLC is active from nominal wind speed to cut-out wind speed. The generator speed
 \begin{equation}\label{eq:pi_flc_ctrl}
 	\theta_{ref} = K_{gs,dP/d\theta} \left(K_{flc,P} \, \omega_e + K_{flc,I} \int \omega_e\right)
 \end{equation}
-The PI controller output is multiplied with a gain scheduling term to compensate for the pitch-dependent sensitivity $ \frac{dP}{d\theta} $ which results from the non linear pitch authority \cite{Pao2009}. The power reference for the power controller is sat at the constant nominal output power. This results in a negative damping 
+The PI controller output is multiplied with a gain scheduling term to compensate for the pitch-dependent sensitivity $ \frac{dP}{d\theta} $ which results from the non linear pitch authority \cite{Pao2009}. 
+
+The power controller in FLC can be operated at either a constant power or constant torque set-point. Vestas' FLC controller operates with a constant power set-point with varying torque. This is favourable from a grid perspective because a steady power delivery is preferable. As a result a negative damping phenomena occurs with regard to the rotor speed. This becomes obvious when observing \cref{eq:plc_rotor_speed} and considering the generator torque:
+\begin{equation}\label{eq:gen_torque}
+	T_g = \dfrac{P}{\omega}
+\end{equation}
+If for an example the generator speed decreases then the generator torque increases as a result of maintaining constant power. As a consequence the rotor speed deceleration increases even further. Consequently the FLC pitch controller must regulate the pitch more actively to compensate for the turbine's increased sensitivity to rotor speed changes.
 
 The FLC PI controller parameters $ K_{flc,P} $ and $ K_{flc,I} $ are tuned such that satisfactory performance and stability is achieved for a given turbine model. 
 

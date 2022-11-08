@@ -14,7 +14,7 @@ The purpose of this section is to outline the linear model of the system. The mo
 \subsection{Component models}
 A component approach to modelling is adopted where system parts are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) with a tool developed by the LaC department called wtLin.
 
-\subsubsection{Drivetrain (stiff)}
+\subsubsection{Drivetrain (stiff)} \label{sec:comp_drv}
 As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In a simple \textit{stiff drivetrain} model dampening or spring effects are left out. As such when a torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor. In the appendix in \cref{sec:mod_drt_flex} a model of a flexible drivetrain can be found. Due to the relatively fast dynamics of the drivetrain in relation to the WT eigenfrequency these dynamics can be left out. 
 
 The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law for rotation as such:
@@ -49,7 +49,7 @@ The non linear generator model is then defined by rearranging \cref{eq:comp_powe
 \begin{equation}\label{eq:comp_gen_torque}
 	T_g(P_g, \omega) = \dfrac{P_g}{\omega}
 \end{equation}
-The linear model of the generator is obtained through a taylor expansion:
+The linear model of the generator is obtained through a taylor expansion. The definition of the taylor expansion is not included in this report. \cref{eq:comp_power_in_rot} is an algebraic equation describing the absolute value of the generator torque and not its rate of change as it would have been for a model including dynamics. Therefore the taylor expansion linearisation at the operating point yields an affine linear approximation at the operating point:
 \begin{equation}\label{eq:comp_gen_taylor}
 	T_g( P_g, \omega) \approx T_g(P_{g_o}, \omega_o) + 
 	\left. \dfrac{\partial T_g( P_g, \omega)}{\partial P_g} \right |_{P_{g_o},\omega_o} ( P_g-P_{g_o}) + 
@@ -66,13 +66,18 @@ The generator torque sensitivity to rotational velocity change from \cref{eq:com
 	& = P_g \dfrac{\partial \left (\dfrac{1}{\omega}\right )}{\partial \omega} \\
 	& = -P_g \, \dfrac{1}{\omega^2}
 \end{align}
-The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\frac{N_r}{N_g} \right ) \omega $ and since the generator model is implemented assuming a stiff drivetrain then $ \omega_L = \Omega $. This yields the final linear generator model evaluated at the operating point $ (P_{g_o}, \Omega_o) $:
+The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\frac{N_r}{N_g} \right ) \omega $ and since the generator model is implemented assuming a stiff drivetrain then $ \omega_L = \Omega $. This yields the affine linear generator model evaluated at the operating point $ (P_{g_o}, \Omega_o) $:
 \begin{equation}
-	\begin{split}
-		T_g(P_g, \Omega) 	& \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
-		& \left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
-	\end{split}
+	T_g(P_g, \Omega) \approx \dfrac{P_{g_o}}{\omega_o} + \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
+	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 \end{equation}
+It is of great interest to have a linear model of the generator and as such the change in the generator torque from the operating point is defined:
+\begin{equation}
+	\bar T_g(P_g, \Omega) \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
+	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
+\end{equation}
+where $ \bar T_g = T_g - T_{g_o} $.
+
 When the model is linearised in a FLC operating point P is constant and therefore the first part is also zero. The second part is the \textit{negative damping} term which yields and increase in the generator torque when the rotational speed decreases which even further decreases the rotational speed.
 
 The component model input is $ \{P, \Omega\} $ and the output is $ \{T_g\} $
@@ -124,7 +129,7 @@ The model is linearised with a taylor expansion.
 The component inputs are $ \{\theta, \Omega, v_0 \} $ and the output is $ \{F_T\} $
 
 
-\subsubsection{Rotor wind}
+\subsubsection{Rotor wind} \label{sec:comp_rot_wind}
 There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's POV. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the heave (\textbf{y}) direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
 \begin{equation}\label{eq:comp_rotorwind}
 	v_{0_{rot}} = v_{0} - v_y
@@ -138,11 +143,11 @@ The component inputs are $ \{v_0, v_y\} $ and the output is $ \{v_{0_{rot}}\} $
 The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation is the same as seen in \cref{fig:fowt_coordinates}. This notation will hereinafter be denoted the \textit{"normal DOF notation"}. Vestas uses another notation which will be denoted the \textit{Vestas DOF notation}: Most importantly \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} in the normal DOF notation is called \textit{tilt} in Vestas DOF notation. This document \underline{for the most part} adopts the normal DOF notation when discussing the DOFs and one is thus directed to \cref{fig:fowt_coordinates} if in doubt about which movement is the subject of discussion. Since Vestas and the wtLin tool adopts the Vestas DOF notation the equations presented make use of this notation as well.
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.95\linewidth]{Graphics/wtLinForeAftMotionModel.pdf}
+	\includegraphics[width=0.9\linewidth]{Graphics/wtLinForeAftMotionModel.pdf}
 	\caption{Illustration of the mass spring damper approximation of the fore-aft tower movement}
 	\label{fig:wtLin_fore-aft_diagram}
 \end{figure}
-The fore-aft movement is modelled by a mass-spring-damper system whose movement is defined at nacelle height. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model in every regard. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ M $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
+The fore-aft movement is modelled by a mass-spring-damper system whose movement is defined to be at nacelle height. This choice is initially made because a sensor in VTS is currently located at nacelle height which is utilized by the FATD controller. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model in every regard. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ M $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
 \begin{equation}\label{eq:comp_fore-aft_ay1}
 	\ddot{p}_y m = F_{rot} - F_d + F_s
 \end{equation}
@@ -175,7 +180,7 @@ From comparison to the standard TF it can be derived that:
 \end{align}
 where $ f_{eig} $ represents the natural frequency of the system while $ \zeta $ is the damping factor. 
 
-This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any parts files of VTS. They need to be tuned such that the response of the total model fits the best with the real system: The VTS simulation.
+This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any parts files of VTS. They need to be tuned such that the response of the model fits the real system as well as possible. In \cref{sec:mod_foreaft_fitting} this process is further described in detail.
 
 \medskip
 The second order TF standard form:
@@ -191,7 +196,7 @@ The component input is $ \{F_{rot} \} $ and the output is $ \{p_y, v_y\} $
 %
 %The component inputs are $ \{ \} $ and the outputs are $ \{ \} $
 
-\subsubsection{Pitch system dynamics} \label{sec:comp_pitch}
+\subsubsection{Pitch system} \label{sec:comp_pitch}
 The pitch system consists of the local pitch controller and the mechanical and electrical parts that make out the pitching system. The pitch controller takes the pitch reference $ \theta_{ref} $ and the FATD contribution $ \theta_{fatd} $ as input and outputs a voltage in a range which through the electrical and mechanical system translates to a pitch position. 
 
 While the pitch system dynamics are not fast by ordinary standards they can be assumed to be fast enough with regards to the control objective to be left out. Therefore the pitch system is simply modelled as a direct feed-through. In the appendix in \cref{sec:comp_pitch_dyn} pitch system dynamics are approximated with a single order low-pass filter. 
@@ -201,7 +206,7 @@ While the pitch system dynamics are not fast by ordinary standards they can be a
 The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is $ \{\theta \} $
 
 
-\subsubsection{Full Load Controller (FLC)} \label{sec:comp_flc}
+--\subsubsection{Full Load Controller (FLC)} \label{sec:comp_flc}
 
 
 The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}.
@@ -297,9 +302,25 @@ At dømme ud fra ovenstående state vektor som næsten passer i længden med sta
 \textbf{Outputs:}
 
 \subsection{Fore-aft tower model fitting} \label{sec:mod_foreaft_fitting}
-As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:comp_foreaft_mod} the wtLin component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This is obviously a seriously simplified model which consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behavior of the system best possible is far from intuitive. When writing the model equation on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the relevant tuning results.\\
+As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:comp_foreaft_mod} the component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This is obviously a seriously simplified model which consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behaviour of the real system well is not intuitive. When the model equations were written on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the relevant tuning results.\\
 
-Setting the natural frequency around the eigenfrequency of the turbine is a good place to start. A first guess for the effective mass $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. Many factors of course affect the dampening of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theo_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction.
+Setting the natural frequency around the eigenfrequency of the turbine is a good place to start. 
 
-A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.... \textbf{This is where i left off. I'm not done at all}
+A first guess for the effective mass $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. This is simply a rough estimate which is not expected to yield satisfactory results mainly because the mass M does not represent the actual mass of the system but rather the inertia of the pitching of the whole structure in the water. 
 
+Many factors affect the dampening of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theo_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction. A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.
+
+\medskip
+In order to be able to fit the model to the real system it is of course necessary to have some data to fit it against. This is where \textit{SysIdFreqSweep} enters the picture.
+
+\subsubsection{System identification}
+A Vestas tool called \textit{SysIdFreqSweep} is utilized to get frequency response plots of the real system from specific actuator inputs to any sensor in the simulation environment. The tool functionality can be split into to main parts. 
+
+The \textbf{first part} is the generation of setup files which alter the simulation environment such that a sinusoid of chosen frequency and amplitude is induced on a chosen reference. A full simulation is run for every frequency between a start and end frequency. 
+
+The \textbf{second part} is the processing of the simulation output data to plot frequency responses from the actuator to an output sensor. 
+
+\medskip
+The input actuators were chosen to be the generator speed reference and the pitch angle reference and the observed outputs were the measured generator speed and the tower top velocity.
+
+60 different frequencies were spaced logaritmacally between 0.01 Hz and 0.3 Hz. The amplitude of the sinusoid was set to 5\% of the mean generator speed reference and for the rotor pitch it was set to 0.5 degrees \todo[inline]{Virker ikke p.t. Vi må se om det kommer til at virke.}
