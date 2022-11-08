@@ -7,7 +7,7 @@
 This test aims to document the behaviour of the floating Vestas Turbine Simulator (VTS) model in the first semi-successful preliminary frequency sweep test. It is desired to get an understanding of how the floating turbine is operating when the different rotor frequencies are induced and how these frequencies translate into the structure of the turbine. 
 
 \subsubsection*{Background}
-A Vestas matlab tool called SysIdFrqSweep is able to generate Design Load Cases (DLCs) which make a variable such as the rotor speed include a constant frequency as to analyse how such a frequency translates to the rest of the system mainly of interest the y-direction foundation translation and tower pitch angle. Essentially it should be possible to make a bode plot when enough simulations are run at enough frequencies. This could be used to tune the linear model to match the VTS model as closely as possible. As such bode plots would also be made for the linear model and compared.
+A Vestas matlab tool called SysIdFrqSweep is able to generate Design Load Cases (DLCs) which make a variable such as the rotor speed include a constant frequency as to analyse how such a frequency translates to the rest of the system mainly of interest the y-direction foundation pitching. Essentially it should be possible to make a bode plot when enough simulations are run at enough frequencies. This could be used to tune the linear model to match the VTS model as closely as possible. As such bode plots would also be made for the linear model and compared.
 
 \subsubsection*{Test subject}
 The test subject is a specific floating turbine setup which is simulated with VTS. The turbine is a V164 8MW on a floating semi-submersible platform.
@@ -38,11 +38,11 @@ In Matlab a script made by me extracts the data from the .int files by using a L
 
 
 \subsubsection*{Results and Comments}
-Since there are 8 different frequencies the data is plotted in sets of four frequencies. Not all all plots of all frequencies are included. 
+Since there are 8 different frequencies the data is plotted in sets of four frequencies. Not all all plots of all frequencies are included. The FFT plots include errors: the titles do not state that they are FFT plots and the y-axis labels state the original non-fft data names and units.
 
 The first two plots are plots of the free wind speed, blade pitch angle 1, rotor angular velocity and generator torques for the two sets of four frequencies respectively. Frequencies 0.02 to 0.06 are seen in \cref{fig:tjj0_f02to06VfreeToMgen} and frequencies 0.07 to 0.1 are seen in \cref{fig:tjj0_f07to1VfreeToMgen}. The time is restricted to a 100 second window. It is seen that the wind speed is set unrealistically at a constant wind speed such that this disturbance would not interfere with the observations of the system frequencies. Only one blade pitch is plotted since it is deemed redundant to plot all pitch angles as they will all have the same angle at only slightly different amplitudes and slightly different phases. When observing the angular velocities it becomes evident that it is not a trivial task to read out the frequencies added on top of the rotor angular velocity in the timeseries. When observing the rotor angular velocity fft plots in \cref{fig:tjj0_f02to06OmegaFFT} and \cref{fig:tjj0_f07to1_OmegaFFT} the frequencies are apparent as pins at each of the respective frequencies. The frequency content observed at around 0.034 Hz is the natural frequency of the tower-foundation structure in the water.
 
-It is widely evident that the turbine is pitching and translating in the water, resulting in great oscillations in the whole turbine. When looking at the plot of the tower translations and pitch angles in \cref{fig:tjj0_f07to1_xPosToPitchAng} it is obvious that the oscillations are occurring due to the structure movement. An fft of the roll and pitch angles are seen in \cref{fig:tjj0_f07to1_RollPitchAngFFT}.
+It is widely evident that the turbine is pitching and translating in the water, resulting in great oscillations in all plotted sensor readings. The big oscillations observed in both the blade pitch angle, rotor angular velocity and generator torque are all due to the slow motion of the turbine pitching in the water. When looking at the plot of the tower translations and pitch angles in \cref{fig:tjj0_f07to1_xPosToPitchAng} it is obvious that the oscillations are occurring due to the structure movement. The tower top position is oscillating between around 4 m and 24 m with a pitch angle oscillating between $ -0.3 \frac{rad}{s} \cdot \frac{180}{\pi} = -17.19 ^{\circ} $ and $ -0.1 \frac{rad}{s} \cdot \frac{180}{\pi} = -5.73 ^{\circ} $. The x-direction (side-side) tower top position oscillation is much smaller and is between 0.4 m and 1.8 m. An fft of the roll and pitch angles are seen in \cref{fig:tjj0_f07to1_RollPitchAngFFT}.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.8\linewidth]{Graphics/TestResults/tj00/tjj0_f02to06VfreeToMgen.png}
@@ -92,19 +92,6 @@ It is widely evident that the turbine is pitching and translating in the water, 
 	\label{fig:tjj0_f07to1_RollPitchAngFFT}
 \end{figure}
 
-%\begin{figure}[ht]
-%	\centering
-%	\includegraphics[width=0.8\linewidth]{Graphics/TestResults/tj00/}
-%	\caption{}
-%	\label{fig:tj00_}
-%\end{figure}
-%
-%\begin{figure}[ht]
-%	\centering
-%	\includegraphics[width=0.8\linewidth]{Graphics/TestResults/tj00/}
-%	\caption{}
-%	\label{fig:tj00_}
-%\end{figure}
 
-
-%\subsubsection*{Sources of error and insecurities}
+\subsubsection*{Conclusion}
+Because of the large oscillations occurring due to the pitch motion of the turbine, the oscillations originating from the added rotor speed reference sine wave are hard to read. From FFTs of the rotor speed and surge direction translation it is evident that the speed reference translates through the system. The eigenfrequency oscillations of the WT structure which lie at 0.034 Hz dominate both non-fft plots and fft plots. It was furthermore observed that the surge tower top movement is much greater than in sway direction. When considering that there is no simulated yaw error this is also expected.

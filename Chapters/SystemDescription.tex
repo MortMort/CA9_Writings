@@ -24,6 +24,7 @@ It is deemed both unfeasible and unnecessary to test the controller derived in t
 Notable simulation environment changes used in parts of this project are:
 \begin{itemize}
 	\item Wind speeds are above 14 m/s to stay well inside the FLC region. It is considered outside the scope of this project to consider operation around nominal wind speed and in PLC.
+	\item The yaw error is zero meaning that the wind flows through the rotor diagonally with respect to the yaw.
 	\item Turbulence is removed for some simulations such that the system response is easier to deduce and model. 
 	\item The FATD controller is turned off such that there is no damping of the fore-aft motion.
 	\item OrcaFlex is set up to simulate flat, still water to simplify the system response even further. 
