@@ -2,7 +2,15 @@
 The purpose of this section is to give an overview of the system which the project is based on. It is not of great importance which specific turbine is the subject of examination with regards to exploring and dealing with the floating control problem. But the specifications of the turbine determines the model parameters. Therefore this section is first and foremost dedicated to outlining the turbine specification and secondly to define the software environment which the system is derived from and evaluated upon. 
 
 \subsubsection{The Vestas V164-8.0}
-The turbine examined in this project is the Vestas V164-8.0 (8 MW) which is a variable-speed-variable-pitch turbine with a permanent magnet generator, gearbox and full-scale converter.
+The turbine examined in this project is the Vestas V164-8.0 (8 MW) which is a variable-speed-variable-pitch turbine with a permanent magnet generator, gearbox and full-scale converter. The 8.4 MW version of the turbine is seen in \cref{fig:v164_8.4mw} on top of the Principle Power’s WindFloat semi-submersible foundation \cite{WindFloatAtlantic}. This is the foundation used in this project. \todo[inline]{Det skal jeg lige checke op på.}
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.80\linewidth]{Graphics/v164-8_4mw_floating.png}
+	\caption{The Vestas V164-8.4 (8.4 MW) on top of the Principle Power’s WindFloat semi-submersible foundation}
+	\label{fig:v164_8.4mw}
+\end{figure}
 
 The turbines operating ranges are:
 \begin{itemize}
@@ -13,7 +21,8 @@ The turbines operating ranges are:
 \end{itemize}
 The rotor diameter is 164 m and the hub height is 100 m. The nominal power output is 8 MW with the power curve seen in \cref{fig:v164_8mw_pc}
 \begin{figure}[ht]
-	\centering	\includegraphics[width=0.95\linewidth]{Graphics/v164-8mw_powerCurve.PNG}
+	\centering
+	\includegraphics[width=0.95\linewidth]{Graphics/v164-8mw_powerCurve.PNG}
 	\caption{The power curve of the Vestas V164-8MW Wind Turbine found at \cite{LucasBauer}}
 	\label{fig:v164_8mw_pc}
 \end{figure}
