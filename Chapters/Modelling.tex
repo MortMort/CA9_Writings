@@ -236,18 +236,18 @@ The time domain model can be derived by rearranging and taking the inverse lapla
 The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 
 
-\subsubsection{Partial Load Controller (PLC)} \label{sec:comp_plc}
-The PLC is a PI-controller on the same form as the \hyperref[sec:comp_flc]{\textbf{FLC}} controller:
-\begin{equation}\label{eq:comp_plc}
-	P_{ref}(s) = K_{gs} (K_{p, P} + K_{p, P} \dfrac{1}{T_{i, P} s}) e(s)
-\end{equation}
-
-Which likewise in the time domain is:
-\begin{equation}\label{eq:comp_plc_time}
-	\dot{P}_{ref} = K_{gs P} K_{p, P} \dot{e} +  K_{gs P} K_{p, P} \dfrac{1}{T_{i, P}}e
-\end{equation}
-
-The component inputs are $ \{e \} $ and the outputs are $ \{P_{ref} \} $
+%\subsubsection{Partial Load Controller (PLC)} \label{sec:comp_plc}
+%The PLC is a PI-controller on the same form as the \hyperref[sec:comp_flc]{\textbf{FLC}} controller:
+%\begin{equation}\label{eq:comp_plc}
+%	P_{ref}(s) = K_{gs} (K_{p, P} + K_{p, P} \dfrac{1}{T_{i, P} s}) e(s)
+%\end{equation}
+%
+%Which likewise in the time domain is:
+%\begin{equation}\label{eq:comp_plc_time}
+%	\dot{P}_{ref} = K_{gs P} K_{p, P} \dot{e} +  K_{gs P} K_{p, P} \dfrac{1}{T_{i, P}}e
+%\end{equation}
+%
+%The component inputs are $ \{e \} $ and the outputs are $ \{P_{ref} \} $
 
 %\subsubsection{Fore-aft tower damper (FATD)}
 %Vestas has a controller is in place called Fore-aft Tower Damper which is responsible for reducing the WT fore-aft tower motion. The same controller is used for both fixed-bottom WTs and FOWTs but the tuning is vastly different. The purpose of this report is to explore the possibilities with regards to the design and tuning of a fore-aft motion dampening controller. The purpose of the Vestas FATD controller is thus exactly the same as that of the controller which is intended to be designed in this report. Including the FATD in the modelling of the system thus might seem unnecessary since it ought to be turned off such that the designed controller will perform the task. The reason for including the FATD controller is that it stabilizes the system such that the SysIdFreqSweep Vestas tool has a better shot at functioning properly.
@@ -266,7 +266,16 @@ The component inputs are $ \{e \} $ and the outputs are $ \{P_{ref} \} $
 %The component inputs are $ \{ \} $ and the outputs are $ \{ \} $
 
 \subsection{The connected model}
-SUBJECT TO CHANGE! This section is not in any way finished. Just skip this and go straight to "Fore-aft tower model fitting"
+In the previous section all individual components models were defined and the non-linear models were linearised at an operating point. This leaves a system of components which when connected is only a function of states and inputs. In this section the system is connected such that we are left with a continuous linear state-space system on the following form:
+\begin{equation}\label{eq:state-space-sys}
+	\begin{split}
+		\dot x &= A x + B u + B_d d \\
+		y &= Cx
+	\end{split}
+\end{equation}
+$ \dot x $ is the time derivative of the state vector $ x $. $ u $ is the input vector and $ d $ is the disturbance vector. A distinction is made between $ u $ and $ d $ because $ u $ represents the controllable inputs which will eventually be the output of the designed controller while $ d $ are uncontrollable inputs such as the wind which affect system beyond out control. Achieving a system model on this form is necessary for conventional linear state-space controller design.
+
+In \cref{fig:con_mod} a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. 
 
 \subsubsection{Inputs, states and outputs}
 \textbf{States of the wtLin model:}
