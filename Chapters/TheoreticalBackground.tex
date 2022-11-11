@@ -78,7 +78,7 @@ The resulting air speed is V with an \textit{inflow angle} $ \phi $. $ F_L $ and
 The lift and drag coefficients $ C_L $ and $ C_D $ are usually extracted from table lookups which are typically found from simulations such as Xfoil
 \todo{Hvad bruger Vestas til at finde $ C_L $ og $ C_D $?}. 
 In a typical scenario $ C_L $ and $ C_D $ are found from the angle of attack $ \alpha $. The thrust and torque vectors $ F_T $ and $ F_Q $ are then calculated from the Pythagorean theorem as in \cref{eq:thrust} and \cref{eq:torque}
-\begin{align}\
+\begin{align}
 	F_T &= L \, cos(\phi) + D \, sin(\phi) \label{eq:thrust} \\
 	F_Q &= L \, sin(\phi) - D \, cos(\phi) \label{eq:torque}
 \end{align}
@@ -133,7 +133,7 @@ PLC is active from cut-in wind speed to nominal wind speed. The highest priority
 	{\includegraphics[width=.42\textwidth]{Graphics/Cp2dPlotRegions.png}%
 		\label{fig:cp_plot2d}}
 	
-	\caption{Typical $ C_p $ plot drawn agains varying $ \theta $ and $ \lambda $; \textbf{(a)} 3D plot; \textbf{(b)} 2D plot where the operating regions are illustrated along the well}
+	\caption{Typical $ C_p $ plot drawn agains varying $ \theta $ and $ \lambda $; \textbf{(a)} 3D plot; \textbf{(b)} 2D plot where the operating regions are illustrated along the well. Figures are from internal LaC department material.}
 	\label{fig:cp_plot}
 \end{figure*}
 $ \theta $ is determined from table lookups based on $ \lambda $ and thus cannot be utilized as an actuator to control the rotor speed such that $ \lambda(v_0, \Omega) = \lambda^*(v_0, \Omega^*) $ but the generator power can. Thus the primary concern is setting the generator power such that the rotor speed speed is optimal in relation to the wind speed. The rotor speed can in simplified form be described as in \cref{eq:plc_rotor_speed}. The rotor speed increases when $ T_r > T_g $ and decreases when $ T_g > T_r $.
@@ -211,7 +211,7 @@ The Vestas implementation of the FATD includes heavily filtering of the nacelle 
 \subsection{Eigenfrequencies and operating speeds} \label{sec:eigenfreq}
 When working with WT control it is relevant to understand the relationship between the eigenfrequencies of the WT tower and the forces that excite the turbine structure. The eigenfrequency of a system is the frequency at which that system oscillates after an initial disturbance has moved it from its equilibrium position.
 
-A problem that both fixed-bottom and floating WTs have to deal with is frequency separation with regards to the natural frequencies of components and the periodic disturbances and exciting forces. Wind and waves as well as the rotating rotor will excite the tower at specific frequencies and it is important that such frequencies do not overlap with the turbine modes. Turbine towers are flexible will therefore oscillate. If a disturbance such as waves or the wind excite the WT at the same frequency as the natural frequency of the tower it will cause the tower to oscillate resulting in an increase in fatigue loads. Therefore towers are designed such that their first and second modes do not overlap with especially the 1P and 3P frequencies. 1P is the rotor rotational frequency and 3P known as the \textit{blade passing frequency} is the third multiple of 1P corresponding to the three blades of conventional horizontal WTs.
+A problem that both fixed-bottom and floating WTs have to deal with is frequency separation with regards to the natural frequencies of components and the periodic disturbances and exciting forces. Wind and waves will excite the tower at specific frequencies and it is important that such frequencies do not overlap with the turbine modes. Turbine towers are flexible will therefore oscillate. If a disturbance such as waves or the wind excite the WT at the same frequency as the natural frequency of the tower it will cause the tower to oscillate resulting in an increase in fatigue loads. Therefore towers are designed such that their first and second modes do not overlap with especially the 1P and 3P frequencies. 1P is the rotor rotational frequency and 3P known as the \textit{blade passing frequency} is the third multiple of 1P corresponding to the three blades of conventional horizontal WTs.
 \begin{itemize}
 	\item \textbf{1P} oscillations are typically activated by mass unbalance in the rotor blades.
 	\item \textbf{3P} oscillations are typically activated by wind shear where the wind speed is higher at the rotor top than at the rotor bottom (individual blade pitching is utilized to dampen this effect).
@@ -228,20 +228,20 @@ Modern WT towers with a \textit{soft-stiff} tower design are made such that thei
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1Pand3PvsTwrStiff.PNG}
-	\caption{Illustration of the frequency regions of the tower modes with different designs and for floaters as well as 1P and 3P.}
+	\caption{Illustration of the frequency regions of the tower modes with different designs and for floaters as well as 1P and 3P. Figure is from internal LaC department material made by Thea Vanelli}
 	\label{fig:1p_and3p}
 \end{figure}
 In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bottom and floating WTs is found. It is apparent that the first tower mode in a conventional fixed-bottom turbine is due to the flexion of the tower while in the floating structure it is due to the tilting of the whole turbine structure. As such the conventional first tower mode of a fixed bottom turbine becomes the second mode of a floating turbine.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1P3PandEigenFloater.png}
-	\caption{Illustration of the 1st and 2nd tower mode of both fixed-bottom and floater turbines. With floating structure the 1st mode is shiften down way past the 1P frequency}
+	\caption{Illustration of the 1st and 2nd tower mode of both fixed-bottom and floater turbines. With floating structure the 1st mode is shiften down way past the 1P frequency. Figure is from internal LaC department material made by Thea Vanelli}
 	\label{fig:eigen_and_1p3p}
 \end{figure}
 
 
 \subsection{FOWT challenges and control} \label{sec:theo_fowt_challenges}
-This section concerns the challenges that are persistent in FOWT design and control. \textbf{I have yet to start this section. Move on :)}
+This section concerns the challenges that are prevalent in FOWT design and control.
 
 
 
