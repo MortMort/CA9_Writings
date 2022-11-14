@@ -59,7 +59,7 @@ The achievable size of $ C_p^\star $ is a matter of the WT design. The \textit{B
 %	\label{fig:airfoil}
 %\end{figure}
 
-Blade element momentum theory is often used to model the forces acting along WT blades. Blade element theory involves breaking a blade into small sections and determining the forces acting on each small section. In \cref{fig:blade_vel_triangle} a cross section of a WT blade can be seen. In this figure, as it is also illustrated at the rotor blade in \cref{fig:betz}, the wind velocity that hits the rotor blades is lowered indicated by the \textit{axial induction factor} $ a $. What is not observed in \cref{fig:betz} is that some of the energy of the wind also goes into driving an airstream around the back of the rotors in the opposite direction of the blade rotation, indicated by the \textit{tangential induction factor} $ a' $. This is known as \textit{swirl losses}.
+Blade element momentum theory is often used to model the forces acting along WT blades. Blade element theory involves breaking a blade into small sections and determining the forces acting on each small section. In \cref{fig:blade_vel_triangle} a cross section of a WT blade can be seen. In this figure, as it is also illustrated at the rotor blade in \cref{fig:betz}, the wind velocity that hits the rotor blades is lowered indicated by the \textit{axial induction factor} $ a $. What is not observed in \cref{fig:betz} is that some of the energy of the wind also goes into driving an airstream around the back of the rotors in the opposite direction of the blade rotation, indicated by the \textit{tangential induction factor} $ a' $. This is known as \textit{swirl losses}. The induction factor's effect on the effective wind speed as seen by the rotor blade is observed in \cref{fig:blade_vel_triangle}. The $ \Omega r (1+a') $ term indicates that the effective wind speed parallel to the rotor plane is reduced by $ a' $ because $ a' < 1 $.
 \begin{figure*}[ht]
 	\centering
 	\subfloat[Blade cross section]{\includegraphics[width=.44\textwidth]{Graphics/RotorBladeElement.pdf}%
@@ -91,14 +91,14 @@ This section includes a walk-through of the main functionality of WT control. Th
 Furthermore the challenges presented in FOWT control are examined and some known solutions to the floating control problem are presented.
 
 \medskip
-In figure \cref{fig:controller_overview} a simplified illustration is seen of the Vestas turbine controller setup. It yields an overview of the main controllers that handle rotor/generator speed control and power control. The following section is focused on the responsibility of the partial load controller (PLC) and the full load controller (FLC). The depicted "Pitch Controller" and "Power Controller" of the diagram are black boxes from the point of view (POV) of this report. Their dynamics are not explored and they are largely assumed to handle references in a correct manner such that it is not necessary to further consider them. 
+In figure \cref{fig:controller_overview} a simplified illustration is seen of the Vestas turbine controller setup. It yields an overview of the main controllers that handle rotor/generator speed control and power control. The following section is focused on the responsibility of the partial load controller (PLC) and the full load controller (FLC). The depicted "Pitch Controller" and "Power Controller" of the diagram are black boxes from the point of view (POV) of this report. They are expected to follow their reference fast enough that it is irrelevant to model their dynamics.
 
 PLC controllers can either be specified to output a torque or power reference and Vestas' controller outputs a power reference. Since the turbine at hand has a full scale converter all of the power delivery from the generator to the grid is handled by the electrical converter. The power reference $ P_{ref} $ output by the PLC sets the generator power $ P_g $ by means of the Power Controller.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/PLC_PI.pdf}
-	\caption{An overview of the PLC/FLC controller setup}
+	\caption{An overview of the PLC/FLC controller setup. The turbine controller contains the FLC and PLC which gives a pitch reference to the pitch controller and a power reference to the power controller respectively.}
 	\label{fig:controller_overview}
 \end{figure}
 
@@ -228,14 +228,14 @@ Modern WT towers with a \textit{soft-stiff} tower design are made such that thei
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1Pand3PvsTwrStiff.PNG}
-	\caption{Illustration of the frequency regions of the tower modes with different designs and for floaters as well as 1P and 3P. Figure is from internal LaC department material made by Thea Vanelli}
+	\caption{Illustration of the frequency regions of the tower modes with different designs and for floaters as well as 1P and 3P. Figure is from internal LaC department material made by Thea Vanelli.}
 	\label{fig:1p_and3p}
 \end{figure}
 In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bottom and floating WTs is found. It is apparent that the first tower mode in a conventional fixed-bottom turbine is due to the flexion of the tower while in the floating structure it is due to the tilting of the whole turbine structure. As such the conventional first tower mode of a fixed bottom turbine becomes the second mode of a floating turbine.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1P3PandEigenFloater.png}
-	\caption{Illustration of the 1st and 2nd tower mode of both fixed-bottom and floater turbines. With floating structure the 1st mode is shiften down way past the 1P frequency. Figure is from internal LaC department material made by Thea Vanelli}
+	\caption{Illustration of the 1st and 2nd tower mode of both fixed-bottom and floater turbines. With floating structure the 1st mode is shiften down way past the 1P frequency. Figure is from internal LaC department material made by Thea Vanelli.}
 	\label{fig:eigen_and_1p3p}
 \end{figure}
 
