@@ -86,9 +86,7 @@ The total thrust and torque of a blade can then be calculated by integrating the
 
 
 \subsection{Wind turbine control} \label{sec:theory_ctrl}
-This section includes a walk-through of the main functionality of WT control. The standard WT control scheme is explained with regards to different operation regions. Besides the main controller additional filters and controllers are implemented in the wind industry which mean to improve turbine performance, stability and safety. In this report only the main controller is included along with the fore-aft tower damper (FATD).
-
-Furthermore the challenges presented in FOWT control are examined and some known solutions to the floating control problem are presented.
+This section includes a walk-through of the main functionality of WT control. The standard WT control scheme is explained with regards to different operation regions. Besides the main controller additional filters and controllers are implemented in the wind industry which mean to improve turbine performance, stability and safety. In this report only the main controller is included.
 
 \medskip
 In figure \cref{fig:controller_overview} a simplified illustration is seen of the Vestas turbine controller setup. It yields an overview of the main controllers that handle rotor/generator speed control and power control. The following section is focused on the responsibility of the partial load controller (PLC) and the full load controller (FLC). The depicted "Pitch Controller" and "Power Controller" of the diagram are black boxes from the point of view (POV) of this report. They are expected to follow their reference fast enough that it is irrelevant to model their dynamics.
@@ -102,7 +100,7 @@ PLC controllers can either be specified to output a torque or power reference an
 	\label{fig:controller_overview}
 \end{figure}
 
-\subsubsection{Control regions} \label{sec:theyry_ctrl_regions}
+\subsubsection{Control regions} \label{sec:theory_ctrl_regions}
 Wind turbine control is split into two main stages of control: PLC and FLC. PLC is further split into three subregions. PLC is related to wind speeds between cut-in wind speed and rated wind speed. In all three PLC regions the generator power or torque reference is regulated with a PI controller based on a generator speed set-point to achieve the most optimal power output. The FLC region is related to the wind speed range from above rated to cut-out wind speed. In this region the pitch angle reference is regulated to track a constant rotor speed set-point and the generator power reference is constant at nominal power. Furthermore each of the four regions are associated with a specific wind speed range. A visualization of these operating regions can be found in figure \cref{fig:operating_regions}. The figure is simply illustrative and especially the width of the regions are out of proportion. 
 \begin{figure}[ht]
 	\centering
@@ -120,7 +118,7 @@ Below is a short description of the four regions focused on the parameters which
 
 
 
-\subsubsection{Partial load control}
+\subsubsection{Partial load control} \label{sec:theory_ctrl_plc}
 PLC is active from cut-in wind speed to nominal wind speed. The highest priority of the \textbf{region 2} controller is to maximize $ C_p $ such that $ C_p(\theta, \lambda) = C_p^*(\theta^*, \lambda^*) $. Two actuators can potentially be utilized to control rotor speed to achieve this: Rotor pitch angle and generator torque. When observing a 3D plot of $ C_p(\theta, \lambda) $ such as the one in \cref{fig:cp_plot3d} it becomes apparent that maximisation of $ C_p $ will occur for specific values of $ \theta $ and $ \lambda $. In \cref{fig:cp_plot2d} the 3D plot is seen from above and thus only colours are indicators of the size of $ C_p $. Black lines are drawn on the plot which indicate a typical path from cut-in wind speed to cut-out wind speed starting in the top left corner where the tip speed ratio is very high due to the proportionally big difference between the minimum rotor speed and the low incoming wind speed and ending in the bottom right corner with the very high pitch angle. Furthermore the operating regions are drawn along the lines. It becomes obvious that all of regions 2 is centred at the $ C_p^*(\theta^*, \lambda^*) $ which is marked by a black dot in the middle of the darkest red region.
 \begin{figure*}[ht]
 	\centering
@@ -136,8 +134,8 @@ PLC is active from cut-in wind speed to nominal wind speed. The highest priority
 	\caption{Typical $ C_p $ plot drawn agains varying $ \theta $ and $ \lambda $; \textbf{(a)} 3D plot; \textbf{(b)} 2D plot where the operating regions are illustrated along the well. Figures are from internal LaC department material.}
 	\label{fig:cp_plot}
 \end{figure*}
-$ \theta $ is determined from table lookups based on $ \lambda $ and thus cannot be utilized as an actuator to control the rotor speed such that $ \lambda(v_0, \Omega) = \lambda^*(v_0, \Omega^*) $ but the generator power can. Thus the primary concern is setting the generator power such that the rotor speed speed is optimal in relation to the wind speed. The rotor speed can in simplified form be described as in \cref{eq:plc_rotor_speed}. The rotor speed increases when $ T_r > T_g $ and decreases when $ T_g > T_r $.
-\begin{equation}\label{eq:plc_rotor_speed}
+$ \theta $ is determined from table lookups based on $ \lambda $ and thus cannot be utilized as an actuator to control the rotor speed such that $ \lambda(v_0, \Omega) = \lambda^*(v_0, \Omega^*) $ but the generator power can. Thus the primary concern is setting the generator power such that the rotor speed speed is optimal in relation to the wind speed. The rotor speed can in simplified form be described as in \cref{eq:rotor_speed_deriv}. The rotor speed increases when $ T_r > T_g $ and decreases when $ T_g > T_r $.
+\begin{equation}\label{eq:rotor_speed_deriv}
 	\dot{\Omega} = \dfrac{1}{J} \left( T_r(\theta, v_0) - T_g(P_g, \omega) \right)
 \end{equation}
 Here $ J $ is the total inertia of all parts connected to the drivetrain, $ T_r $ the rotor torque and $ T_g $ the generator torque referred to the rotor side of the drivetrain. From this equation it becomes apparent that if $ \theta $ is fixed at the optimal angle the generator torque is the only actuator available to control the rotor speed such that $ C_p = C_p^* $.
@@ -154,7 +152,7 @@ This causes the rotor speed to tend towards the optimal rotor speed. This is mor
 \begin{equation}\label{eq:omega_dot}
 	\dot{\Omega} = \dfrac{1}{2 J} \rho \pi R^5 \omega^2 \left( \dfrac{C_p}{\lambda^3} - \dfrac{C_p^*}{\lambda^{*3}} \right)
 \end{equation}
-\cref{eq:omega_dot} is derived by combining equations \cref{eq:power2}, \cref{eq:Cp}, \cref{eq:tipspeedratio}, \cref{eq:plc_rotor_speed} and \cref{eq:gen_torque_ctrl} and \cref{eq:mech_torque}.
+\cref{eq:omega_dot} is derived by combining equations \cref{eq:power2}, \cref{eq:Cp}, \cref{eq:tipspeedratio}, \cref{eq:rotor_speed_deriv} and \cref{eq:gen_torque_ctrl} and \cref{eq:mech_torque}.
 \begin{equation}\label{eq:mech_torque}
 	T_r = \dfrac{P_T}{\Omega}
 \end{equation}
@@ -171,7 +169,7 @@ The generator speed reference in region 2 is calculated from the TSR formula in 
 \end{equation} 
 The mentioned gain scheduling component is present to account for the non-linearity of the system throughout the wind operating range.
 
-In \textbf{region 1} achieving $ C_p = C_p^* $ is disregarded in favour of maintaining a minimum generator speed $ \underline{\omega} $. This is done to avoid the \textit{blade passing frequency} (3P) overlapping with the eigenfrequency of the system. The 3P frequency is the third multiple of the rotor frequency and this frequency is important with regards to resonance and fatigue loads. This concept is further explored in \cref{sec:eigenfreq}. As such only $ \theta = \theta^* $.
+In \textbf{region 1} achieving $ C_p = C_p^* $ is disregarded in favour of maintaining a minimum generator speed $ \underline{\omega} $. This is done to avoid the \textit{blade passing frequency} (3P) overlapping with the eigenfrequency of the system. The 3P frequency is the third multiple of the rotor frequency and this frequency is important with regards to resonance and fatigue loads. This concept is further explored in \cref{sec:theory_eigenfreq}. As such only $ \theta = \theta^* $.
 
 \textbf{Region 3} is characterized by the generator speed reaching nominal speed $ \bar{\omega} $. Thus like in region 1 optimal $ C_p $ is disregarded to maintain the nominal generator speed. The output power has not reached nominal output power. Thus $ \theta = \theta^* $ and $ P_{ref} $ is regulated to achieve $ \omega = \bar{\omega} $. As the wind increases $ C_p $ decreases while $ P $ increases towards nominal power output. 
 
@@ -182,14 +180,14 @@ The PI controller parameters $ K_{plc,P} $ and $ K_{plc,I} $ are tuned such that
 As the wind speed reaches the end of region 3 the generator power enters saturation and thus the WT control switches from PLC control to FLC control which is what the following section is concerned with.
 
 
-\subsubsection{Full load control}
+\subsubsection{Full load control} \label{sec:theory_ctrl_flc}
 FLC is active from nominal wind speed to cut-out wind speed. The generator speed reference is set to the constant nominal generator speed $ \bar{\omega} $. A PI controller tracks $ \bar{\omega} $ by regulating the collective pitch angle through $ \theta_{ref} $:
 \begin{equation}\label{eq:pi_flc_ctrl}
 	\theta_{ref} = K_{gs,dP/d\theta} \left(K_{flc,P} \, \omega_e + K_{flc,I} \int \omega_e\right)
 \end{equation}
 The PI controller output is multiplied with a gain scheduling term to compensate for the pitch-dependent sensitivity $ \frac{dP}{d\theta} $ which results from the non linear pitch authority \cite{Pao2009}. 
 
-The power controller in FLC can be operated at either a constant power or constant torque set-point. Vestas' FLC controller operates with a constant power set-point with varying torque. This is favourable from a grid perspective because a steady power delivery is preferable. As a result a negative damping phenomena occurs with regard to the rotor speed. This becomes obvious when observing \cref{eq:plc_rotor_speed} and considering the generator torque:
+The power controller in FLC can be operated at either a constant power or constant torque set-point. Vestas' FLC controller operates with a constant power set-point with varying torque. This is favourable from a grid perspective because a steady power delivery is preferable but as a consequence a negative damping phenomena occurs with regard to the rotor speed. This negative damping phenomena should not be mistaken for the FOWT negative damping problem as they are two separate issues. The negative damping tendency becomes obvious when observing \cref{eq:rotor_speed_deriv} and considering the generator torque:
 \begin{equation}\label{eq:gen_torque}
 	T_g = \dfrac{P}{\omega}
 \end{equation}
@@ -198,17 +196,7 @@ If for an example the generator speed decreases then the generator torque increa
 The FLC PI controller parameters $ K_{flc,P} $ and $ K_{flc,I} $ are tuned such that satisfactory performance and stability is achieved for a given turbine model. 
 
 
-\subsubsection{FATD}
-The conventional fore-aft tower damper is an addition to the FLC controller responsible for dampening the fore-aft tower motion. The exciting forces that act on the WT such as the wind can cause the tower to oscillate resulting in increased fatigue loads on the tower. This phenomena will be further examined in \cref{sec:eigenfreq}. Therefore the FATD is implemented to counteract the motion of the tower in the surge/pitch direction. In the simplest case it takes as input the horizontal acceleration at the nacelle and outputs a collective pitch angle contribution $ \theta_{FATD} $ which is added to the pitch reference:
-\begin{equation}\label{eq:fatd}
-	\theta_{ref} = \theta_{flc} + \theta_{fatd}
-\end{equation}
-The important consideration with regards to the tuning of the FATD is the coupling of rotor speed control and fore-aft motion control. The FATD pitch controller can not be so aggressive that its pitch contribution results in poor rotor speed tracking.
-
-The Vestas implementation of the FATD includes heavily filtering of the nacelle fore-aft movement sensor measurement. Thus the filtered input position or velocity input to the FATD controller no longer represents the actual velocity or position directly. The reason for this is simply that the tuned filter setup has proven to work better with the used controller than using measurement signals which more directly represent the actual sensor measurements.
-
-
-\subsection{Eigenfrequencies and operating speeds} \label{sec:eigenfreq}
+\subsection{Eigenfrequencies and operating speeds} \label{sec:theory_eigenfreq}
 When working with WT control it is relevant to understand the relationship between the eigenfrequencies of the WT tower and the forces that excite the turbine structure. The eigenfrequency of a system is the frequency at which that system oscillates after an initial disturbance has moved it from its equilibrium position.
 
 A problem that both fixed-bottom and floating WTs have to deal with is frequency separation with regards to the natural frequencies of components and the periodic disturbances and exciting forces. Wind and waves will excite the tower at specific frequencies and it is important that such frequencies do not overlap with the turbine modes. Turbine towers are flexible will therefore oscillate. If a disturbance such as waves or the wind excite the WT at the same frequency as the natural frequency of the tower it will cause the tower to oscillate resulting in an increase in fatigue loads. Therefore towers are designed such that their first and second modes do not overlap with especially the 1P and 3P frequencies. 1P is the rotor rotational frequency and 3P known as the \textit{blade passing frequency} is the third multiple of 1P corresponding to the three blades of conventional horizontal WTs.
@@ -239,13 +227,33 @@ In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bo
 	\label{fig:eigen_and_1p3p}
 \end{figure}
 
+\clearpage \newpage
+\subsection{FOWT challenges and control} \label{sec:theory_fowt_challenges}
+This section concerns the challenges that are prevalent in FOWT design and control. In the introduction of the FOWT in \cref{sec:intro_theFOWT} a specific issue; the negative dampening problem, was briefly described. This phenomena is further explored here and other relevant challenges are furthermore touched upon. Furthermore a few solutions to the negative dampening problem are briefly explained.
 
-\subsection{FOWT challenges and control} \label{sec:theo_fowt_challenges}
-This section concerns the challenges that are prevalent in FOWT design and control.
+\medskip
+To get a better understanding of the negative damping problem \cref{fig:thrust_vs_windspeed} is considered. It shows the relationship between wind speed and rotor thrust during operation where the turbine controller is actively regulating power in PLC and rotor pitch in FLC. The specific curve is from the IEA 15 MW reference wind turbine which is the subject of discussion in \cite{Vanelli2021}. The general shape of the curve is not turbine specific for modern turbines. The curve is a product of the relationship between pitch angle, wind speed and rotor speed which is regulated by the WT controller:
+\begin{equation} \label{eq:aero_thrust}
+	F_T(\theta, \Omega, v) = \dfrac{1}{2} \rho A_d v^2 C_T(\theta, \Omega, v)
+\end{equation}
+$ C_T $ is the thrust coefficient. In \cref{sec:theory_aero} the rotor thrust was defined for a blade from integrating over the thrust component of each blade element based on a combination of the lift and drag forces. When calculating the total stationary thrust it is convenient to use the pre-calculated thrust coefficient values $ C_T $ to determine the thrust \cite{Knudsen2013}. From \cref{eq:aero_thrust} the rotor thrust's dependency on $ v_0 $ is obvious because of the $ v_0^2 $ term. The thrust's sensitivity to rotor speed and and pitch angle can only be inferred from the thrust coefficient's sensitivities to said variables. 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.85\linewidth]{Graphics/ThrustWindpeedCurve.PNG}
+	\caption{Thrust as a function of wind speed for the IEA 15 MW reference wind turbine. Figure from \cite{Vanelli2021}.}
+	\label{fig:thrust_vs_windspeed}
+\end{figure}
 
+In \cref{fig:thrust_vs_windspeed} it is evident that rotor thrust increases until nominal after which the thrust decreases rapidly again. The increase in thrust before nominal is a product of the increased wind speed and the pitch angle which is either constant or decreasing in PLC as observed in \cref{fig:operating_regions}. An increase in wind speed always yields greater thrust and the FLC keeps the rotor speed constant. Thus the drop in thrust after nominal is due to the FLC increasing the pitch angle to limit the generator.
 
+% In most of the operating range $ \dfrac{\partial C_T}{\partial \theta} < 0 $ something something.
+The wind speed seen by the rotor is a function of the free wind speed and the fore-aft motion: $ v = v_0 - v_y $. $ v_y $ is the velocity of the nacelle in the surge direction and a \textit{backwards motion} refers to a positive movement in this direction. Consider a given wind speed in FLC: If the turbine moves backwards, $ v_y $ increases, resulting in a lowered wind speed $ v $ seen by the rotor. When observing \cref{fig:thrust_vs_windspeed} it is obvious that the thrust increases for at lowering wind speed. This causes the turbine to move backwards even faster. In the other scenario when the turbine moves forward the wind speed felt by the rotor increases, resulting in an even lower thrust, causing the turbine to move forward with even less resistance. 
 
-- Mention the use of a floater tuned FATD controller.
-- 2nd tower mode close to 3P (refer to test)
-- Negative damping term when using constant power in stead of constant torque
+This phenomena is present in both fixed bottom and floating WTs but the problem is greatly exacerbated for FOWTs due to their extra degrees of freedom. For fixed bottom turbines a solution is to detune the controller bandwidth below the system's first natural frequency. The resulting control performance is usually satisfactory. Vestas' solution is their fore-aft tower damper (FATD) controller addition. In the simplest case it takes the nacelle's horizontal acceleration in the surge direction as input and outputs a collective pitch angle contribution $ \theta_{FATD} $ which is added to the pitch reference:
+\begin{equation}\label{eq:fatd}
+	\theta_{ref} = \theta_{flc} + \theta_{fatd}
+\end{equation}
 
+If the same fore-aft motion mitigation strategies used for fixed bottom WTs are used for floating turbines severe instability issues can ensue \cite{Larsen2007}. Therefore another strategy or tuning must be adopted to handle the negative damping problem on floating turbines. Several solutions are known with the simplest being to detune the FLC to below the first natural frequency of the FOWT. While it solves the problem it is a poor solution yielding big rotor speed variations as a result of the very slow rotor speed controller. Other common methods include feeding back the tower top velocity or acceleration through filters to a PI controller which outputs a pitch reference contribution \cref{Grant2022}. Vestas adopts a variation of this method which coincidentally is simply a heavily detuned version of their FATD. As it stands tuning of the FATD is mostly trail and error and does not rely on a linear model. \todo[inline]{Er det rigtigt at FATDen ikke er baseret på en model? Jeg forsøger blot at komme lidt af en forklaring på hvorfor mit projekt er relevant :)}.
+
+Furthermore as mentioned in \cref{sec:theory_ctrl_flc} constant power control results in a negative damping term. This plays an important role for stability since this strategy can result in over-speeding of the rotor in FOWTs. While the constant torque strategy seems to limit the rotor speed variation the improvement comes at the expense of some generator overloading due to the power increasing with rotor speed \cite{Jonkman2010}. As mentioned Vestas utilizes constant power tracking and thus this strategy is assumed in this project.

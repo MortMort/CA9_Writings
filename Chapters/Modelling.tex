@@ -96,37 +96,37 @@ The input is $ \{P_{conv}\} $ and the output is $ \{P_{ref}\} $
 
 
 \subsubsection{Aerodynamic torque} \label{sec:comp_aero_torque}
-In \cref{sec:theory_aero} the rotor torque was defined for a blade from integrating over the torque component of each blade element based on a combination of the lift and drag forces. When calculating the total stationary torque it is convenient to use the pre-calculated power coefficient values $ C_P $ to determine the torque \cite{Knudsen2013}. Tables of both $ C_p $ and $ C_T $ are extracted and linearised at the operating point with wtLin.
+In \cref{sec:theory_fowt_challenges} it was explained that it was convenient to use the pre-calculated thrust coefficient values $ C_T $ to determine the stationary thrust. Likewise pre-calculated power coefficient tables $ C_p $ can be used to calculate the stationary torque. Both $ C_p $ and $ C_T $ are extracted and linearised at the operating point with wtLin.
 
 In \cref{eq:power_w_Cp} the extractable power from the free wind was defined. When combining this equation with the definition of power in a mechanical system the torque on the rotor can be expressed:
 \begin{equation}\label{eq:comp_Mrot_lambda}
-	T_r(\Omega, \lambda) = \dfrac{1}{2} \rho A_d v_0^3 \, C_p(\theta, \lambda) \dfrac{1}{\Omega}
+	T_r(\Omega, \lambda) = \dfrac{1}{2} \rho A_d v^3 \, C_p(\theta, \lambda) \dfrac{1}{\Omega}
 \end{equation}
-The TSR is dependent on $ \Omega $ and $ v_0 $ and thus the rotor torque model ends up being dependent on $ \theta $, $ \Omega $ and $ v_0 $:
+The TSR is dependent on $ \Omega $ and $ v $ and thus the rotor torque model ends up being dependent on $ \theta $, $ \Omega $ and $ v $:
 \begin{equation}\label{eq:comp_Mrot_wind}
-	T_r(\theta, \Omega, v_0) = \dfrac{1}{2} \rho A_d v_0^3 \, C_p(\theta, \Omega, v_0) \dfrac{1}{\Omega}
+	T_r(\theta, \Omega, v) = \dfrac{1}{2} \rho A_d v^3 \, C_p(\theta, \Omega, v) \dfrac{1}{\Omega}
 \end{equation}
-The model is linearised at an operating point with a taylor expansion $ (\theta_o, \Omega_o, v_{0_o}) $:
+The model is linearised at an operating point with a taylor expansion $ (\theta_o, \Omega_o, v_o) $:
 \begin{align}
-	T_r(\theta, \Omega, v_0) \approx T_r(\theta_o, \Omega_o, v_{0_o}) 
-	& + \left. \dfrac{\partial T_r(\theta, \Omega, v_0)}{\partial \theta} \right |_{\theta_o, \Omega_o, v_{0_o}} ( \theta-\theta_o) \\
-	& + \left. \dfrac{\partial T_r(\theta, \Omega, v_0)}{\partial \Omega} \right |_{\theta_o, \Omega_o, v_{0_o}} ( \Omega-\Omega_o) \\
-	& + \left. \dfrac{\partial T_r(\theta, \Omega, v_0)}{\partial v_0} \right |_{\theta_o, \Omega_o, v_{0_o}} ( v_0 - v_{0_o})
+	T_r(\theta, \Omega, v) \approx T_r(\theta_o, \Omega_o, v_o) 
+	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial \theta} \right |_{\theta_o, \Omega_o, v_o} ( \theta-\theta_o) \\
+	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial \Omega} \right |_{\theta_o, \Omega_o, v_o} ( \Omega-\Omega_o) \\
+	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial v} \right |_{\theta_o, \Omega_o, v_o} ( v - v_o)
 \end{align}
 The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving the linear model with the \textit{jacobian()} Matlab functions is furthermore a trivial task.
 
-The component inputs are $ \{\theta, \Omega, v_0\} $ and the output is $ \{T_r\} $
+The component inputs are $ \{\theta, \Omega, v\} $ and the output is $ \{T_r\} $
 
 \subsubsection{Aerodynamic thrust} \label{sec:comp_aero_thrust}
-In \cref{sec:comp_aero_torque} the stationary rotor torque was calculated based on the pre-calculated power coefficient table. Likewise the stationary rotor thrust force $ F_T $ can be calculated from the pre-calculated thrust table $ C_T $. Thus the model of the stationary aerodynamic rotor thrust force ends up being:
+The stationary rotor thrust force $ F_T $ is calculated from the pre-calculated thrust table $ C_T $ yielding the model:
 \begin{equation} \label{eq:comp_aero_thrust}
-	F_T(\theta, \Omega, v_0) = \dfrac{1}{2} \rho A_d v_0^2 C_T(\theta, \Omega, v_0)
+	F_T(\theta, \Omega, v) = \dfrac{1}{2} \rho A_d v^2 C_T(\theta, \Omega, v)
 \end{equation}
-$ C_T $ is a mapping from the pitch angle, rotor velocity and free wind speed to a total stationary rotor thrust.
+$ C_T $ is a mapping from the pitch angle, rotor velocity and wind speed to a total stationary rotor thrust.
 
 The model is linearised with a taylor expansion.
 
-The component inputs are $ \{\theta, \Omega, v_0 \} $ and the output is $ \{F_T\} $
+The component inputs are $ \{\theta, \Omega, v \} $ and the output is $ \{F_T\} $
 
 
 \subsubsection{Rotor wind} \label{sec:comp_rot_wind}
@@ -321,7 +321,7 @@ As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \
 \noindent A first guess for the effective mass $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. This is simply a rough estimate which is not expected to yield satisfactory results mainly because the mass M does not represent the actual mass of the system but rather the inertia of the pitching of the whole structure in the water. 
 
 \smallskip
-\noindent Many factors affect the dampening of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theo_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction. A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.
+\noindent Many factors affect the dampening of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theory_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction. A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.
 
 \medskip
 In order to be able to fit the model to the real system it is of course necessary to have some data to fit it against. This is where \textit{SysIdFreqSweep} enters the picture.
