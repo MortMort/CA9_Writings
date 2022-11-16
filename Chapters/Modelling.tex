@@ -14,7 +14,7 @@ The purpose of this section is to outline the linear model of the system. The mo
 \subsection{Component models} \label{sec:comp}
 A component approach to modelling is adopted where system parts are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) with a tool developed by the LaC department called wtLin.
 
-\subsubsection{Drivetrain (stiff)} \label{sec:comp_drv}
+\subsubsection{Drivetrain} \label{sec:comp_drv}
 As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In a simple \textit{stiff drivetrain} model dampening or spring effects are left out. Thus when a torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor. In the appendix in \cref{sec:mod_drt_flex} a model of a flexible drivetrain can be found. Due to the relatively fast dynamics of the drivetrain in relation to the WT eigenfrequency these dynamics can be left out. 
 
 The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law for rotation like so:
@@ -36,7 +36,7 @@ The component inputs are $ \{T_r, T_g\} $ and the output is $ \{\Omega\} $
 
 
 
-\subsubsection{Generator model} \label{sec:comp_generator}
+\subsubsection{Generator} \label{sec:comp_generator}
 The generator is mechanically connected to the drivetrain and is electrically connected to the converter. It is used to control the rotor speed during PLC by means of the generator torque. The generator is not just a direct feed-through because 
 
 While the generator model in wtLin includes the generator efficiencies they are left out here for simplicity. In the appendix in \cref{sec:comp_generator_eff} the generator model is derived including efficiencies. No generator dynamics are modelled and thus it is simply an algebraic equation.
@@ -83,7 +83,7 @@ When the model is linearised in a FLC operating point P is constant and therefor
 The component model input is $ \{P, \Omega\} $ and the output is $ \{T_g\} $
 
 
-\subsubsection{Unity model converter} \label{sec:comp_conv_unity}
+\subsubsection{Converter} \label{sec:comp_conv_unity}
 The converter connects the generator with the grid and it is controlled by the power controller. It handles the power flow from the generator to the grid.
 
 The dynamics of modern converters are much faster than the rotor and tower dynamics and therefore it is simply modelled as an algebraic equation as a direct feed-through:
@@ -139,7 +139,7 @@ $ v_{0_{rot}} $ is \underline{not} the rotor wind which is the wind speed at the
 The component inputs are $ \{v_0, v_y\} $ and the output is $ \{v_{0_{rot}}\} $
 
 
-\subsubsection{Fore-aft tower model} \label{sec:comp_foreaft_mod}
+\subsubsection{Tower fore-aft movement} \label{sec:comp_foreaft_mod}
 The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation is the same as seen in \cref{fig:fowt_coordinates}. This notation will hereinafter be denoted the \textit{"normal DOF notation"}. Vestas uses another notation which will be denoted the \textit{Vestas DOF notation}: Most importantly \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} in the normal DOF notation is called \textit{tilt} in Vestas DOF notation. This document \underline{for the most part} adopts the normal DOF notation when discussing the DOFs and one is thus directed to \cref{fig:fowt_coordinates} if in doubt about which movement is the subject of discussion. Since Vestas and the wtLin tool adopts the Vestas DOF notation the equations presented make use of this notation as well.
 \begin{figure}[ht]
 	\centering
@@ -147,7 +147,7 @@ The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turb
 	\caption{Illustration of the mass spring damper approximation of the fore-aft tower movement}
 	\label{fig:wtLin_fore-aft_diagram}
 \end{figure}
-The fore-aft movement is modelled by a mass-spring-damper system whose movement is defined to be at nacelle height. This choice is initially made because a sensor in VTS is currently located at nacelle height which is utilized by the FATD controller. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model in every regard. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ M $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
+The fore-aft movement is modelled by a mass-spring-damper system whose movement is defined to be at nacelle height. This choice is initially made because a sensor in VTS is currently located at nacelle height which is utilized by the FATD controller. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ M $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
 \begin{equation}\label{eq:comp_fore-aft_ay1}
 	\ddot{p}_y m = F_{rot} - F_d + F_s
 \end{equation}
@@ -180,7 +180,13 @@ From comparison to the standard TF it can be derived that:
 \end{align}
 where $ f_{eig} $ represents the natural frequency of the system while $ \zeta $ is the damping factor. 
 
-This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any parts files of VTS. They need to be tuned such that the response of the model fits the real system as well as possible. In \cref{sec:mod_foreaft_fitting} this process is further described in detail.
+This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any parts files of VTS. They need to be tuned such that the response of the model fits the real system as well as possible. In the appendix in \cref{sec:app_mod_foreaft_fitting} this process is further described in detail. With an operating point of 16 m/s the parameters were found to be:
+\todo[inline]{Indsæt parametre her. Jeg skal lige se om der skal laves noget om nu hvor theta -> vy checkes ud}
+\begin{itemize}
+	\item $ m =  $
+	\item $ f_{eig} =  $
+	\item $ \zeta =  $
+\end{itemize}
 
 \medskip
 The second order TF standard form:
@@ -201,7 +207,7 @@ While the pitch system dynamics are not fast by ordinary standards they can be a
 The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is $ \{\theta \} $
 
 
---\subsubsection{Full Load Controller (FLC)} \label{sec:comp_flc}
+\subsubsection{Full Load Controller (FLC)} \label{sec:comp_flc}
 The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC controller is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller designed later in \cref{sec:ctrl-design} acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the turbine behaves under normal operation.
 \begin{figure}[ht]
 	\centering
@@ -244,7 +250,7 @@ The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 
 
 \subsection{The connected model}
-In the previous section all individual components models were defined and the non-linear models were linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
+In the previous section all individual components models were defined and the non-linear models are linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
 \begin{equation}\label{eq:state-space-sys}
 	\begin{split}
 		\dot x &= A x + B u + B_d d \\
@@ -253,7 +259,7 @@ In the previous section all individual components models were defined and the no
 \end{equation}
 Where $ \dot x $ is the time derivative of the state vector, $ u $ the input vector and $ d $ the disturbance vector. A distinction is made between $ u $ and $ d $ because $ u $ represents the controllable inputs which will eventually be the output of the designed controller while $ d $ are uncontrollable inputs such as the wind which affect the system beyond our control. Achieving a system model on this form is necessary for conventional linear state-space controller design.
 
-In xxx a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ the power reference $ Pref $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices. Thus it is a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
+In xxx a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ the power reference $ Pref $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices, essentially making it a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
 
 \smallskip
 Outputs can be defined from the sensors which are expected to be available and if the outputs the states then the output matrix $ C $ only contains ones and zeros.
@@ -295,65 +301,22 @@ with the output
 					\Omega \end{bmatrix}
 \end{equation}
 
-%\begin{equation}\label{eq:comp_fatd}
-%	\theta_{fatd} = K_{fatd}u = \begin{bmatrix} k_{pos} & k_{vel} \end{bmatrix} \begin{bmatrix} p_y \\ v_y \end{bmatrix} = k_{pos} p_y + k_{vel} v_y
-%\end{equation}
-
-
-%\begin{equation}\label{eq:B}
-%	B = 
-%\end{equation}
-%
-%\begin{equation}\label{eq:C}
-%	C = 
-%\end{equation}
-%
-%with the states being:
-%\begin{equation}\label{eq:x}
-%	
-%\end{equation}
-
-and the outputs being:
 
 \subsubsection{System evaluation}
-A linear system model has now been derived at an operating point and before using it to make a state-space controller some key evaluations should be made. Firstly stability is checked and secondly controllability and observability. It is important to note that the derived linear system contains the FLC controller from \cref{sec:comp_flc} 
+A linear system model has now been derived at an operating point and before using it to make a state-space controller some key evaluations should be made. Firstly stability is checked and secondly controllability and observability.
 
 \medskip
-An important characteristic of any system is stability. Some system $ \dot x = f(x) $ which is linearised at an operating point $ x_0 $ such that $ A = \left. \dfrac{\partial f}{\partial x} \right| _{x_0} $ is stable in a vicinity around the origin iff
+An important characteristic of any system is its stability. Some system $ \dot x = f(x) $ which is linearised at an operating point $ x_0 $ such that $ A = \left. \dfrac{\partial f}{\partial x} \right| _{x_0} $ is stable in a vicinity around the origin iff
 \begin{equation}\label{eq:stability}
 	Re\{\lambda_i\} < 0 \;\;\; \text{for} \;\;\; 1 \leq i \leq n
 \end{equation}
-with $ \lambda_i $ being the eigenvalues of the system. For an inherently linear system if \cref{eq:stability} is true then no matter where the states are initialized they will always return to an equilibrium point. For a non-linear system which is linearised at an operating point it only means that the system is stable in some vicinity around that operating point. There is furthermore no guarantee that stability holds for all operating points.
-
-
-
-
-
-
-\subsection{Fore-aft tower model fitting} \label{sec:mod_foreaft_fitting}
-As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:comp_foreaft_mod} the component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This is obviously a seriously simplified model which consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behaviour of the real system well is not intuitive. When the model equations were written on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the relevant tuning results.
+with $ \lambda_i $ being the eigenvalues of the system. For an inherently linear system if \cref{eq:stability} then no matter where the states are initialized they will always return to an equilibrium point. For a non-linear system which is linearised at an operating point it only means that the system is stable in some vicinity around that operating point. There is furthermore no guarantee that stability holds for all operating points. The poles of $ A $ from \cref{eq:xdot} all have negative real values and it is thus stable.
 
 \medskip
-
-\noindent Setting the natural frequency around the eigenfrequency of the turbine is a good place to start.
-
-\smallskip
-\noindent A first guess for the effective mass $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. This is simply a rough estimate which is not expected to yield satisfactory results mainly because the mass M does not represent the actual mass of the system but rather the inertia of the pitching of the whole structure in the water. 
-
-\smallskip
-\noindent Many factors affect the dampening of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theory_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction. A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.
+Next it is checked if the rank of the controllability matrix is equal to the number of states.
 
 \medskip
-In order to be able to fit the model to the real system it is of course necessary to have some data to fit it against. This is where \textit{SysIdFreqSweep} enters the picture.
+Next is is checked if the rank of the observability matrix is equal to the number of states.
 
-\subsubsection{System identification}
-A Vestas tool called \textit{SysIdFreqSweep} is utilized to get frequency response plots of the real system from specific actuator inputs to any sensor in the simulation environment. The tool functionality can be split into to main parts. 
 
-The \textbf{first part} is the generation of setup files which alter the simulation environment such that a sinusoid of chosen frequency and amplitude is induced on a chosen reference. A full simulation is run for every frequency between a start and end frequency. A preliminary test was made where the system behaviour was analyzed when frequencies were induced, in the appendix in \cref{app:tj_00}. In this test only a few frequencies were induced on the rotor speed reference and the effect on the rotor speed and fore-aft motion was commented.
 
-The \textbf{second part} is the processing of the simulation output data to plot frequency responses from the actuator to an output sensor. 
-
-\medskip
-For the parameter tuning the input actuators were chosen to be the generator speed reference and the pitch angle reference and the observed outputs were the measured generator speed and the tower top velocity.
-
-60 different frequencies were spaced logaritmacally between 0.01 Hz and 0.3 Hz. The amplitude of the sinusoid was set to 5\% of the mean generator speed reference and for the rotor pitch it was set to 0.5 degrees \todo[inline]{Virker ikke p.t. Vi må se om det kommer til at virke.}
