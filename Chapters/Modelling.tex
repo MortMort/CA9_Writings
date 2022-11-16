@@ -1,5 +1,5 @@
 \section{Modelling} \label{sec:mod} % Incl. Subsection "Component Models"
-The purpose of this section is to outline the linear model of the system. The model is intended to be used as a control model with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. In stead such components models are either completely left out or modelled with algebraic equations. 
+The purpose of this section is to outline the linear model of the system. The model is intended to be used as a control model for state-space control with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. In stead such components models are either completely left out or modelled with algebraic equations. 
 
 
 
@@ -11,13 +11,13 @@ The purpose of this section is to outline the linear model of the system. The mo
 %
 %In this section the relevant component models are derived. At the end the components are connected such that the flow of information in the model becomes apparent.}
 
-\subsection{Component models}
+\subsection{Component models} \label{sec:comp}
 A component approach to modelling is adopted where system parts are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) with a tool developed by the LaC department called wtLin.
 
 \subsubsection{Drivetrain (stiff)} \label{sec:comp_drv}
-As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In a simple \textit{stiff drivetrain} model dampening or spring effects are left out. As such when a torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor. In the appendix in \cref{sec:mod_drt_flex} a model of a flexible drivetrain can be found. Due to the relatively fast dynamics of the drivetrain in relation to the WT eigenfrequency these dynamics can be left out. 
+As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In a simple \textit{stiff drivetrain} model dampening or spring effects are left out. Thus when a torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor. In the appendix in \cref{sec:mod_drt_flex} a model of a flexible drivetrain can be found. Due to the relatively fast dynamics of the drivetrain in relation to the WT eigenfrequency these dynamics can be left out. 
 
-The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law for rotation as such:
+The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law for rotation like so:
 \begin{equation}\label{eq:wtlin_comp_drivetrain}
 	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
 \end{equation}
@@ -39,7 +39,7 @@ The component inputs are $ \{T_r, T_g\} $ and the output is $ \{\Omega\} $
 \subsubsection{Generator model} \label{sec:comp_generator}
 The generator is mechanically connected to the drivetrain and is electrically connected to the converter. It is used to control the rotor speed during PLC by means of the generator torque. The generator is not just a direct feed-through because 
 
-While the generator model in wtLin includes the generator efficiencies they are left out here for simplicity. In the appendix in \cref{sec:comp_generator_eff} the generator model is derived including efficiencies. No generator dynamics are modelled and as such it is simply an algebraic equation.
+While the generator model in wtLin includes the generator efficiencies they are left out here for simplicity. In the appendix in \cref{sec:comp_generator_eff} the generator model is derived including efficiencies. No generator dynamics are modelled and thus it is simply an algebraic equation.
 
 The power of a rotating machine can be defined as the product of torque and rotational velocity:
 \begin{equation}\label{eq:comp_power_in_rot}
@@ -71,7 +71,7 @@ The above derived generator model is referred to the low-speed generator side by
 	T_g(P_g, \Omega) \approx \dfrac{P_{g_o}}{\omega_o} + \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
 	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 \end{equation}
-It is of great interest to have a linear model of the generator and as such the change in the generator torque from the operating point is defined:
+It is of great interest to have a linear model of the generator and therefore the change in the generator torque from the operating point is defined:
 \begin{equation}
 	\bar T_g(P_g, \Omega) \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
 	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
@@ -190,11 +190,6 @@ The second order TF standard form:
 
 The component input is $ \{F_{rot} \} $ and the output is $ \{p_y, v_y\} $
 
-%
-%\subsubsection{Side-side tower model}
-%
-%
-%The component inputs are $ \{ \} $ and the outputs are $ \{ \} $
 
 \subsubsection{Pitch system} \label{sec:comp_pitch}
 The pitch system consists of the local pitch controller and the mechanical and electrical parts that make out the pitching system. The pitch controller takes the pitch reference $ \theta_{ref} $ and the FATD contribution $ \theta_{fatd} $ as input and outputs a voltage in a range which through the electrical and mechanical system translates to a pitch position. 
@@ -207,9 +202,7 @@ The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is
 
 
 --\subsubsection{Full Load Controller (FLC)} \label{sec:comp_flc}
-
-
-The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}.
+The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC controller is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller designed later in \cref{sec:ctrl-design} acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the turbine behaves under normal operation.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Graphics/PiController.pdf}
@@ -249,66 +242,93 @@ The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 %
 %The component inputs are $ \{e \} $ and the outputs are $ \{P_{ref} \} $
 
-%\subsubsection{Fore-aft tower damper (FATD)}
-%Vestas has a controller is in place called Fore-aft Tower Damper which is responsible for reducing the WT fore-aft tower motion. The same controller is used for both fixed-bottom WTs and FOWTs but the tuning is vastly different. The purpose of this report is to explore the possibilities with regards to the design and tuning of a fore-aft motion dampening controller. The purpose of the Vestas FATD controller is thus exactly the same as that of the controller which is intended to be designed in this report. Including the FATD in the modelling of the system thus might seem unnecessary since it ought to be turned off such that the designed controller will perform the task. The reason for including the FATD controller is that it stabilizes the system such that the SysIdFreqSweep Vestas tool has a better shot at functioning properly.
-%
-%It outputs an angle $ \theta_{fatd} $ which is added to the pitch angle reference $ \theta{ref} $ before entering the \hyperref[sec:comp_pitch]{\textbf{pitch system}}. The FATD is a state-space controller on the form:
-%\begin{equation}\label{eq:comp_fatd}
-%	\theta_{fatd} = K_{fatd}u = \begin{bmatrix} k_{pos} & k_{vel} \end{bmatrix} \begin{bmatrix} p_y \\ v_y \end{bmatrix} = k_{pos} p_y + k_{vel} v_y
-%\end{equation}
-
-
-% Template:5
-%\begin{equation}\label{eq:comp_}
-%	
-%\end{equation}
-
-%The component inputs are $ \{ \} $ and the outputs are $ \{ \} $
 
 \subsection{The connected model}
-In the previous section all individual components models were defined and the non-linear models were linearised at an operating point. This leaves a system of components which when connected is only a function of states and inputs. In this section the system is connected such that we are left with a continuous linear state-space system on the following form:
+In the previous section all individual components models were defined and the non-linear models were linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
 \begin{equation}\label{eq:state-space-sys}
 	\begin{split}
 		\dot x &= A x + B u + B_d d \\
 		y &= Cx
 	\end{split}
 \end{equation}
-$ \dot x $ is the time derivative of the state vector $ x $. $ u $ is the input vector and $ d $ is the disturbance vector. A distinction is made between $ u $ and $ d $ because $ u $ represents the controllable inputs which will eventually be the output of the designed controller while $ d $ are uncontrollable inputs such as the wind which affect system beyond out control. Achieving a system model on this form is necessary for conventional linear state-space controller design.
+Where $ \dot x $ is the time derivative of the state vector, $ u $ the input vector and $ d $ the disturbance vector. A distinction is made between $ u $ and $ d $ because $ u $ represents the controllable inputs which will eventually be the output of the designed controller while $ d $ are uncontrollable inputs such as the wind which affect the system beyond our control. Achieving a system model on this form is necessary for conventional linear state-space controller design.
 
-In \cref{fig:con_mod} a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. 
+In xxx a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ the power reference $ Pref $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices. Thus it is a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
 
-\subsubsection{Inputs, states and outputs}
-\textbf{States of the wtLin model:}
-Converter with time constant (maybe used?): $ P_{conv} $
+\smallskip
+Outputs can be defined from the sensors which are expected to be available and if the outputs the states then the output matrix $ C $ only contains ones and zeros.
 
-Flexible drivetrain: $ \Omega $ and $ \left( \dfrac{N_g}{N_r} \right)\omega_L $
+The resulting state space system becomes:
 
-Fore-aft tower model: $ \dot{p}_y $ and $ p_y $
-
-Side-side tower model (maybe used?): $ \dot{p}_x $ and $ p_x $
-
-Pitch model with dynamics (maybe used?): $ \theta $
-
-FLC: $ \theta_{ref} $
-
-PLC: $ P_{ref} $
-
-State vector: 
-\begin{equation}\label{key}
-	x = [\Omega, \left( \dfrac{N_g}{N_r} \right)\omega_L, \dot{p}_y, p_y, \dot{p}_x, p_x, \theta, \theta_{ref}, P_{ref}]^T
+\begin{equation}\label{eq:xdot}
+	\dot{\begin{bmatrix} \theta_{ref} \\
+						p_y \\ 
+						v_y \\
+						\Omega \end{bmatrix}} = 
+	\begin{bmatrix} A_{11} & A_{12} & A_{13} & A_{14}\\ 
+					A_{21} & A_{22} & A_{23} & A_{24}\\ 
+					A_{31} & A_{32} & A_{33} & A_{34}\\
+					A_{41} & A_{42} & A_{43} & A_{44}\end{bmatrix}
+	\begin{bmatrix} \theta_{ref} \\
+					p_y \\ 
+					v_y \\
+					\Omega \end{bmatrix} + 
+	\begin{bmatrix} B_{11} & B_{12} \\
+					B_{21} & B_{22} \\
+					B_{31} & B_{32} \\
+					B_{41} & B_{42} \end{bmatrix}
+	\begin{bmatrix} \omega_{Ref} \\ 
+					P_{ref} \end{bmatrix}
 \end{equation}
 
-wtLin matlab state vector:
-\begin{equation}\label{key}
-	x = [(), (), \theta, p_y, \dot{p}_y, \Omega, p_x, \dot{p}_x]^T
+with the output
+\begin{equation}\label{eq:y}
+	\begin{bmatrix} p_y \\ 
+					v_y \\
+					\Omega \end{bmatrix} = 
+	\begin{bmatrix}	0 	& 1 	& 0 	& 0 \\ 
+					0 	& 0 	& 1 	& 0 \\
+					0 	& 0 	& 0 	& 1 \end{bmatrix}
+	\begin{bmatrix} \theta_{ref} \\
+					p_y \\ 
+					v_y \\
+					\Omega \end{bmatrix}
 \end{equation}
 
-At dømme ud fra ovenstående state vektor som næsten passer i længden med state vektoren i wtLin så vil jeg sige at de states som mangler navn i wtLin må være $ \omega $ og enten $ P_{ref} $ eller $ \theta_{ref} $.
+%\begin{equation}\label{eq:comp_fatd}
+%	\theta_{fatd} = K_{fatd}u = \begin{bmatrix} k_{pos} & k_{vel} \end{bmatrix} \begin{bmatrix} p_y \\ v_y \end{bmatrix} = k_{pos} p_y + k_{vel} v_y
+%\end{equation}
 
-\textbf{Inputs:}
+
+%\begin{equation}\label{eq:B}
+%	B = 
+%\end{equation}
+%
+%\begin{equation}\label{eq:C}
+%	C = 
+%\end{equation}
+%
+%with the states being:
+%\begin{equation}\label{eq:x}
+%	
+%\end{equation}
+
+and the outputs being:
+
+\subsubsection{System evaluation}
+A linear system model has now been derived at an operating point and before using it to make a state-space controller some key evaluations should be made. Firstly stability is checked and secondly controllability and observability. It is important to note that the derived linear system contains the FLC controller from \cref{sec:comp_flc} 
+
+\medskip
+An important characteristic of any system is stability. Some system $ \dot x = f(x) $ which is linearised at an operating point $ x_0 $ such that $ A = \left. \dfrac{\partial f}{\partial x} \right| _{x_0} $ is stable in a vicinity around the origin iff
+\begin{equation}\label{eq:stability}
+	Re\{\lambda_i\} < 0 \;\;\; \text{for} \;\;\; 1 \leq i \leq n
+\end{equation}
+with $ \lambda_i $ being the eigenvalues of the system. For an inherently linear system if \cref{eq:stability} is true then no matter where the states are initialized they will always return to an equilibrium point. For a non-linear system which is linearised at an operating point it only means that the system is stable in some vicinity around that operating point. There is furthermore no guarantee that stability holds for all operating points.
 
 
-\textbf{Outputs:}
+
+
+
 
 \subsection{Fore-aft tower model fitting} \label{sec:mod_foreaft_fitting}
 As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:comp_foreaft_mod} the component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This is obviously a seriously simplified model which consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behaviour of the real system well is not intuitive. When the model equations were written on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the relevant tuning results.

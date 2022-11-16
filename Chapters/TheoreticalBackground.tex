@@ -17,7 +17,7 @@ The power of the \textit{free wind} $ v_0 $ can be expressed from the wind mass 
 \begin{equation} \label{eq:power}
 	P = \dfrac{1}{2} \dot{m} v_0^2
 \end{equation}
-The flow of mass can be expressed from the air density $ \rho $, the cross sectional area $ A_d $ of the CV  at the rotor and the free wind speed $ v_0 $ as such:
+The flow of mass can be expressed from the air density $ \rho $, the cross sectional area $ A_d $ of the CV at the rotor and the free wind speed $ v_0 $ like so:
 \begin{equation}\label{eq:mass_deriv}
 	\dot{m} = \rho A_d v_0
 \end{equation}
@@ -144,7 +144,7 @@ While there are numerous generator torque controllers in use in the wind industr
 \begin{equation}\label{eq:gen_torque_ctrl}
 	T_g = K \Omega^2
 \end{equation}
-with the \textit{generator constant} being defined as such \cite{Pao2009}:
+with the \textit{generator constant} being defined like so \cite{Pao2009}:
 \begin{equation}\label{eq:gen_torque_const}
 	K = \dfrac{1}{2} \rho \pi R^5 \dfrac{C_{p\_max}}{\lambda^{*3}}
 \end{equation}
@@ -163,7 +163,7 @@ Unlike the conventional torque controller, Vestas utilizes a PI controller struc
 \begin{equation}\label{eq:pi_plc_ctrl}
 	P_{ref} = K_{gs}(\omega) \left(K_{plc,P} \, \omega_e + K_{plc,I} \int \omega_e\right)
 \end{equation}
-The generator speed reference in region 2 is calculated from the TSR formula in \cref{eq:tipspeedratio} with $ \lambda = \lambda^* $ as such:
+The generator speed reference in region 2 is calculated from the TSR formula in \cref{eq:tipspeedratio} with $ \lambda = \lambda^* $ like so:
 \begin{equation}\label{eq:omega_ref_from_tsr}
 	\omega_{ref} = v_0 \dfrac{\lambda^*}{R}
 \end{equation} 
@@ -219,7 +219,7 @@ Modern WT towers with a \textit{soft-stiff} tower design are made such that thei
 	\caption{Illustration of the frequency regions of the tower modes with different designs and for floaters as well as 1P and 3P. Figure is from internal LaC department material made by Thea Vanelli.}
 	\label{fig:1p_and3p}
 \end{figure}
-In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bottom and floating WTs is found. It is apparent that the first tower mode in a conventional fixed-bottom turbine is due to the flexion of the tower while in the floating structure it is due to the tilting of the whole turbine structure. As such the conventional first tower mode of a fixed bottom turbine becomes the second mode of a floating turbine.
+In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bottom and floating WTs is found. It is apparent that the first tower mode in a conventional fixed-bottom turbine is due to the flexion of the tower while in the floating structure it is due to the tilting of the whole turbine structure. Thus the conventional first tower mode of a fixed bottom turbine becomes the second mode of a floating turbine.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/1P3PandEigenFloater.png}
