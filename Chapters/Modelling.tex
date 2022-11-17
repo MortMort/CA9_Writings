@@ -1,5 +1,5 @@
 \section{Modelling} \label{sec:mod} % Incl. Subsection "Component Models"
-The purpose of this section is to outline the linear model of the system. The model is intended to be used as a control model for state-space control with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. In stead such components models are either completely left out or modelled with algebraic equations. 
+The purpose of this section is to outline the linear model of the system. The model is intended to be used as a control model for state-space control with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. Instead such components models are either completely left out or modelled with algebraic equations. 
 
 
 
@@ -9,10 +9,26 @@ The purpose of this section is to outline the linear model of the system. The mo
 %
 %The tool takes as input an operating point and a specific set of components. It outputs a connected linear state-space model at that operating point.
 %
-%In this section the relevant component models are derived. At the end the components are connected such that the flow of information in the model becomes apparent.}
+
 
 \subsection{Component models} \label{sec:comp}
-A component approach to modelling is adopted where system parts are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) with a tool developed by the LaC department called wtLin.
+A component approach to modelling is adopted where system parts are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) with a tool developed by the LaC department called wtLin. When the components are defined in the correct manner the Matlab \textit{connect()} function can used to create a connected model.
+
+\smallskip
+\noindent In this section the relevant component models are derived. The modelled components are:
+\begin{itemize}
+	\item Drivetrain
+	\item Generator
+	\item Converter
+	\item Aerodynamic torque
+	\item Aerodynamic thrust
+	\item Rotor wind
+	\item Tower fore-aft motion
+	\item Pitch system
+	\item Full load controller
+\end{itemize}
+In \cref{sec:comp_connected} the components are connected such that the flow of information in the model is apparent. 
+
 
 \subsubsection{Drivetrain} \label{sec:comp_drv}
 As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In a simple \textit{stiff drivetrain} model dampening or spring effects are left out. Thus when a torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor. In the appendix in \cref{sec:mod_drt_flex} a model of a flexible drivetrain can be found. Due to the relatively fast dynamics of the drivetrain in relation to the WT eigenfrequency these dynamics can be left out. 
@@ -25,7 +41,7 @@ The torques are related to the low-speed rotor side and thus the high-speed gene
 \begin{equation} \label{eq:wtlin_comp_inertiamap}
 	J_{gL} = J_{g} \left(\dfrac{N_r}{N_g}\right)^2
 \end{equation}
-where $ N_r $ and $ N_g $ is the number of teeth on the rotor and generator side of the gearbox respectively. The rotor spins at angular velocity $ \dot{\theta}_r $.
+where $ N_r $ and $ N_g $ is the number of teeth on the rotor and generator side of the gearbox respectively. The rotor spins at angular velocity $ \dot{\theta}_r = \Omega $.
 
 Given $ \dot{\Omega} = \ddot{\theta}_r $ the model becomes:
 \begin{equation}\label{key}
@@ -37,7 +53,7 @@ The component inputs are $ \{T_r, T_g\} $ and the output is $ \{\Omega\} $
 
 
 \subsubsection{Generator} \label{sec:comp_generator}
-The generator is mechanically connected to the drivetrain and is electrically connected to the converter. It is used to control the rotor speed during PLC by means of the generator torque. The generator is not just a direct feed-through because 
+The generator is mechanically connected to the drivetrain and is electrically connected to the converter. It is used to control the rotor speed during PLC by means of the generator torque. 
 
 While the generator model in wtLin includes the generator efficiencies they are left out here for simplicity. In the appendix in \cref{sec:comp_generator_eff} the generator model is derived including efficiencies. No generator dynamics are modelled and thus it is simply an algebraic equation.
 
@@ -56,10 +72,9 @@ The linear model of the generator is obtained through a taylor expansion. The de
 	\left. \dfrac{\partial T_g( P_g, \omega)}{\partial \omega} \right |_{P_{g_o},\omega_o} (\omega - \omega_o)
 \end{equation}
 Below the the generator torque sensitivity to the grid power change term from \cref{eq:comp_gen_taylor} is derived.
-\begin{align} 
-	\dfrac{\partial T_g( P_g, \omega)}{\partial P_g} &= \dfrac{\partial \left (\dfrac{P_g}{\omega}\right )}{\partial P_g} \label{eq:comp_gen_1_1} \\
-	& = \dfrac{1}{\omega} \dfrac{\partial P_g}{\partial P_g} \label{eq:comp_gen_1_2}
-\end{align}
+\begin{equation} 
+	\dfrac{\partial T_g( P_g, \omega)}{\partial P_g} = \dfrac{\partial \left (\dfrac{P_g}{\omega}\right )}{\partial P_g} \label{eq:comp_gen_1} = \dfrac{1}{\omega}
+\end{equation}
 The generator torque sensitivity to rotational velocity change from \cref{eq:comp_gen_taylor} is then derived:
 \begin{align}
 	\dfrac{\partial T_g(P_g, \omega)}{\partial \omega} & = \dfrac{\partial \left (\dfrac{P_g}{\omega}\right )}{\partial \omega} \\
@@ -71,12 +86,12 @@ The above derived generator model is referred to the low-speed generator side by
 	T_g(P_g, \Omega) \approx \dfrac{P_{g_o}}{\omega_o} + \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
 	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 \end{equation}
-It is of great interest to have a linear model of the generator and therefore the change in the generator torque from the operating point is defined:
+The goal is to have a linear model of the generator and therefore the change in the generator torque from the operating point is defined:
 \begin{equation}
-	\bar T_g(P_g, \Omega) \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
+	\hat T_g(P_g, \Omega) \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
 	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 \end{equation}
-where $ \bar T_g = T_g - T_{g_o} $.
+where $ \hat T_g = T_g - T_{g_o} $.
 
 When the model is linearised in a FLC operating point P is constant and therefore the first part is also zero. The second part is the \textit{negative damping} term which yields and increase in the generator torque when the rotational speed decreases which even further decreases the rotational speed.
 
@@ -113,7 +128,7 @@ The model is linearised at an operating point with a taylor expansion $ (\theta_
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial \Omega} \right |_{\theta_o, \Omega_o, v_o} ( \Omega-\Omega_o) \\
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial v} \right |_{\theta_o, \Omega_o, v_o} ( v - v_o)
 \end{align}
-The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving the linear model with the \textit{jacobian()} Matlab functions is furthermore a trivial task.
+The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving a linear model with the \textit{jacobian()} Matlab functions is furthermore a trivial task.
 
 The component inputs are $ \{\theta, \Omega, v\} $ and the output is $ \{T_r\} $
 
@@ -130,7 +145,7 @@ The component inputs are $ \{\theta, \Omega, v \} $ and the output is $ \{F_T\} 
 
 
 \subsubsection{Rotor wind} \label{sec:comp_rot_wind}
-There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's POV. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the heave (\textbf{y}) direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
+There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's point of view. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the heave (\textbf{y}) direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
 \begin{equation}\label{eq:comp_rotorwind}
 	v_{0_{rot}} = v_{0} - v_y
 \end{equation}
@@ -207,7 +222,7 @@ While the pitch system dynamics are not fast by ordinary standards they can be a
 The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is $ \{\theta \} $
 
 
-\subsubsection{Full Load Controller (FLC)} \label{sec:comp_flc}
+\subsubsection{Full load controller} \label{sec:comp_flc}
 The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC controller is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller designed later in \cref{sec:ctrl-design} acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the turbine behaves under normal operation.
 \begin{figure}[ht]
 	\centering
@@ -249,7 +264,7 @@ The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 %The component inputs are $ \{e \} $ and the outputs are $ \{P_{ref} \} $
 
 
-\subsection{The connected model}
+\subsection{The connected model} \label{sec:comp_connected}
 In the previous section all individual components models were defined and the non-linear models are linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
 \begin{equation}\label{eq:state-space-sys}
 	\begin{split}
