@@ -195,13 +195,7 @@ From comparison to the standard TF it can be derived that:
 \end{align}
 where $ f_{eig} $ represents the natural frequency of the system while $ \zeta $ is the damping factor. 
 
-This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any inputs/parameters in VTS. They need to be tuned such that the response of the model fits the real system as close as possible. In the appendix in \cref{sec:app_mod_foreaft_fitting} this process is further described in detail. With an operating point of 16 m/s the parameters were found to be:
-\todo[inline]{Indsæt parametre her. Jeg skal lige se om der skal laves noget om nu hvor theta -> vy checkes ud}
-\begin{itemize}
-	\item $ m =  $
-	\item $ f_{eig} =  $
-	\item $ \zeta =  $
-\end{itemize}
+This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any inputs/parameters in VTS. They need to be tuned such that the response of the model fits the real system as close as possible. In the appendix in \cref{sec:app_mod_foreaft_fitting} this process is further described in detail.
 
 \medskip
 The second order TF standard form:
@@ -265,7 +259,7 @@ The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 
 
 \subsection{The connected model} \label{sec:comp_connected}
-In the previous section all individual components models were defined and the non-linear models are linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
+In the previous section all individual components models were defined and the non-linear models were linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
 \begin{equation}\label{eq:state-space-sys}
 	\begin{split}
 		\dot x &= A x + B u + B_d d \\
@@ -276,40 +270,62 @@ Where $ \dot x $ is the time derivative of the state vector, $ u $ the input vec
 
 In xxx a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ the power reference $ Pref $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices, essentially making it a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
 
-\smallskip
-Outputs can be defined from the sensors which are expected to be available and if the outputs the states then the output matrix $ C $ only contains ones and zeros.
+Outputs are defined from the available sensors and if the outputs are equal to the states then the output matrix $ C $ only contains ones and zeros.
 
-The resulting state space system becomes:
+\subsubsection{Evaluation of model fit} \label{sec:lin_fit_eval}
+In the tower fore-aft movement component section in \cref{sec:comp_foreaft_mod} it was explained that a fitting process was necessary to find the parameters which gave the best linear fit. In the appendix in \cref{sec:app_mod_foreaft_fitting} all results from said process are presented and a few of the results are also shown here in \cref{fig:wref-vy_16}. In \cref{fig:sysid_wref-vy_16} the frequency response from VTS is seen when a test sine curve is applied to the pitch reference. The frequency response is plotted from the pitch reference to the surge direction velocity at nacelle height.
 
+\begin{figure*}[ht]
+	\centering
+	
+	\subfloat[VTS frequency response]{\includegraphics[width=.49\textwidth]{Graphics/TestResults/foreaftFitting/sysid_thSine-vy_16ms.png}
+		\label{fig:sysid_wref-vy_16}}
+	\hfil
+	\subfloat[Linear model response]{\includegraphics[width=.49\textwidth]{Graphics/TestResults/foreaftFitting/wtLin_th-vy_16ms.png}
+		\label{fig:wtlin_wref-vy_16}}
+	
+	\caption{pitch reference to fore-aft surge velocity fitting with operating point at 16 m/s; \textbf{(a)} VTS bode plot; \textbf{(b)} Linear model bode plot. Black lines are positioned in the magnitude plot to indicate the location of the peak of the VTS bode plot magnitude in (a). Black lines also indicate the position of the beginning and end of the large phase shift around the eigenfrequency from (a).}
+	\label{fig:wref-vy_16}
+\end{figure*}
+
+
+\subsubsection{The linear model} \label{sec:linear_model}
+The resulting linear state space system derived at the 16 m/s operating point becomes:
 \begin{equation}\label{eq:xdot}
 	\dot{\begin{bmatrix} \theta_{ref} \\
 						p_y \\ 
 						v_y \\
 						\Omega \end{bmatrix}} = 
-	\begin{bmatrix} A_{11} & A_{12} & A_{13} & A_{14}\\ 
-					A_{21} & A_{22} & A_{23} & A_{24}\\ 
-					A_{31} & A_{32} & A_{33} & A_{34}\\
-					A_{41} & A_{42} & A_{43} & A_{44}\end{bmatrix}
+	\begin{bmatrix} 0       &  0        & 0 		& -45.741	\\
+					0       &  0   		& 1    		& 0			\\
+					0.0065  & -0.064	& -0.134	& -1.505	\\
+					0.0011  &       0  	& -0.017	& -0.265\end{bmatrix}
 	\begin{bmatrix} \theta_{ref} \\
 					p_y \\ 
 					v_y \\
 					\Omega \end{bmatrix} + 
-	\begin{bmatrix} B_{11} & B_{12} \\
-					B_{21} & B_{22} \\
-					B_{31} & B_{32} \\
-					B_{41} & B_{42} \end{bmatrix}
+	\begin{bmatrix} 0.125   & 0 \\
+					0       & 0	\\
+					0.0036  & 0	\\
+					0.0006  & 0 \end{bmatrix}
 	\begin{bmatrix} \omega_{Ref} \\ 
-					P_{ref} \end{bmatrix}
+					P_{ref} \end{bmatrix} + 
+	\begin{bmatrix} 0	\\
+					0		\\
+					0.068 	\\
+					0.017 \end{bmatrix} v_{free}
 \end{equation}
 
-with the output
+\smallskip
+\noindent with the output
+
 \begin{equation}\label{eq:y}
-	\begin{bmatrix} p_y \\ 
-					v_y \\
-					\Omega \end{bmatrix} = 
-	\begin{bmatrix}	0 	& 1 	& 0 	& 0 \\ 
-					0 	& 0 	& 1 	& 0 \\
-					0 	& 0 	& 0 	& 1 \end{bmatrix}
+	\begin{bmatrix} \omega \\ 
+					p_y \\
+					v_y \end{bmatrix} = 
+	\begin{bmatrix}	0  	& 0 	& 0  	& 365.9290	\\
+					0  	& 1  	& 0 	& 0			\\
+					0	& 0 	& 1 	& 0 \end{bmatrix}
 	\begin{bmatrix} \theta_{ref} \\
 					p_y \\ 
 					v_y \\
@@ -317,19 +333,23 @@ with the output
 \end{equation}
 
 
-\subsubsection{System evaluation}
-A linear system model has now been derived at an operating point and before using it to make a state-space controller some key evaluations should be made. Firstly stability is checked and secondly controllability and observability.
+\subsubsection{System stability, controllability and observability}
+A linear system model with the FLC controller has now been derived at an operating point. Before moving further some key evaluations should be made. Firstly stability is checked and secondly controllability and observability.
 
 \medskip
 An important characteristic of any system is its stability. Some system $ \dot x = f(x) $ which is linearised at an operating point $ x_0 $ such that $ A = \left. \dfrac{\partial f}{\partial x} \right| _{x_0} $ is stable in a vicinity around the origin iff
 \begin{equation}\label{eq:stability}
 	Re\{\lambda_i\} < 0 \;\;\; \text{for} \;\;\; 1 \leq i \leq n
 \end{equation}
-with $ \lambda_i $ being the eigenvalues of the system. For an inherently linear system if \cref{eq:stability} then no matter where the states are initialized they will always return to an equilibrium point. For a non-linear system which is linearised at an operating point it only means that the system is stable in some vicinity around that operating point. There is furthermore no guarantee that stability holds for all operating points. The poles of $ A $ from \cref{eq:xdot} all have negative real values and it is thus stable.
+with $ \lambda_i $ being the eigenvalues of the system. For an inherently linear system if \cref{eq:stability} holds then no matter where the states are initialized they will always return to an equilibrium point. For a non-linear system linearised at an operating point it only means that the system is stable in some vicinity around that operating point. There is furthermore no guarantee that stability holds for all operating points. The poles of $ A $ from \cref{eq:xdot} all have negative real values and it is thus stable.
 
 \medskip
-Next it is checked if the rank of the controllability matrix is equal to the number of states.
+Next controllability is checked by making sure that the rank of the controllability matrix is equal to the number of states. 
+
+\textbf{CHECK AFSNIT UD FRA CA8 RAPPORT OM CONTROLLABILITY OG OBSERVABILITY}
 
 \medskip
-Next is is checked if the rank of the observability matrix is equal to the number of states.
+Next observability is checked by making sure that the rank of the observability matrix is equal to the number of states.
+
+
 

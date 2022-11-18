@@ -135,31 +135,101 @@ The component model input is $ \{P, \Omega\} $ and the output is $ \{T_g\} $
 
 
 \subsection{Fore-aft tower model fitting} \label{sec:app_mod_foreaft_fitting}
-As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:comp_foreaft_mod} the component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This is obviously a seriously simplified model which consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behaviour of the real system well is not intuitive. When the model equations were written on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the relevant tuning results.
-
-\medskip
-\noindent Setting the \textbf{natural frequency} around the eigenfrequency of the turbine is a good place to start.
+As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \cref{sec:comp_foreaft_mod} the component which models the fore-aft movement consists of a simple second order mass-spring-damper system. This simplified model consists of only three parameters: A mass $ m $, a spring constant $ k $ and a damper constant $ b $. Setting these parameters such that the model fits the behaviour of the real system well is not intuitive. When the model equations were written on the standard second order TF form it became apparent that the parameters could be derived from the mass, the natural frequency $ \omega_n $ and the dampening factor $ \zeta $. While these parameters are much more intuitive to place some tuning still has to be done. This section is dedicated to explaining the tuning procedure and showcasing the final results of the tuning process. The starting point for the parameter estimation was as follows:
 
 \smallskip
-\noindent A first guess for the \textbf{effective mass} $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. This is simply a rough estimate which is not expected to yield satisfactory results mainly because the mass M does not represent the actual mass of the system but rather the inertia of the pitching of the whole structure in the water. 
+\noindent Setting the \textbf{natural frequency} around the eigenfrequency of the turbine is a good place to start. Thus $ \omega_{ninit} = 0.035 \cdot 2 \pi $.
 
 \smallskip
-\noindent Many factors affect the \textbf{dampening} of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theory_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction. A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.
+\noindent A first guess for the \textbf{effective mass} $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. This is simply a rough estimate which is not expected to yield satisfactory results mainly because the mass M does not represent the actual mass of the system but rather the inertia of the pitching of the whole structure in the water. Thus $ m_{init} = m_{tower} + m_{hub} + m_{nacelle} + 3 \cdot m_{blade} = 77743 + 82262 + 293382 + 3*36251 $
+
+\smallskip
+\noindent Many factors affect the \textbf{dampening} of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theory_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction. A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces. Thus $ \zeta_{init} = 0.2 $
 
 \medskip
 In order to be able to fit the model to the real system it is of course necessary to have some data to fit it against.
 
-\subsubsection{System identification}
+\subsubsection*{System identification}
 A Vestas tool is utilized to get frequency response plots of the real system from specific actuator inputs to any sensor in the simulation environment. The tool functionality can be split into two main parts. 
 
 \textbf{Firstly} setup files are generated which alter the VTS simulation environment such that a sinusoid of chosen frequency and amplitude is induced on a chosen reference. A full simulation is run for every frequency. A preliminary test was made where the system behaviour was analysed when frequencies were induced, in the appendix in \cref{app:tj_00}. In this test only a few frequencies were induced on the rotor speed reference and the effect on the rotor speed and fore-aft motion was commented.
 
 The \textbf{second part} is the processing of the simulation output data to plot frequency responses from the actuator to an output sensor. 
 
-For the parameter tuning the input actuators were chosen to be the generator speed reference and the pitch angle reference and the observed outputs were the measured generator speed and the tower top velocity.
+Furthermore for the parameter tuning the input actuators were chosen to be the generator speed reference and the pitch angle reference and the observed outputs were the measured generator speed and the tower top velocity. 60 different frequencies were spaced logaritmacally between 0.01 Hz and 0.3 Hz. The amplitude of the sinusoid was set to 5\% of the mean generator speed reference and and 1 degree for the rotor pitch. 
 
-60 different frequencies were spaced logaritmacally between 0.01 Hz and 0.3 Hz. The amplitude of the sinusoid was set to 5\% of the mean generator speed reference and and 1 degree for the rotor pitch. 
-
-\subsubsection{Fitting results}
+\subsubsection*{Fitting results}
 In this subsection the results of the fitting process are presented. Firstly the model is fitted for the transfer function from rotor speed reference to rotor speed and from rotor speed reference to surge direction velocity. Secondly the model is fitted for the transfer function from the pitch reference to the surge direction velocity.
 
+\smallskip
+After a trail and error fitting process the parameters that were found to yield the most satisfactory fit were the following:
+\begin{equation*}
+	\begin{split}
+		\omega_n &= 1.15 \, \omega_ninit \\
+		m 		 &= 2.5 \, m_{init} \\
+		\zeta 	 &= 0.13
+	\end{split}
+\end{equation*}
+
+
+\begin{figure*}[ht]
+	\centering
+	
+	\subfloat[VTS frequency response]{\includegraphics[width=.49\textwidth]{Graphics/TestResults/foreaftFitting/sysid_wRef-w_16ms.png}
+		\label{fig:app_sysid_wref-w_16}}
+	\hfil
+	\subfloat[Linear model response]{\includegraphics[width=.49\textwidth]{Graphics/TestResults/foreaftFitting/wtLin_wRef-w_16ms.png}
+		\label{fig:app_wtlin_wref-w_16}}
+	
+	\caption{generator speed reference to generator speed fitting with operating point at 16 m/s; \textbf{(a)} VTS bode plot; \textbf{(b)} Linear model bode plot. Black lines are placed in the magnitude plot to indicate the peaks and valleys around the eigenfrequency and in the phase plot at the valley from (a).}
+	\label{fig:app_wref-w_16}
+\end{figure*}
+
+
+
+\begin{figure*}[ht]
+	\centering
+	
+	\subfloat[VTS frequency response]
+	{\includegraphics[width=.49\textwidth]{Graphics/TestResults/foreaftFitting/sysid_wRef-vy_16ms.png}%
+			\label{fig:app_sysid_wref-vy_16}}
+	\hfil
+	\subfloat[Linear model response]
+	{\includegraphics[width=.50\textwidth]{Graphics/TestResults/foreaftFitting/wtLin_wRef-vy_16ms.png}%
+			\label{fig:app_wtlin_wref-vy_16}}
+	
+	\caption{generator speed reference to fore-aft surge velocity fitting with operating point at 16 m/s; \textbf{(a)} VTS bode plot; \textbf{(b)} Linear model bode plot. Black lines are placed in the magnitude plot to indicate position of magnitude peak from (a).}
+	\label{fig:app_wref-vy_16}
+\end{figure*}
+
+
+\begin{figure*}[ht]
+	\centering
+	
+	\subfloat[VTS frequency response]{\includegraphics[width=.49\textwidth]{Graphics/TestResults/foreaftFitting/sysid_thSine-vy_16ms.png}
+		\label{fig:app_sysid_wref-vy_16}}
+	\hfil
+	\subfloat[Linear model response]{\includegraphics[width=.49\textwidth]{Graphics/TestResults/foreaftFitting/wtLin_th-vy_16ms.png}
+		\label{fig:app_wtlin_wref-vy_16}}
+	
+	\caption{pitch reference to fore-aft surge velocity fitting with operating point at 16 m/s; \textbf{(a)} VTS bode plot; \textbf{(b)} Linear model bode plot. Black lines are positioned in the magnitude plot to indicate the location of the peak of the VTS bode plot magnitude in (a). Black lines also indicate the position of the beginning and end of the large phase shift around the eigenfrequency from (a).}
+	\label{fig:app_wref-vy_16}
+\end{figure*}
+
+
+
+% Template
+%\begin{figure*}[ht]
+%	\centering
+%	
+%	\subfloat[VTS frequency response]
+%	{\includegraphics[width=.49\textwidth]{Graphics/}%
+%		\label{fig:app_sysid_}}
+%	\hfil
+%	\subfloat[Linear model response]
+%	{\includegraphics[width=.50\textwidth]{Graphics/}%
+%		\label{fig:app_wtlin_}}
+%	
+%	\caption{General_text; \textbf{(a)} a_text; \textbf{(b)} b_text.}
+%	\label{fig:app_full}
+%\end{figure*}
