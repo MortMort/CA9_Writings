@@ -144,19 +144,22 @@ As described in \hyperref[sec:comp_foreaft_mod]{\textbf{fore-aft tower model}} \
 \noindent A first guess for the \textbf{effective mass} $ m $ is the combined mass of: The tower, nacelle, hub and rotor blades. This is simply a rough estimate which is not expected to yield satisfactory results mainly because the mass M does not represent the actual mass of the system but rather the inertia of the pitching of the whole structure in the water. 
 
 \smallskip
-\noindent Many factors affect the \textbf{dampening} of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theo_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction. A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.
+\noindent Many factors affect the \textbf{dampening} of the fore-aft movement. As described in \cref{sec:intro_theFOWT} ballast, buoyancy and mooring line forces all contribute to the stability and dampening of the fore-aft tower movement. Furthermore as also described in \cref{sec:theory_fowt_challenges} the rotor blades act as a sail which dampens the movement in the surge direction. A low dampening factor $ \zeta $ is assumed as a start since the dampening from the blades is modelled in the \hyperref[sec:comp_aero_thrust]{\textbf{aerodynamic thrust model}} \cref{sec:comp_aero_thrust}. Thus the only contributors to dampening of the system are from the other mentioned forces.
 
 \medskip
-In order to be able to fit the model to the real system it is of course necessary to have some data to fit it against. This is where \textit{SysIdFreqSweep} enters the picture.
+In order to be able to fit the model to the real system it is of course necessary to have some data to fit it against.
 
 \subsubsection{System identification}
-A Vestas tool called \textit{SysIdFreqSweep} is utilized to get frequency response plots of the real system from specific actuator inputs to any sensor in the simulation environment. The tool functionality can be split into to main parts. 
+A Vestas tool is utilized to get frequency response plots of the real system from specific actuator inputs to any sensor in the simulation environment. The tool functionality can be split into two main parts. 
 
-The \textbf{first part} is the generation of setup files which alter the simulation environment such that a sinusoid of chosen frequency and amplitude is induced on a chosen reference. A full simulation is run for every frequency between a start and end frequency. A preliminary test was made where the system behaviour was analyzed when frequencies were induced, in the appendix in \cref{app:tj_00}. In this test only a few frequencies were induced on the rotor speed reference and the effect on the rotor speed and fore-aft motion was commented.
+\textbf{Firstly} setup files are generated which alter the VTS simulation environment such that a sinusoid of chosen frequency and amplitude is induced on a chosen reference. A full simulation is run for every frequency. A preliminary test was made where the system behaviour was analysed when frequencies were induced, in the appendix in \cref{app:tj_00}. In this test only a few frequencies were induced on the rotor speed reference and the effect on the rotor speed and fore-aft motion was commented.
 
 The \textbf{second part} is the processing of the simulation output data to plot frequency responses from the actuator to an output sensor. 
 
-\medskip
 For the parameter tuning the input actuators were chosen to be the generator speed reference and the pitch angle reference and the observed outputs were the measured generator speed and the tower top velocity.
 
 60 different frequencies were spaced logaritmacally between 0.01 Hz and 0.3 Hz. The amplitude of the sinusoid was set to 5\% of the mean generator speed reference and and 1 degree for the rotor pitch. 
+
+\subsubsection{Fitting results}
+In this subsection the results of the fitting process are presented. Firstly the model is fitted for the transfer function from rotor speed reference to rotor speed and from rotor speed reference to surge direction velocity. Secondly the model is fitted for the transfer function from the pitch reference to the surge direction velocity.
+

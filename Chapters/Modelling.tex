@@ -128,7 +128,7 @@ The model is linearised at an operating point with a taylor expansion $ (\theta_
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial \Omega} \right |_{\theta_o, \Omega_o, v_o} ( \Omega-\Omega_o) \\
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial v} \right |_{\theta_o, \Omega_o, v_o} ( v - v_o)
 \end{align}
-The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving a linear model with the \textit{jacobian()} Matlab functions is furthermore a trivial task.
+The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving a linear model can easily be done for the remainder of the components with the \textit{jacobian()} Matlab functions.
 
 The component inputs are $ \{\theta, \Omega, v\} $ and the output is $ \{T_r\} $
 
@@ -145,28 +145,28 @@ The component inputs are $ \{\theta, \Omega, v \} $ and the output is $ \{F_T\} 
 
 
 \subsubsection{Rotor wind} \label{sec:comp_rot_wind}
-There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's point of view. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the heave (\textbf{y}) direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
+There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's point of view. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the  (\textbf{y}) direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
 \begin{equation}\label{eq:comp_rotorwind}
 	v_{0_{rot}} = v_{0} - v_y
 \end{equation}
-$ v_{0_{rot}} $ is \underline{not} the rotor wind which is the wind speed at the rotor plane but the free wind modified by the turbine velocity.
+$ v_{0_{rot}} $ is \underline{not} the rotor wind (which is the wind speed at the rotor plane) but the free wind modified by the turbine velocity.
 
 The component inputs are $ \{v_0, v_y\} $ and the output is $ \{v_{0_{rot}}\} $
 
 
 \subsubsection{Tower fore-aft movement} \label{sec:comp_foreaft_mod}
-The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation is the same as seen in \cref{fig:fowt_coordinates}. This notation will hereinafter be denoted the \textit{"normal DOF notation"}. Vestas uses another notation which will be denoted the \textit{Vestas DOF notation}: Most importantly \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} in the normal DOF notation is called \textit{tilt} in Vestas DOF notation. This document \underline{for the most part} adopts the normal DOF notation when discussing the DOFs and one is thus directed to \cref{fig:fowt_coordinates} if in doubt about which movement is the subject of discussion. Since Vestas and the wtLin tool adopts the Vestas DOF notation the equations presented make use of this notation as well.
+The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation follows the convention in \cref{fig:fowt_coordinates}. Vestas uses a slightly different notation where \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} is called \textit{tilt}. This document for the most part follows the notation in \cref{fig:fowt_coordinates}. Since Vestas and the wtLin tool adopts the Vestas DOF notation the equations presented make use of this notation as well.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.9\linewidth]{Graphics/wtLinForeAftMotionModel.pdf}
 	\caption{Illustration of the mass spring damper approximation of the fore-aft tower movement}
 	\label{fig:wtLin_fore-aft_diagram}
 \end{figure}
-The fore-aft movement is modelled by a mass-spring-damper system whose movement is defined to be at nacelle height. This choice is initially made because a sensor in VTS is currently located at nacelle height which is utilized by the FATD controller. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ M $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
+The fore-aft motion is modelled by a mass-spring-damper system whose movement is defined to be at nacelle height. This choice is initially made because a sensor in VTS is currently located at nacelle height which is utilized by the FATD controller. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ m $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
 \begin{equation}\label{eq:comp_fore-aft_ay1}
 	\ddot{p}_y m = F_{rot} - F_d + F_s
 \end{equation}
-where $ p_y $ is the heave translation position, $ F_{rot} $ is the rotor force and $ F_d $ and $ F_s $ are the damper and spring forces respectively.
+where $ p_y $ is the pitch equivalent translation position in the surge direction, $ F_{rot} $ is the rotor force and $ F_d $ and $ F_s $ are the damper and spring forces respectively.
 
 when isolating $ \ddot{p}_y $ and expanding $ F_d $ and $ F_s $, \cref{eq:comp_fore-aft_ay1} becomes:
 \begin{equation}\label{eq:comp_fore-aft_ay2}
@@ -184,7 +184,7 @@ which yields the fore-aft tower model:
 	\dot{v}_y & = \dfrac{F_{rot} - b v_y - k p_y}{m}  \label{eq:comp_fore-aft_1} \\
 	\dot{p}_y & = v_y \label{eq:comp_fore-aft_2}
 \end{align}
-Furthermore the fore-aft tower model transfer function (TF) from rotor thrust $ F_{rot} $ to heave translation $ p_y $ can be written on the standard second order TF form (seen in \cref{eq:std_tf}) in the laplace domain as seen below:
+Furthermore the fore-aft tower model transfer function (TF) from rotor thrust $ F_{rot} $ to equivalent surge translation $ p_y $ can be written on the standard second order TF form (seen in \cref{eq:std_tf}) in the laplace domain as seen below:
 \begin{equation}\label{eq:comp_fore_aft_tf}
 	\dfrac{p_y}{F_{rot}} = \dfrac{\dfrac{1}{m}}{s^2 + \dfrac{b}{m} s + \dfrac{k}{m}}
 \end{equation}
@@ -195,7 +195,7 @@ From comparison to the standard TF it can be derived that:
 \end{align}
 where $ f_{eig} $ represents the natural frequency of the system while $ \zeta $ is the damping factor. 
 
-This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any parts files of VTS. They need to be tuned such that the response of the model fits the real system as well as possible. In the appendix in \cref{sec:app_mod_foreaft_fitting} this process is further described in detail. With an operating point of 16 m/s the parameters were found to be:
+This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any inputs/parameters in VTS. They need to be tuned such that the response of the model fits the real system as close as possible. In the appendix in \cref{sec:app_mod_foreaft_fitting} this process is further described in detail. With an operating point of 16 m/s the parameters were found to be:
 \todo[inline]{Indsæt parametre her. Jeg skal lige se om der skal laves noget om nu hvor theta -> vy checkes ud}
 \begin{itemize}
 	\item $ m =  $
@@ -213,9 +213,9 @@ The component input is $ \{F_{rot} \} $ and the output is $ \{p_y, v_y\} $
 
 
 \subsubsection{Pitch system} \label{sec:comp_pitch}
-The pitch system consists of the local pitch controller and the mechanical and electrical parts that make out the pitching system. The pitch controller takes the pitch reference $ \theta_{ref} $ and the FATD contribution $ \theta_{fatd} $ as input and outputs a voltage in a range which through the electrical and mechanical system translates to a pitch position. 
+The pitch system consists of both the local pitch controller and the hydraulic and electrical parts. The pitch controller takes the pitch reference $ \theta_{ref} $ and the FATD contribution $ \theta_{fatd} $ as input and outputs a voltage in a range which through the electrical and mechanical system translates to a pitch position. 
 
-While the pitch system dynamics are not fast by ordinary standards they can be assumed to be fast enough with regards to the control objective to be left out. Therefore the pitch system is simply modelled as a direct feed-through. In the appendix in \cref{sec:comp_pitch_dyn} pitch system dynamics are approximated with a single order low-pass filter. 
+While the pitch system dynamics can be assumed to be fast enough with regards to the control objective to be left out. Therefore the pitch system is simply modelled as a direct feed-through. Alternatively the pitch system could have been approximated with a single order low-pass filter as it's done in the appendix in \cref{sec:comp_pitch_dyn}. 
 \begin{equation}\label{eq:comp_pitch_freq}
 	\theta = \theta_{ref} + \theta_{fatd}
 \end{equation}
