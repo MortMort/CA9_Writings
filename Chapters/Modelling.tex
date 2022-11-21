@@ -1,5 +1,5 @@
 \section{Modelling} \label{sec:mod} % Incl. Subsection "Component Models"
-The purpose of this section is to outline the linear model of the system. The model is intended to be used as a control model for state-space control with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. Instead such components models are either completely left out or modelled with algebraic equations. 
+The purpose of this chapter is to outline the linear model of the system. The model is intended to be used as a control model for state-space control with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. Instead such components models are either completely left out or modelled with algebraic equations. 
 
 
 
@@ -289,7 +289,7 @@ In the tower fore-aft movement component section in \cref{sec:comp_foreaft_mod} 
 \end{figure*}
 
 
-\subsubsection{The linear model} \label{sec:linear_model_xdot}
+\subsubsection{The linear model} \label{sec:linear_model}
 The resulting linear state space system derived at the 16 m/s operating point becomes:
 \begin{equation}\label{eq:xdot}
 	\dot{\begin{bmatrix} \theta_{ref} \\
@@ -317,7 +317,7 @@ The resulting linear state space system derived at the 16 m/s operating point be
 \smallskip
 \noindent with the output
 
-\begin{equation}\label{sec:linear_model_y}
+\begin{equation}\label{eq:y}
 	\begin{bmatrix} \omega \\ 
 					p_y \\
 					v_y \end{bmatrix} = 
@@ -330,7 +330,7 @@ The resulting linear state space system derived at the 16 m/s operating point be
 					\Omega \end{bmatrix}
 \end{equation}
 
-In \cref{sec:linear_model_xdot} $ P_{ref} $ is observed to not affect any of the states. This is because a PLC controller component has not been included in the linear model.
+In \cref{sec:linear_model} $ P_{ref} $ is observed to not affect any of the states. This is because a PLC controller component has not been included in the linear model.
 
 \subsubsection{System stability, controllability and observability}
 A linear system model with the FLC controller has now been derived at an operating point. Before moving further some key evaluations should be made. Firstly stability is checked and secondly controllability and observability.

@@ -1,5 +1,71 @@
 \section{Controller design} \label{sec:ctrl-design}
-The 
+The purpose of this chapter is to... LQR ... LQI
+
+\subsection{The Linear Quadratic Regulator} \label{sec:ctrl_lqr}
+The linear quadratic regulator (LQR) in its infinite horizon form is the preferred controller. It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
+
+For a system
+\begin{equation}\label{eq:ctrl_sys}
+	\begin{split}
+		\dot x &= A x + B u \\
+		y &= Cx
+	\end{split}
+\end{equation}
+the LQR controller is an optimal with respect to a relevant cost function such as:
+\begin{equation}\label{eq:lqr_cost}
+	J = \int_{0}^{\infty} \left(x^T Q x + u^T R u + 2x^T N u\right) dt
+\end{equation}
+where
+\begin{center}
+	\begin{tabular}{l r l }
+		weight & $R$         & $ > 0$ (positive definite) and symmetric       \\
+		weight & $Q$ and $N$ & $\ge 0$ (positive semi-definite) and symmetric
+	\end{tabular}
+\end{center}
+\smallskip
+The final term cross-term which punishes combinations of inputs and states is usually omitted by setting $ N = 0 $. The diagonal entries of $ R $ and $ Q $ are considered tuning parameters. The solution to the LQR control problem is the optimal control feedback which minimizes the cost function. The LQR controller is thus inherently a regulator meaning that it drives the system states to 0. For a system linearised at an operating point $ \{x_o, u_o\} $ the state and input deviations from the operating point replaces the actual states and inputs: $ \hat x = x-x_o $ and $ \hat u = u-u_o $. Given that the operating point is located at the reference the regulator property is obviously not unattractive. With $ N = 0 $ and states substituted with state deviations the final cost function becomes:
+\begin{equation}\label{eq:lqr_cost_final}
+	J = \int_{0}^{\infty} \left(\hat x^T Q \hat x + \hat u^T R \hat u\right) dt
+\end{equation}
+The optimal feedback gain can be shown to be: 
+\begin{equation}\label{eq:lqr_K}
+	K = -R^{-1} B^T P
+\end{equation}
+with P being the solution to the algebraic Ricatti equation:
+\begin{equation}\label{lqr:ricatti}
+	A^T P + P A - P B R^{-1} B^T P + Q = 0
+\end{equation}
+This leaves $ Q $ and $ R $ to be tuned in such a manner that a satisfactory performance is achieved. For initial guesses \textit{Bryson's Rule} can be utilized. It states that a diagonal entry in $ Q $ or $ R $ for a corresponding state $ x_i $ or input $ u_i $ should be set as such:
+\begin{equation}\label{eq:bryson}
+	\begin{split}
+		Q_i = \dfrac{1}{Max(x_i)^2} \\
+		R_i = \dfrac{1}{Max(u_i)^2}
+	\end{split}
+\end{equation}
+where $ Max(x) $ is the largest tolerated value of $ x $. While optimal performance is rarely achieved without further tuning Bryson's Rule gives a good starting point. In Matlab the \textit{lqr(A, B, Q, R, N)} function is used to get the controller gains $ K $.
 
 
-The FLC is removed from the system. To ensure that the system can be controlled the rank of the controllability matrix is checked
+\subsection{Linear Quadratic Integrator} \label{sec:ctrl_lqi}
+As described \cref{sec:comp_flc} the FLC controller is of the proportional-integrator (PI) type which ensures no generator speed steady state error due to integral action. The controller to be derived includes generator speed control and the regular LQR controller does not have integral action. Therefore the system is augmented with an integral state on the generator speed $ \dot x_i = \hat \omega $ leaving the extended state space system to be:
+\begin{align} 
+	\dot {\bar x} & = \begin{bmatrix} \dot{\hat x} \\ \dot x_i \end{bmatrix} = \begin{bmatrix} A &0 \\ C_{iy} & 0 \end{bmatrix} \bar x + \begin{bmatrix} B_u \\ 0 \end{bmatrix}  u \\
+	\bar y & = \begin{bmatrix} C & 0 \end{bmatrix} \bar x
+\end{align}
+where $ C_{iy} $ is defined such that the output to be integrated is picked out. %; in this case the generator speed.
+
+A linear quadratic integrator (LQI) controller is obtained when the integrator-augmented system matrices are used to solve the LQR problem. The dimension of $ Q $ increases for every extra integrator state and thus extra weights are defined for these. 
+
+
+\subsection{The controller} \label{sec:ctrl_thecontroller}
+In the preceding sections the LQR and LQI controllers were explained and we are therefore ready to make the LQI controller. Firstly the FLC controller is removed from the system such that the input to the system is $ thRef $ in stead of $ wRef $. Stability and controllability are checked and the system is both stable and controllable. The \textit{lqr()} matlab function is used with the integrator-augmented system yielding the controller gains:
+\begin{equation}\label{eq:lqi_K}
+	K = \begin{bmatrix} K_1 & K_2	\end{bmatrix}
+\end{equation}
+
+when the following $ R $ \text{and} $ Q $ matrices are defined:
+\begin{equation}\label{eq:lqi_Q_and_R}
+	Q = \begin{bmatrix} Q_11 	& 0 \\
+						0		& Q_22 \end{bmatrix} \;\; and \;\; 
+	R = \begin{bmatrix} R_11 	& 0 \\
+						0 		& R_22 \end{bmatrix}
+\end{equation}
