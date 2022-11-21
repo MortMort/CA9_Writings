@@ -217,7 +217,7 @@ The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is
 
 
 \subsubsection{Full load controller} \label{sec:comp_flc}
-The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC controller is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller designed later in \cref{sec:ctrl-design} acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the turbine behaves under normal operation.
+The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC controller is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller designed later in \cref{sec:ctrl-design} acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the linear turbine model behaves under normal operation.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Graphics/PiController.pdf}
@@ -239,7 +239,7 @@ The time domain model can be derived by rearranging and taking the inverse lapla
 \begin{equation}\label{eq:comp_flc_time}
 	\dot{\theta}_{ref} = K_{gs,dP/d\theta} (K_{p, \theta} \dot{e} + K_{p, \theta} \dfrac{1}{T_{i, \theta}} e)
 \end{equation}
-
+The controller parameters are extracted from VTS.
 
 The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 
@@ -266,9 +266,9 @@ In the previous section all individual components models were defined and the no
 		y &= Cx
 	\end{split}
 \end{equation}
-Where $ \dot x $ is the time derivative of the state vector, $ u $ the input vector and $ d $ the disturbance vector. A distinction is made between $ u $ and $ d $ because $ u $ represents the controllable inputs which will eventually be the output of the designed controller while $ d $ are uncontrollable inputs such as the wind which affect the system beyond our control. Achieving a system model on this form is necessary for conventional linear state-space controller design.
+Where $ \dot x $ is the time derivative of the state vector, $ u $ the input vector and $ d $ the disturbance vector with $ x \in R^n $, $ u \in R^m $ and $ u \in R^q $ where $ n $ is the number of states, $ m $ the number of controlled inputs and $ q $ the number of disturbances. A distinction is made between $ u $ and $ d $ because $ u $ represents the controllable inputs which will eventually be the output of the designed controller while $ d $ are uncontrollable inputs such as the wind which affect the system beyond our control. Achieving a system model on this form is necessary for conventional linear state-space controller design.
 
-In xxx a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ the power reference $ Pref $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices, essentially making it a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
+In xxx a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices, essentially making it a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
 
 Outputs are defined from the available sensors and if the outputs are equal to the states then the output matrix $ C $ only contains ones and zeros.
 
@@ -304,12 +304,10 @@ The resulting linear state space system derived at the 16 m/s operating point be
 					p_y \\ 
 					v_y \\
 					\Omega \end{bmatrix} + 
-	\begin{bmatrix} 0.125   & 0 \\
-					0       & 0	\\
-					0.0036  & 0	\\
-					0.0006  & 0 \end{bmatrix}
-	\begin{bmatrix} \omega_{Ref} \\ 
-					P_{ref} \end{bmatrix} + 
+	\begin{bmatrix} 0.125 	\\
+					0		\\
+					0.0036	\\
+					0.0006\end{bmatrix} \omega_{Ref} + 
 	\begin{bmatrix} 0	\\
 					0		\\
 					0.068 	\\
@@ -344,13 +342,21 @@ An important characteristic of any system is its stability. Some system $ \dot x
 \end{equation}
 with $ \lambda_i $ being the eigenvalues of the system. For an inherently linear system if \cref{eq:stability} holds then no matter where the states are initialized they will always return to an equilibrium point. For a non-linear system linearised at an operating point it only means that the system is stable in some vicinity around that operating point. There is furthermore no guarantee that stability holds for all operating points. The poles of $ A $ from \cref{eq:xdot} all have negative real values and it is thus stable.
 
-\medskip
-Next controllability is checked by making sure that the rank of the controllability matrix is equal to the number of states. 
+\smallskip
+\textbf{Controllability} is checked by making sure that the rank of the controllability matrix is equal to the number of states with the controllability matrix being defined:
+\begin{equation}\label{eq:controllability}
+	Q_c = [A|B_u] = [B \;\; AB_u \; \cdots \; A^{n-1}B_u]
+\end{equation}
+$ rank(Q_c) = 4 $ and thus the system is controllable meaning that all states can be controlled to any value with the available controllable inputs.
 
-\textbf{CHECK AFSNIT UD FRA CA8 RAPPORT OM CONTROLLABILITY OG OBSERVABILITY}
-
-\medskip
-Next observability is checked by making sure that the rank of the observability matrix is equal to the number of states.
+\smallskip
+Likewise \textbf{observability} is checked by making sure that the rank of the observability matrix is equal to the number of states with the observability matrix being defined:
+\begin{equation}\label{eq:observability}
+	Q_o = [A|C] = \begin{bmatrix}
+		C \\ CA \\ \vdots \\ CA^{n-1}
+	\end{bmatrix}
+\end{equation}
+$ rank(Q_o) = 4 $ and thus the system is observable meaning that all dynamical action in the states is observable in the measured output. This is not an unexpected result given that all states except the FLC pitch reference $ \theta_{ref} $ are measured. Furthermore $ \theta_{ref} $ is an input to both the rotor speed and the fore-aft velocity as observed in the first column of $ A $ in \cref{eq:xdot}.
 
 
 
