@@ -1,5 +1,9 @@
 \section{Test: Linear model}
-The purpose of this chapter is to show and discuss the performance results of the LQI controller derived in \cref{sec:ctrl-design} on the linear model derived in \cref{sec:linear_model}. T
+The purpose of this chapter is to show and discuss the performance results of the LQI controller derived in \cref{sec:ctrl-design} on the linear model derived in \cref{sec:linear_model}. The controller is benchmarked against the original FLC controller with regards to both rotor speed control and fore-aft movement dampening capability. Prior to the test the LQI controller has been tuned such that a satisfactory performance was achieved on the linear model. 
+
+It is naturally expected that the LQI controller will perform much better in damping the fore-aft movement than the original FLC. It is also expected to perform better in generator speed control despite the fact that the original FLC controller has been thoroughly tuned to achieve the best possible generator speed tracking performance. The reason for this is that the LQI controller has been tuned on the simple linear model and not in VTS. Thus potential unforeseen consequences of having an aggressive controller in a more realistic environment are not discovered until it is tested in VTS.
+
+Test results are shown for both frequency domain 
 
 \subsection{Test framework}
 
