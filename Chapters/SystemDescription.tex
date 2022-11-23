@@ -1,5 +1,5 @@
 \section{System description} \label{sec:sys-descr}
-The purpose of this chapter is to give an overview of the system which the project is based on. It is not of great importance which specific turbine is the subject of examination with regards to exploring and dealing with the floating control problem. But the specifications of the turbine determines the model parameters. Therefore this section is first and foremost dedicated to outlining the turbine specification and secondly to define the software environment which the system is derived from and evaluated upon. 
+The purpose of this chapter is to give an overview of the system that the project is concerned with. It is not of great importance which specific turbine is the subject of examination with regards to exploring and dealing with the floating control problem. But the specifications of the turbine determines the model parameters. Therefore this section is first and foremost dedicated to outlining the turbine specification and secondly to define the software environment which the system is derived from and evaluated upon. 
 
 \subsection{The Vestas V164-8.0 turbine}
 The turbine examined in this project is the Vestas V164-8.0 (8 MW) which is a variable-speed-variable-pitch turbine with a permanent magnet generator, gearbox and full-scale converter. The 8.4 MW version of the turbine is seen in \cref{fig:v164_8.4mw} on top of the Principle Power’s WindFloat semi-submersible foundation \cite{WindFloatAtlantic}. This is the foundation type used in this project but the turbine is the 8.4 MW and not the 8.0 MW variant of this project.
@@ -33,8 +33,8 @@ It is deemed both unfeasible and unnecessary to test the controller derived in t
 Notable simulation environment settings used in parts of this project are:
 \begin{itemize}
 	\item Wind speeds are above 14 m/s to stay well inside the FLC region. It is considered outside the scope of this project to consider operation around nominal wind speed and in PLC.
-	\item The yaw error is zero meaning that the wind flows through the rotor diagonally with respect to the yaw.
-	\item The FATD controller is turned off such that there is no damping of the fore-aft motion.
+	\item The yaw error is zero meaning that the wind flows through the rotor diagonally with respect to the yaw angle.
+	\item The Vestas FATD controller is turned off such that there is no damping of the fore-aft motion.
 	\item OrcaFlex is set up to simulate flat, still water to simplify the system response. 
 \end{itemize}
 

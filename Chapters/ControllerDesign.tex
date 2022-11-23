@@ -1,8 +1,8 @@
 \section{Controller design} \label{sec:ctrl-design}
-The purpose of this chapter is to... LQR ... LQI
+This chapter firstly presents the basic LQR and LQI controller theory and secondly the derived controller. 
 
 \subsection{The Linear Quadratic Regulator} \label{sec:ctrl_lqr}
-The linear quadratic regulator (LQR) in its infinite horizon form is the preferred controller. It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
+The linear quadratic regulator (LQR) in its \textit{infinite horizon} form is the preferred controller. It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
 
 For a system
 \begin{equation}\label{eq:ctrl_sys}
@@ -61,8 +61,7 @@ In the preceding sections the LQR and LQI controllers were explained and we are 
 \begin{equation}\label{eq:lqi_K}
 	K = \begin{bmatrix} K_1 & K_2	\end{bmatrix}
 \end{equation}
-
-when the following $ R $ \text{and} $ Q $ matrices are defined:
+when the $ R $ \text{and} $ Q $ matrices are defined as such:
 \begin{equation}\label{eq:lqi_Q_and_R}
 	Q = \begin{bmatrix} Q_11 	& 0 \\
 						0		& Q_22 \end{bmatrix} \;\; and \;\; 
