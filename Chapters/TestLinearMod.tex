@@ -5,6 +5,7 @@ It is expected that the LQI controller will perform much better in damping the f
 
 Test results are shown for both frequency and time domain.
 
+
 \subsection{Test framework}
 Matlab is used to make bode plots and Matlab Simulink is used to run time simulations. The Matlab \textit{connect()} function is utilized with component models defined on a specific form to gain transfer functions or state space systems from one or more inputs to one or more outputs. From these the \textit{bode()} Matlab function is used to make bode plots. 
 
@@ -21,6 +22,7 @@ From the left an OP deviation step on the free wind is observed entering both sy
 
 \subsection{Test results}
 In this section the test results are both presented and discussed.
+
 
 \subsubsection{Frequency Domain}
 In figure \cref{fig:10_vfreeTovy} the frequency response from the free wind disturbance $ v_{free} $ to the surge direction tower top velocity $ v_y $ is seen. Both the FLC PI system and LQI system are plotted for easy comparison. The plotted frequency range is between 0.01 and 0.3 Hz because this is the frequency range of interest. In figure \cref{fig:11_vfreeToW} the frequency response $ v_{free} $ to the rotor speed $ \Omega $ is seen. The LQI controller is observed yielding much greater dampening of the eigenfrequency for both plots. The gain from $ v_{free} $ to $ \Omega $ is around 10 to 13 dB higher until around 0.05 Hz. \todo[inline]{Ret disse tal når controller er tunet.}
