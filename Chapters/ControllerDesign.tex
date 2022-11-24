@@ -1,8 +1,8 @@
 \section{Controller design} \label{sec:ctrl-design}
 This chapter firstly presents the basic LQR and LQI controller theory and secondly the derived controller. 
 
-\subsection{The Linear Quadratic Regulator} \label{sec:ctrl_lqr}
-The linear quadratic regulator (LQR) in its \textit{infinite horizon} form is the preferred controller. It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
+\subsection{Linear-Quadratic Regulator} \label{sec:ctrl_lqr}
+The Linear-Quadratic Regulator (LQR) in its \textit{infinite horizon} form is the preferred controller. It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
 
 For a system
 \begin{equation}\label{eq:ctrl_sys}
@@ -45,7 +45,7 @@ This leaves $ Q $ and $ R $ to be tuned in such a manner that a satisfactory per
 where $ Max(x) $ is the largest tolerated value of $ x $. While optimal performance is rarely achieved without further tuning Bryson's Rule gives a good starting point. In Matlab the \textit{lqr(A, B, Q, R, N)} function is used to get the controller gains $ K $.
 
 
-\subsection{Linear Quadratic Integrator} \label{sec:ctrl_lqi}
+\subsection{Linear-Quadratic Integrator} \label{sec:ctrl_lqi}
 As described \cref{sec:comp_flc} the FLC controller is of the proportional-integrator (PI) type which ensures no generator speed steady state error due to integral action. The controller to be derived includes generator speed control and the regular LQR controller does not have integral action. Therefore the system is augmented with an integral state on the generator speed $ \dot x_i = \hat \omega $ leaving the extended state space system to be:
 \begin{align} 
 	\dot {\bar x} & = \begin{bmatrix} \dot{\hat x} \\ \dot x_i \end{bmatrix} = \begin{bmatrix} A &0 \\ C_{iy} & 0 \end{bmatrix} \bar x + \begin{bmatrix} B_u \\ 0 \end{bmatrix}  u \\
