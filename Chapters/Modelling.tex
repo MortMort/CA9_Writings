@@ -268,9 +268,16 @@ In the previous section all individual components models were defined and the no
 \end{equation}
 Where $ \dot x $ is the time derivative of the state vector, $ u $ the input vector and $ d $ the disturbance vector with $ x \in R^n $, $ u \in R^m $ and $ u \in R^q $ where $ n $ is the number of states, $ m $ the number of controlled inputs and $ q $ the number of disturbances. A distinction is made between $ u $ and $ d $ because $ u $ represents the controllable inputs which will eventually be the output of the designed controller while $ d $ are uncontrollable inputs such as the wind which affect the system beyond our control. Achieving a system model on this form is necessary for conventional linear state-space controller design.
 
-In xxx a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices, essentially making it a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
+In \cref{fig:connected_components} a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices, essentially making it a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
 
 Outputs are defined from the available sensors and if the outputs are equal to the states then the output matrix $ C $ only contains ones and zeros.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.99\linewidth]{Graphics/wtLinComponents.pdf}
+	\caption{Diagram showing the connections of the components}
+	\label{fig:connected_components}
+\end{figure}
 
 \subsubsection{Evaluation of model fit} \label{sec:lin_fit_eval}
 In the tower fore-aft movement component section in \cref{sec:comp_foreaft_mod} it was explained that a fitting process was necessary to find the parameters which gave the best linear fit. In the appendix in \cref{sec:app_mod_foreaft_fitting} all results from said process are presented and a few of the results are also shown here in \cref{fig:wref-vy_16}. In \cref{fig:sysid_wref-vy_16} the frequency response from VTS is seen when a test sine curve is applied to the pitch reference. The frequency response is plotted from the pitch reference to the surge direction velocity at nacelle height.
