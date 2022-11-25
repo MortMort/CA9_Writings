@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-11-25T11:45:00.624Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.42" etag="NTqbSqwns_GYv4-DB7Vg" version="20.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2022-11-25T11:46:39.657Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.42" etag="SesAFS_Az2-e00AmF-ox" version="20.5.3" type="github">
   <diagram id="bfgBtSmYc3XGGk-cx81R" name="Page-1">
-    <mxGraphModel dx="1131" dy="619" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="646" dy="353" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1513,10 +1513,10 @@
         <mxCell id="9AgO_kFVsNGtxWM4UtPc-231" value="Pitch controller&lt;br&gt;(unity)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="1301.0000000000002" y="2718" width="100" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="9AgO_kFVsNGtxWM4UtPc-272" style="edgeStyle=orthogonalEdgeStyle;rounded=0;jumpStyle=arc;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="9AgO_kFVsNGtxWM4UtPc-233" target="9AgO_kFVsNGtxWM4UtPc-235">
+        <mxCell id="9AgO_kFVsNGtxWM4UtPc-272" style="edgeStyle=orthogonalEdgeStyle;rounded=0;jumpStyle=arc;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="9AgO_kFVsNGtxWM4UtPc-233" target="9AgO_kFVsNGtxWM4UtPc-235">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1420" y="2475" />
+              <mxPoint x="1420" y="2505" />
               <mxPoint x="1420" y="2440" />
               <mxPoint x="940" y="2440" />
               <mxPoint x="940" y="2595" />
@@ -1525,7 +1525,7 @@
         </mxCell>
         <mxCell id="9AgO_kFVsNGtxWM4UtPc-288" value="py" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;" vertex="1" connectable="0" parent="9AgO_kFVsNGtxWM4UtPc-272">
           <mxGeometry x="-0.9177" y="3" relative="1" as="geometry">
-            <mxPoint x="13" y="-5" as="offset" />
+            <mxPoint x="33" y="-34" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="9AgO_kFVsNGtxWM4UtPc-300" value="vy" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;" vertex="1" connectable="0" parent="9AgO_kFVsNGtxWM4UtPc-272">
