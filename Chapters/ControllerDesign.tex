@@ -57,14 +57,17 @@ A linear quadratic integrator (LQI) controller is obtained when the integrator-a
 
 
 \subsection{The controller} \label{sec:ctrl_thecontroller}
-In the preceding sections the LQR and LQI controllers were explained and we are therefore ready to make the LQI controller. Firstly the FLC controller is removed from the system such that the input to the system is $ thRef $ in stead of $ wRef $. Stability and controllability are checked and the system is both stable and controllable. The \textit{lqr()} matlab function is used with the integrator-augmented system yielding the controller gains:
+In the preceding sections the LQR and LQI controllers were explained and we are therefore ready to make the LQI controller. Firstly the FLC controller is removed from the system such that the input to the system is the pitch reference $ thRef $ in stead of $ wRef $. Stability and controllability are checked and the system is both stable and controllable. The \textit{lqr()} matlab function is used with the integrator-augmented system yielding the controller gains:
 \begin{equation}\label{eq:lqi_K}
-	K = \begin{bmatrix} K_1 & K_2	\end{bmatrix}
+	K = \begin{bmatrix} -3.00 & -3.20 & -59.13 & -4.78 \end{bmatrix}
 \end{equation}
 when the $ R $ \text{and} $ Q $ matrices are defined as such:
 \begin{equation}\label{eq:lqi_Q_and_R}
-	Q = \begin{bmatrix} Q_11 	& 0 \\
-						0		& Q_22 \end{bmatrix} \;\; and \;\; 
-	R = \begin{bmatrix} R_11 	& 0 \\
-						0 		& R_22 \end{bmatrix}
+	Q =   \begin{bmatrix}
+		0.25 &  0 &  0 &  0 \cr
+		0 &  4 &  0 &  0 \cr
+		0 &  0 & 22.80 &  0 \cr
+		0 &  0 &  0 &  0.91
+	\end{bmatrix} \;\; and \;\; 
+	R = \begin{bmatrix} 0.04 \end{bmatrix}
 \end{equation}

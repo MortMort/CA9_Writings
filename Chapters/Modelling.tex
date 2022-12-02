@@ -280,8 +280,7 @@ Outputs are defined from the available sensors and if the outputs are equal to t
 \end{figure}
 
 \subsubsection{Evaluation of model fit} \label{sec:lin_fit_eval}
-In the tower fore-aft movement component section in \cref{sec:comp_foreaft_mod} it was explained that a fitting process was necessary to find the parameters which gave the best linear fit. In the appendix in \cref{sec:app_mod_foreaft_fitting} all results from said process are presented and a few of the results are also shown here in \cref{fig:wref-vy_16}. In \cref{fig:sysid_wref-vy_16} the frequency response from VTS is seen when a test sine curve is applied to the pitch reference. The frequency response is plotted from the pitch reference to the surge direction velocity at nacelle height.
-
+In the tower fore-aft movement component section in \cref{sec:comp_foreaft_mod} it was explained that a fitting process was necessary to find the parameters which gave the best linear fit. In the appendix in \cref{sec:app_mod_foreaft_fitting} all results from said process are presented and a few of the results are also shown here in \cref{fig:wref-vy_16}. In \cref{fig:sysid_wref-vy_16} the frequency response from VTS is seen when a test sine is applied to the pitch reference. The frequency response is plotted from the pitch reference to the surge direction velocity at nacelle height. In \cref{fig:wtlin_wref-vy_16} a bode plot of the linear model is seen from the pitch reference to the surge direction velocity. Black lines are plotted in the linear model bode plot to aid in assessing the fit accuracy. The intersection of the lines are located at the peak of the magnitude of the VTS plot. In the phase plot they are located right before and after the sharp dip in the phase. It is observed that the magnitude of the linear model is around 5-6 dB lower than the VTS model. The phase is furthermore observed almost passing through the cross sections of the black lines. While the fit is not perfect is is deemed good enough to continue.
 \begin{figure*}[ht]
 	\centering
 	
@@ -323,21 +322,20 @@ The resulting linear state space system derived at the 16 m/s operating point be
 
 \smallskip
 \noindent with the output
-
 \begin{equation}\label{eq:y}
-	\begin{bmatrix} \omega \\ 
-					p_y \\
-					v_y \end{bmatrix} = 
-	\begin{bmatrix}	0  	& 0 	& 0  	& 365.9290	\\
-					0  	& 1  	& 0 	& 0			\\
-					0	& 0 	& 1 	& 0 \end{bmatrix}
+	\begin{bmatrix} p_y \\
+					v_y \\
+					\omega \end{bmatrix} = 
+	\begin{bmatrix}	0  	& 1 	& 0  	& 0	\\
+					0  	& 0  	& 1 	& 0			\\
+					0	& 0 	& 0 	& 365.93 \end{bmatrix}
 	\begin{bmatrix} \theta_{ref} \\
 					p_y \\ 
 					v_y \\
 					\Omega \end{bmatrix}
 \end{equation}
 
-In \cref{sec:linear_model} $ P_{ref} $ is observed to not affect any of the states. This is because a PLC controller component has not been included in the linear model.
+
 
 \subsubsection{System stability, controllability and observability}
 A linear system model with the FLC controller has now been derived at an operating point. Before moving further some key evaluations should be made. Firstly stability is checked and secondly controllability and observability.
