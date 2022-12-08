@@ -85,7 +85,7 @@ From $ Q $ and $ R $ it is observable that:
 	\item the rotor speed integration weight is set 5 times lower than the rotor speed
 	\item the maximum allowed pitch angle actuation deviation is set to 5 deg
 \end{itemize}
-$ 2 \pi $/$ 60 $ is multiplied with the rotor speed tolerances to translate the weight from rad/s to rpm. There is furthermore no intuitive explanation behind the choice of the integrator weight other than that it has yielded satisfactory results in the controller tuning process. Little tuning was necessary from the initial guesses of maximum tolerable state and input values to achieve good performance. This highlights the usefulness of the LQR controller when a fitting linear model is used. Also perhaps importantly when the necessary system understanding has not been achieved such that placement of poles with the pole placement method can be done based on reasonable design considerations. Significant system understanding can be achieved by observing the positions of poles and zeros and thus a drawback of LQR is perhaps that some understanding of the system is lost.
+The maximum tolerated rotor speed is multiplied with $ 2 \pi $/$ 60 $ to translate the weight from rpm to rad/s which is the state unit. There is furthermore no intuitive explanation behind the choice of the integrator weight other than that it has yielded satisfactory results in the controller tuning process. Little tuning was necessary from the initial guesses of maximum tolerable state and input values to achieve good performance. This highlights the usefulness of the LQR controller when a fitting linear model is used. Also perhaps importantly when the necessary system understanding has not been achieved such that placement of poles with the pole placement method can be done based on reasonable design considerations. A better system understanding can be achieved by observing the positions of poles and zeros and thus a drawback of LQR is perhaps that some understanding of the system is lost when omitting this process.
 %\begin{equation}\label{eq:lqi_Q_and_R}
 %	Q =   \begin{bmatrix}
 %		0.04 &  0 &  0 &  0 \cr
@@ -119,30 +119,26 @@ $ 2 \pi $/$ 60 $ is multiplied with the rotor speed tolerances to translate the 
 %	R = \begin{bmatrix} \dfrac{1}{5^2} \end{bmatrix}
 %\end{equation}
 
-\subsection{LQI controller tuning analysis}
-This section is dedicated to gaining an understand of how the LQI controller moves the system poles when weights are changed. The pole-zero map of the system with no FLC or LQI controller is compared to the system when the LQI controller is applied with varying weights.
+\subsection{LQI controller analysis}
+This section is dedicated to analysing how the LQI controller moves the system poles and changes the system behaviour when some weights of $ Q $ and $ R $ are changed. The poles of the system with no FLC or LQI controller is plotted with the system when the LQI controller is applied. Each plot contains a change in one weight (e.g. via $ max(\Omega) $) with three variations of that weight to see how the poles move. The weights which are not changed are left at the tuned values presented in \cref{sec:ctrl_thecontroller}. 
 
-
-
-% VY
+\smallskip
+In \cref{fig:pzmap_vy} the LQI $ Q $ weight on $ v_y $ is varied via $ 1/max(v_y)^2 $. The blue markers indicate the poles of the uncontrolled system. The frequency of the pole pair closest to the imaginary axis fit well with the structure eigenfrequency around 0.035 Hz. The high ratio between the imaginary and real part indicate a very low dampening of especially the uncontrolled system (blue markers). As expected when putting a greater constraint on the tower velocity the dampening is increased through the reduction of mainly the imaginary component of the dominating pole pair. The increased dampening is expected to lead to reduced oscillations of the turbine structure. This is also apparent when observing a step response as in \cref{fig:step_vy}. Here a reduction of the oscillations of $ p_y $ and $ v_y $ is observed but at the cost of a greater rotor tracking error. Furthermore the \textit{fastest} (most negative) pole on the real axis becomes even faster while the slowest becomes slower. The implications of how this affects the system response is harder to deduce. % The rotor speed step response transient is observed lasting longer perhaps attributed to the slower real pole.
+One might wonder why the LQI controller does not simply make the dominating pole pair even faster with an even lower dampening. It is important to remember that a constraint on the actuator effort is still in place (in the form of $ max(\theta) = 5 $) which limits the possibility of extensively reducing the fore-aft motion.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.55\textwidth]{Graphics/LQI pole zero/02_pzmap_vy}
-	\caption{Pole-zero diagram with varying LQI weight of the state $ v_y $.}
+	\caption{Pole-zero diagram with varying LQI weight on the state $ v_y $. Arrows indicate the pole movement direction tendency.}
 	\label{fig:pzmap_vy}
 \end{figure}
-
-
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Graphics/LQI pole zero/102_step_vy.png}
-	\caption{Step response}
+	\caption{Step response from a step on the free wind disturbance. The constraint on $ v_y $ is varied. The y-axis shows the deviation from the operating point. The rotor speed reference is at the operating point and therefore the third subplot shows the rotor speed tracking error. An increased constraint on the fore-aft velocity results in reduced fore-aft motion oscillations but greater rotor speed tracking error.}
 	\label{fig:step_vy}
 \end{figure}
 
-
-
-% OMEGA
+In \cref{fig:pzmap_W_both} two plots are seen where the one in \cref{fig:pzmap_W_zoom} is zoomed in at the area indicated in the top right corner of \cref{fig:pzmap_W}. Here greater constraint is put on $ \Omega $ and in contrast to the $ v_y $ case the dominating pole pair of the floating structure moves in the opposite direction. This leads to lower dampening and stability of the floating movement due to the poles being closer to the imaginary axis. As expected when observing the step response in \cref{fig:step_W} the oscillations on the turbine movement are greater and last longer. Surprisingly the two poles located on the real axis move in the same direction as in \cref{fig:pzmap_vy} with the fastest pole becoming much faster and the slow pole becoming much slower. The effect of this seems to be that the rotor speed error is reduced faster due to the faster real pole but at the cost of a greater transient period attributed perhaps to a combination of both the slower pole pair and the slower real pole.
 \begin{figure*}[ht]
 	\centering
 	
@@ -157,15 +153,14 @@ This section is dedicated to gaining an understand of how the LQI controller mov
 	\caption{Pole-zero diagram with varying LQI weight of the state $ \Omega $; \textbf{(a)} a-text; \textbf{(b)} b-text.}
 	\label{fig:pzmap_W_both}
 \end{figure*}
-
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Graphics/LQI pole zero/103_step_W.png}
-	\caption{Step response}
+	\caption{Step response from a step on the free wind disturbance. The constraint on $ \Omega $ is varied. The y-axis shows the deviation from the operating point. The rotor speed reference is at the operating point and therefore the third subplot shows the rotor speed tracking error. An increased constraint on the rotor speed tracking error yields slightly greater fore-aft motion oscillations but lower rotor speed tracking overshoot.}
 	\label{fig:step_W}
 \end{figure}
 
-% THETA
+In \cref{fig:pzmap_theta} the constraint on the rotor pitch angle actuation is varied from 1 deg to 5 deg with 5 deg being the original tuned parameter. With a tight constraint on the pitch angle of 1 deg the two poles which were located at the real axis have in stead become slower pole pair as observed by the red poles at $ -0.1 \pm0.8 $. As the constraint is relieved from 1 to 5 deg the pole pair becomes faster with a lower dampening and ultimately turns into two faster real poles. The dominating pole pair's imaginary part is furthermore lowered as the constraint is relieved. The general tendency is that the system becomes both faster and more dampened. As expected allowing for a greater actuator effort leads to a better and faster system altogether which is also readily visible in the step response in \cref{fig:step_theta}. Both the magnitude of oscillations and settle time is reduces for both the tower movement and rotor speed error.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.55\textwidth]{Graphics/LQI pole zero/05_pzmap_theta.png}
@@ -176,7 +171,7 @@ This section is dedicated to gaining an understand of how the LQI controller mov
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Graphics/LQI pole zero/105_step_theta.png}
-	\caption{Step response}
+	\caption{Step response from a step on the free wind disturbance. The constraint on $ \theta_{ref} $ is varied. The y-axis shows the deviation from the operating point. The rotor speed reference is at the operating point and therefore the third subplot shows the rotor speed tracking error. Lowered constraints on the actuator effort results in both smaller fore-aft oscillations with lower settling time and smaller rotor speed tracking overshoot with slightly lower settling time.}
 	\label{fig:step_theta}
 \end{figure}
 
