@@ -1,17 +1,16 @@
 \section{Test: Linear model} \label{sec:test_lin}
 The purpose of this chapter is to show and discuss the performance results of the LQI controller derived in \cref{sec:ctrl-design} on the linear model derived in \cref{sec:linear_model}. The controller is benchmarked against the original FLC controller with regards to both rotor speed control and fore-aft movement dampening capability. Prior to the test the LQI controller has been tuned such that a satisfactory performance was achieved in VTS.
 
-It is expected that the LQI controller will perform much better in damping the fore-aft movement than the original FLC PI controller. % It is also expected to perform better in generator speed control despite the fact that the original FLC controller has been tuned to achieve the best possible generator speed tracking performance. The reason for this prediction might be less obvious. The reason is that the LQI controller has been tuned on the simple linear model and not in VTS like the FLC PI controller. Thus potential unforeseen consequences of having an aggressive controller in a more realistic environment are not discovered until it is tested in VTS.
+It is expected that the LQI controller will perform much better in damping the fore-aft movement than the original FLC PI controller. Test results are shown for both frequency and time domain.
 
-Test results are shown for both frequency and time domain.
-
+% It is also expected to perform better in generator speed control despite the fact that the original FLC controller has been tuned to achieve the best possible generator speed tracking performance. The reason for this prediction might be less obvious. The reason is that the LQI controller has been tuned on the simple linear model and not in VTS like the FLC PI controller. Thus potential unforeseen consequences of having an aggressive controller in a more realistic environment are not discovered until it is tested in VTS.
 
 \subsection{Test framework}
 Matlab is used to make bode plots and Matlab Simulink is used to run time simulations. The Matlab \textit{connect()} function is utilized with component models defined on a specific form to gain transfer functions or state space systems from one or more inputs to one or more outputs. From these the \textit{bode()} Matlab function is used to make bode plots. 
 
 Time simulations are made with the FLC PI and LQI controlled linear models from the $ A $, $ B $ and $ C $ system matrices and controller gains $ K $. In \cref{fig:simulink_setup2} the Simulink simulation setup is seen. Two systems are observed with the top one containing the original FLC PI controller without FATD enabled and the bottom one being the one with the designed LQI controller. While not directly apparent because of the missing state feedback, the top system is a closed loop system with the controller gain $ K $ contained in the $ A $ and $ B $ matrix. The reason for this is simply that the FLC component described in \cref{sec:comp_flc} is defined as a generic component model and conveniently combined with the Matlab \textit{connect()} function to yield a full closed-loop system.
 
-From the left the free wind disturbance deviation from the operating point is observed entering both systems. The wind data is extracted from VTS simulations and thus mimic the wind turbulence realistically. The simulation is run for a total of 1000 seconds and are initialized at the operating point except for the tower top position $ p_y $ which is initialized with a deviation of 5 m to provoke a response from both systems.
+From the left the free wind disturbance deviation from the operating point is observed entering both systems. The wind data is extracted from VTS simulations and thus mimic the wind turbulence realistically. The simulation is run for a total of 1000 seconds and the states are initialized at the operating point except for the tower top position $ p_y $ which is initialized with a deviation of 5 m to provoke a response from both systems.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.95\linewidth]{Graphics/TestResults/linearModPerf/simulink_setup2.png}
@@ -28,14 +27,14 @@ In figure \cref{fig:script_vfreeTovy} the frequency response from the free wind 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/linearModPerf/script_vfreeTovy.png}
-	\caption{Frequency response from the free wind as observed by the rotor ($ v_{free} $) to the rotor speed  ($ \Omega $) of the linear model with comparison between the original FLC PI controller and the developed LQI controller.}
+	\caption{Frequency response from the free wind as observed by the rotor ($ v_{free} $) to the fore-aft velocity ($ v_y $) of the linear model with a comparison between the original FLC PI controller and the LQI controller.}
 	\label{fig:script_vfreeTovy}
 \end{figure}
  In \cref{fig:script_vfreeTovy} where the frequency response from $ v_{free} $ to $ v_y $ is plotted the same tendency is observed. The LQI controller furthermore dampens the magintude around 4-7 dB more than the FLC PI controller before the eigenfrequency around 0.035 Hz. It also dampens the magnitude more after the eigenfrequency but decreasingly for higher frequencies.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/linearModPerf/script_vfreeToW.png}
-	\caption{Frequency response from the free wind as observed by the rotor ($ v_{free} $) to the surge direction tower top velocity ($ v_y $) of the linear model with comparison between the original FLC PI controller and the developed LQI controller.}
+	\caption{Frequency response from the free wind as observed by the rotor ($ v_{free} $) to the rotor speed ($ \Omega $) of the linear model with a comparison between the original FLC PI controller and the LQI controller}
 	\label{fig:script_vfreeToW}
 \end{figure}
 From the frequency responses it can be concluded that the LQI controller will perform better at both rotor speed tracking and fore-aft movement damping. 
@@ -60,11 +59,11 @@ The LQI controller pitch reference deviation from the operating point and its ra
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/linearModPerf/sim_10_pitch.png}
-	\caption{Simulink simulation results of the pitch reference and pitch reference change. It is important that neither the absolute value of the pirch reference nor the change in pitch reference exceed realistic values.}
+	\caption{Simulink simulation results of the pitch reference and pitch reference change. Neither the absolute value of the pitch reference nor the change in pitch reference reach alarming values.}
 	\label{fig:sim_10_pitch}
 \end{figure}
 
-Conclusively the LQI controller performance is very good on the linear model in comparison to the FLC PI controller. This is also to be expected given the...
+Conclusively the LQI controller performance is very good on the linear model in comparison to the FLC PI controller.% This is also to be expected given the...
 
 
 % OLD PLOTS WITH vfree STEP

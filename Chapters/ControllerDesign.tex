@@ -1,30 +1,30 @@
 \section{Controller design} \label{sec:ctrl-design}
-This chapter firstly presents basic LQR and LQI controller theory and secondly the derived controller. 
-The main purpose of this chapter is firstly to present the basic LQR and LQI theory and secondly the derived LQI controller. Finally the LQI controller is analysed with respect to how the closed loop system poles moves when the LQI weights are changed.
+The main purpose of this chapter is firstly to present the basic LQR and LQI theory and secondly the derived LQI controller. Finally the LQI controller's effect on the system is analysed with respect to how the closed loop system poles move when LQI weights are changed.
 
 \subsection{Linear-Quadratic Regulator} \label{sec:ctrl_lqr}
 The Linear-Quadratic Regulator (LQR) in its \textit{infinite horizon} form is the preferred controller. It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
 
-For a system
+\smallskip
+\noindent Consider the system:
 \begin{equation}\label{eq:ctrl_sys}
 	\begin{split}
 		\dot x &= A x + B u \\
 		y &= Cx
 	\end{split}
 \end{equation}
-the LQR controller is an optimal with respect to a relevant cost function such as:
+For such a system the LQR controller is optimal with respect to a relevant cost function such as:
 \begin{equation}\label{eq:lqr_cost}
 	J = \int_{0}^{\infty} \left(x^T Q x + u^T R u + 2x^T N u\right) dt
 \end{equation}
 where
 \begin{center}
 	\begin{tabular}{l r l }
-		weight & $R$         & $ > 0$ (positive definite) and symmetric       \\
-		weight & $Q$ and $N$ & $\ge 0$ (positive semi-definite) and symmetric
+		weight & $R$         & $ > 0$\hspace{1mm} (positive definite) and symmetric       \\
+		weight & $Q$ and $N$ & $\ge 0$\hspace{1mm} (positive semi-definite) and symmetric
 	\end{tabular}
 \end{center}
 \smallskip
-The final term cross-term which punishes combinations of inputs and states is usually omitted by setting $ N = 0 $. The diagonal entries of $ R $ and $ Q $ are considered tuning parameters. The solution to the LQR control problem is the optimal control feedback which minimizes the cost function. The LQR controller is thus inherently a regulator meaning that it drives the system states to 0. For a system linearised at an operating point $ \{x_o, u_o\} $ the state and input deviations from the operating point replaces the actual states and inputs: $ \hat x = x-x_o $ and $ \hat u = u-u_o $. Given that the operating point is located at the reference the regulator property is obviously not unattractive. With $ N = 0 $ and states substituted with state deviations the final cost function becomes:
+The final cross-term which punishes combinations of inputs and states is usually omitted by setting $ N = 0 $. The entries of $ R $ and $ Q $ are considered tuning parameters. The solution to the LQR control problem is the optimal control feedback $ u = -Kx $ which minimizes the cost function. The LQR controller is thus inherently a regulator meaning that it drives the system states to 0. For a system linearised at an operating point $ \{x_o, u_o\} $ the state and input deviations from the operating point replaces the actual states and inputs: $ \hat x = x-x_o $ and $ \hat u = u-u_o $. Given that the operating point is located at the reference, the regulator property is obviously not unattractive. With $ N = 0 $ and states substituted with state deviations the final continuous-time cost function becomes:
 \begin{equation}\label{eq:lqr_cost_final}
 	J = \int_{0}^{\infty} \left(\hat x^T Q \hat x + \hat u^T R \hat u\right) dt
 \end{equation}
@@ -43,18 +43,18 @@ It is noted that proving \cref{eq:lqr_K} is deemed outside the scope of this rep
 		R_i = \dfrac{1}{Max(\hat u_i)^2}
 	\end{split}
 \end{equation}
-where $ Max(\hat x) $ is the largest tolerated value of $ \hat x $. While optimal performance is rarely achieved without further tuning Bryson's Rule gives a good starting point. In Matlab the \textit{lqr(A, B, Q, R, N)} function is used to get the controller gains $ K $.
+where $ Max(\hat x) $ is the largest tolerated value of $ \hat x $. While optimal performance is rarely achieved without further tuning, Bryson's Rule gives a good starting point. In Matlab the \textit{lqr(A, B, Q, R, N)} function is used to get the controller gains $ K $.
 
 
 \subsection{Linear-Quadratic Integrator} \label{sec:ctrl_lqi}
 As described \cref{sec:comp_flc} the FLC controller is of the proportional-integrator (PI) type which ensures no generator speed steady state error due to integral action. The controller to be derived includes generator speed control and the regular LQR controller does not have integral action. Therefore the system is augmented with an integral state on the generator speed $ \dot x_i = \hat \omega $ leaving the extended state space system to be:
 \begin{align} 
 	\dot {\bar x} & = \begin{bmatrix} \dot{\hat x} \\ \dot x_i \end{bmatrix} = \begin{bmatrix} A &0 \\ C_{iy} & 0 \end{bmatrix} \bar x + \begin{bmatrix} B_u \\ 0 \end{bmatrix}  \hat u \\
-	\hat y & = \begin{bmatrix} C & 0 \end{bmatrix} \bar x
+	\bar y & = \begin{bmatrix} C & 0 \end{bmatrix} \bar x
 \end{align}
-where $ C_{iy} $ is defined such that the output to be integrated is picked out and $ \bar x $ is the deviation state vector extended with the integral state. %; in this case the generator speed.
+where $ C_{iy} $ is defined such that the desired output is picked out for integration and $ \bar x $ is the deviation state vector extended with the integral state.
 
-A linear quadratic integrator (LQI) controller is obtained when the integrator-augmented system matrices are used to solve the LQR problem. The dimension of $ Q $ increases for every extra integrator state and thus extra weights are defined for these. 
+A linear quadratic integrator (LQI) controller is obtained when the integrator-augmented system matrices are used to solve the LQR problem. The dimension of $ Q $ increases for every extra integrator state and thus extra weights are defined for these. While Bryson's Rule is utilized for more intuitive definitions of weights on states and inputs, the integrator state weight is a far more awkward weight to choose. In this report is is set based on a tuning process as a multiple of the original state.
 
 
 \subsection{The controller} \label{sec:ctrl_thecontroller}
@@ -69,7 +69,7 @@ when the $ Q $ and $ R $ matrices are defined as such:
 			\dfrac{1}{max(p_y)^2}& 0 					& 0 															& 0 \cr
 			0 					& \dfrac{1}{max(v_y)^2}	& 0 															& 0 \cr
 			0 					& 0 					& \dfrac{1}{\left( max(\Omega) \cdot \frac{2 \pi}{60} \right)^2} & 0 \cr
-			0 					& 0 					& 0 															& \dfrac{1}{(max(\Omega_i) \cdot \frac{2 \pi}{60})^2} \end{bmatrix} & = \begin{bmatrix}
+			0 					& 0 					& 0 															& \dfrac{1}{(5 \cdot max(\Omega) \cdot \frac{2 \pi}{60})^2} \end{bmatrix} & = \begin{bmatrix}
 			\dfrac{1}{5^2} 	&  	0 				&  0 										&  0 \cr
 			0 				&  \dfrac{1}{1^2}	&  0 										&  0 \cr
 			0 				&  0 				& \dfrac{1}{\left( 1 \cdot \frac{2 \pi}{60} \right)^2} 	&  0 \cr
@@ -86,7 +86,7 @@ From $ Q $ and $ R $ it is observable that:
 	\item the rotor speed integration weight is set 5 times lower than the rotor speed
 	\item the maximum allowed pitch angle actuation deviation is set to 5 deg
 \end{itemize}
-The maximum tolerated rotor speed is multiplied with $ 2 \pi $/$ 60 $ to translate the weight from rpm to rad/s which is the state unit. There is furthermore no intuitive explanation behind the choice of the integrator weight other than that it has yielded satisfactory results in the controller tuning process. Only light tuning was necessary from the initial guesses of maximum tolerable state and input values to achieve good performance. This highlights the usefulness of the LQR controller when a fitting linear model is used. Also perhaps importantly when the necessary system understanding has not been achieved such that pole placement can be done based on reasonable design considerations. Some system understanding can perhaps be achieved by considering the positions of system poles and zeros and thus a drawback of LQR might be that some understanding is lost when omitting this process.
+The maximum tolerated rotor speed is multiplied with $ 2 \pi $/$ 60 $ to translate the weight from rpm to rad/s which is the state unit. There is furthermore no intuitive explanation behind the choice of the integrator weight other than that it has yielded satisfactory results in the controller tuning process. Only light tuning was necessary from the initial guesses of maximum tolerable state and input values to achieve good performance. This is regarded as a highlight of the usefulness of the LQR controller when a well fitting linear model is used. Also perhaps importantly when the necessary system understanding has not been achieved such that pole placement can be done based on reasonable design considerations. Some system understanding can perhaps be achieved by considering the positions of system poles and zeros and thus a drawback of LQR might be that some understanding is lost when omitting this process.
 %\begin{equation}\label{eq:lqi_Q_and_R}
 %	Q =   \begin{bmatrix}
 %		0.04 &  0 &  0 &  0 \cr
