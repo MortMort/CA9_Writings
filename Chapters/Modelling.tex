@@ -105,7 +105,7 @@ The dynamics of modern converters are much faster than the rotor and tower dynam
 \begin{equation}\label{eq:comp_convdft}
 	P_{conv} = P_{ref}
 \end{equation}
-In other words the converter is treated as a \textit{black box} system which, when given a power reference, delivers a power equal to said power reference instantly.
+In other words the converter is treated as a \textit{black box} system which, when given a power reference, delivers a power equal to said power reference instantly. 
 
 The input is $ \{P_{conv}\} $ and the output is $ \{P_{ref}\} $
 
@@ -259,7 +259,7 @@ The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 
 
 \subsection{The connected model} \label{sec:comp_connected}
-In the previous section all individual components models were defined and the non-linear models were linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
+In the previous section all individual component models were defined and the non-linear models were linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving\todo[inline]{With the states deriving..??} from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
 \begin{equation}\label{eq:state-space-sys}
 	\begin{split}
 		\dot x &= A x + B u + B_d d \\

@@ -2,7 +2,7 @@
 The main purpose of this chapter is firstly to present the basic LQR and LQI theory and secondly the derived LQI controller. Finally the LQI controller's effect on the system is analysed with respect to how the closed loop system poles move when LQI weights are changed.
 
 \subsection{Linear-Quadratic Regulator} \label{sec:ctrl_lqr}
-The Linear-Quadratic Regulator (LQR) in its \textit{infinite horizon} form is the preferred controller. It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
+The Linear-Quadratic Regulator (LQR) in its \textit{infinite horizon} form is the preferred controller. \todo[inline]{Jesper syntes ikke at dette er god argumentaiton da han mener at den netop IKKE er intuitiv.}It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
 
 \smallskip
 \noindent Consider the system:
@@ -54,11 +54,11 @@ As described \cref{sec:comp_flc} the FLC controller is of the proportional-integ
 \end{align}
 where $ C_{iy} $ is defined such that the desired output is picked out for integration and $ \bar x $ is the deviation state vector extended with the integral state.
 
-A linear quadratic integrator (LQI) controller is obtained when the integrator-augmented system matrices are used to solve the LQR problem. The dimension of $ Q $ increases for every extra integrator state and thus extra weights are defined for these. While Bryson's Rule is utilized for more intuitive definitions of weights on states and inputs, the integrator state weight is a far more awkward weight to choose. In this report is is set based on a tuning process as a multiple of the original state.
+A linear quadratic integrator (LQI) controller is obtained when the integrator-augmented system matrices are used to solve the LQR problem. The dimension of $ Q $ increases for every extra integrator state and thus extra weights are defined for these. While Bryson's Rule is utilized for more intuitive definitions of weights on states and inputs, the integrator state weight is a far more awkward weight to choose. In this report it is set based on a tuning process as a multiple of the original state.
 
 
 \subsection{The controller} \label{sec:ctrl_thecontroller}
-In the preceding sections the LQR and LQI controllers were explained and we are therefore ready to make the LQI controller. Firstly the FLC controller is removed from the system such that the input to the system is the pitch reference $ thRef $ in stead of the rotor speed reference $ wRef $. Stability and controllability are checked and the system is both stable and controllable. The \textit{lqr()} Matlab function is used with the integrator-augmented system. Bryson's Rule is used to define $ Q $ and $ R $ by defining maximum limits to the states and controllable inputs. A less intuitive weight is put on the integrator state. After a controller tuning process in VTS the resulting gains are:
+In the preceding sections the LQR and LQI controllers were explained and we are therefore ready to make the LQI controller. Firstly the FLC controller is removed from the system such that the input to the system is the pitch reference $ thRef $ instead of the rotor speed reference $ wRef $. Stability and controllability are checked and the system is both stable and controllable. The \textit{lqr()} Matlab function is used with the integrator-augmented system. Bryson's Rule is used to define $ Q $ and $ R $ by defining maximum limits to the states and controllable inputs. A less intuitive weight is put on the integrator state. After a controller tuning process in VTS the resulting gains are:
 \begin{equation}\label{eq:lqi_K}
 	K = \begin{bmatrix} -1.264 &  1.249 & -75.159 & -9.549 \end{bmatrix}
 \end{equation}
@@ -82,7 +82,7 @@ From $ Q $ and $ R $ it is observable that:
 \begin{itemize}
 	\item the maximum allowed fore-aft position deviation is set to 5 m
 	\item the maximum allowed fore-aft velocity deviation is set to 1 m/s
-	\item the maximum allowed fore-aft rotor speed deviation is set to 1 rpm
+	\item the maximum allowed rotor speed deviation is set to 1 rpm
 	\item the rotor speed integration weight is set 5 times lower than the rotor speed
 	\item the maximum allowed pitch angle actuation deviation is set to 5 deg
 \end{itemize}
@@ -162,7 +162,7 @@ In \cref{fig:pzmap_W_both} two plots are seen where the one in \cref{fig:pzmap_W
 	\label{fig:step_W}
 \end{figure}
 
-In \cref{fig:pzmap_theta} the constraint on the rotor pitch angle actuation is varied from 1 deg to 5 deg with 5 deg being the original tuned parameter. With a tight constraint on the pitch angle of 1 deg the two poles which were located at the real axis have in stead become a slower pole pair as observed by the red poles at $ -0.1 \pm0.8 $. As the constraint is relieved from 1 to 5 deg the pole pair becomes faster with a lower dampening and ultimately turns into two faster real poles. The dominating pole pair's imaginary part is furthermore lowered as the constraint is relieved. The general tendency is that the system becomes both faster and more dampened. As expected allowing for a greater actuator effort leads to a better and faster system altogether which is also readily visible in the step response in \cref{fig:step_theta}. Both the magnitude of oscillations and settle time is reduces for both the tower movement and rotor speed error.
+In \cref{fig:pzmap_theta} the constraint on the rotor pitch angle actuation is varied from 1 deg to 5 deg with 5 deg being the original tuned parameter. With a tight constraint on the pitch angle of 1 deg the two poles which were located at the real axis have instead become a slower pole pair as observed by the red poles at $ -0.1 \pm0.8 $. As the constraint is relieved from 1 to 5 deg the pole pair becomes faster with a lower dampening and ultimately turns into two faster real poles. The dominating pole pair's imaginary part is furthermore lowered as the constraint is relieved. The general tendency is that the system becomes both faster and more dampened. As expected allowing for a greater actuator effort leads to a better and faster system altogether which is also readily visible in the step response in \cref{fig:step_theta}. Both the magnitude of oscillations and settle time is reduces for both the tower movement and rotor speed error.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.55\textwidth]{Graphics/LQI pole zero/05_pzmap_theta.png}
@@ -176,7 +176,7 @@ In \cref{fig:pzmap_theta} the constraint on the rotor pitch angle actuation is v
 	\caption{Step response from a step on the free wind disturbance. The constraint on $ \theta_{ref} $ is varied. The y-axis shows the deviation from the operating point. The rotor speed reference is at the operating point and therefore the third subplot shows the rotor speed tracking error. Lowered constraints on the actuator effort results in both smaller fore-aft oscillations with lower settling time and smaller rotor speed tracking overshoot with slightly lower settling time.}
 	\label{fig:step_theta}
 \end{figure}
-Conclusively 
+
 
 %\begin{figure*}[ht]
 %	\centering
