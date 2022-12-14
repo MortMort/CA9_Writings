@@ -1,5 +1,5 @@
 \section{Test: Vestas Turbine Simulator} \label{sec:test_vts}
-This section contains the results of the test of the controller in Vestas Turbine Simulator (VTS). It is split into two sections. In the first section the LQI controller is compared with the FLC PI controller without FATD and with the FLC PI controller detuned to reduce the fore-aft negative damping phenomena. In the second section the LQI controller performance at 12 m/s and 26 m/s wind speed is shown with the LQI controller parameters recalculated at said operating points. The controller performance is compared across 12, 16 and 26 m/s wind speeds.
+This section contains the results of the test of the controller in Vestas Turbine Simulator (VTS). It is split into two sections. In the first section the LQI controller is compared with the FLC PI controller without FATD and with the FLC PI controller detuned to reduce the fore-aft negative damping phenomena. In the second section the LQI controller performance at 12 m/s and 26 m/s wind speed is shown with the LQI controller parameters recalculated at said operating points. The controller performance is compared across the three LQI controller tunings at 12, 16 and 26 m/s wind speeds. 
 
 \subsection{Part 1}
 
@@ -61,4 +61,38 @@ This section contains the results of the test of the controller in Vestas Turbin
 \end{figure}
 
 \subsection{Part 2}
+
+
 Due to the increased rotor thrust sensitivity around nominal wind which is observed in \cref{fig:thrust_vs_windspeed} greater instability is expected for the 12 m/s simulations. The WT controller will furthermore change between PLC and FLC as the wind speed observed by the rotor goes above and below the nominal wind speed. This is expected to increase stability and worsen overall performance as well. At higher wind the rotor thrust sensitivity decreases and thus greater general stability and better performance is expected at 26 m/s.
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/20_pow_th_w_py_vy.png}
+	\caption{VTS simulation results.}
+	\label{fig:vts_20_pow_th_w_py_vy}
+\end{figure}
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/21_fft_th_w_py_vy.png}
+	\caption{VTS simulation results.}
+	\label{fig:vts_21_fft_th_w_py_vy}
+\end{figure}
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/30_pow_th_w_py_vy.png}
+	\caption{VTS simulation results.}
+	\label{fig:vts_30_pow_th_w_py_vy}
+\end{figure}
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/31_fft_th_w_py_vy.png}
+	\caption{VTS simulation results.}
+	\label{fig:vts_31_fft_th_w_py_vy}
+\end{figure}
