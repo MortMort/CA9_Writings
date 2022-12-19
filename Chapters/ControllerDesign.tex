@@ -1,8 +1,8 @@
 \section{Controller design} \label{sec:ctrl-design}
-The main purpose of this chapter is firstly to present the basic LQR and LQI theory and secondly the derived LQI controller. Finally the LQI controller's effect on the system is analysed with respect to how the closed loop system poles move when LQI weights are changed. The controller to be derived is used in full state feedback and outputs a pitch reference to the system. Therefore the FLC controller is removed from the model such that the input to the system is the pitch reference $ thRef $ instead of the rotor speed reference $ wRef $.
+The main purpose of this chapter is firstly to discuss the reasoning behind using the LQR controller along with a presentation of the basic LQR and LQI theory. Then the derived LQI controller if shown and finally the LQI controller's effect on the system is analysed with respect to how the closed loop system poles move when LQI weights are changed. The controller to be derived is used in full state feedback and outputs a pitch reference to the system. Therefore the FLC controller is later removed from the model such that the input to the system is the pitch reference $ thRef $ instead of the rotor speed reference $ wRef $.
 
 \subsection{Linear-Quadratic Regulator} \label{sec:ctrl_lqr}
-The Linear-Quadratic Regulator (LQR) in its \textit{infinite horizon} form is the preferred controller. \todo[inline]{Jesper syntes ikke at dette er god argumentaiton da han mener at den netop IKKE er intuitiv.}It is chosen because the LQR tuning process of choosing weights to penalize state deviations is deemed more intuitive than defining pole locations in the \textit{pole placement method}. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
+The Linear-Quadratic Regulator (LQR) in its \textit{infinite horizon} form is the preferred controller type. LQR is chosen because satisfactory performance can be gained reasonably fast with some state and input weight tuning. Furthermore penalizing state deviations by the use of \textit{Bryson's Rule} can give an intuitive starting point for weights. Another common alternative, the \textit{pole placement method}, is disregarded as it can suffer from being less intuitive with regards to choosing the placement of poles. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
 
 \smallskip
 \noindent Consider the system:
@@ -24,7 +24,7 @@ where
 	\end{tabular}
 \end{center}
 \smallskip
-The final cross-term which punishes combinations of inputs and states is usually omitted by setting $ N = 0 $. The entries of $ R $ and $ Q $ are considered tuning parameters. The solution to the LQR control problem is the optimal control feedback $ u = -Kx $ which minimizes the cost function. The LQR controller is thus inherently a regulator meaning that it drives the system states to 0. For a system linearised at an operating point $ \{x_o, u_o\} $ the state and input deviations from the operating point replaces the actual states and inputs: $ \hat x = x-x_o $ and $ \hat u = u-u_o $. Given that the operating point is located at the reference, the regulator property is obviously not unattractive. With $ N = 0 $ and states substituted with state deviations the final continuous-time cost function becomes:
+The final cross-term which punishes combinations of inputs and states is usually omitted by setting $ N = 0 $. The entries of $ R $ and $ Q $ are considered tuning parameters. The solution to the LQR control problem is the optimal control feedback $ u = -Kx $ which minimizes the cost function. The LQR controller is thus inherently a regulator meaning that it drives the system states to 0. For a system linearised at an operating point (OP) $ \{x_o, u_o\} $ the state and input deviations from the OP replaces the actual states and inputs: $ \hat x = x-x_o $ and $ \hat u = u-u_o $. Given that the OP is located at the reference, the regulator property is obviously not unattractive. With $ N = 0 $ and states substituted with state deviations the final continuous-time cost function becomes:
 \begin{equation}\label{eq:lqr_cost_final}
 	J = \int_{0}^{\infty} \left(\hat x^T Q \hat x + \hat u^T R \hat u\right) dt
 \end{equation}
@@ -136,7 +136,7 @@ Furthermore one might wonder why the LQI controller does not simply make the dom
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Graphics/LQI pole zero/102_step_vy.png}
-	\caption{Step response from a step on the free wind disturbance. The weight on $ v_y $ is varied. The y-axis shows the deviation from the operating point. The rotor speed reference is at the operating point and therefore the third subplot shows the rotor speed tracking error. An increased weight on the fore-aft velocity results in reduced fore-aft motion oscillations but greater rotor speed tracking error.}
+	\caption{Step response from a step on the free wind disturbance. The weight on $ v_y $ is varied. The y-axis shows the deviation from the OP. The rotor speed reference is at the OP and therefore the third subplot shows the rotor speed tracking error. An increased weight on the fore-aft velocity results in reduced fore-aft motion oscillations but greater rotor speed tracking error.}
 	\label{fig:step_vy}
 \end{figure}
 
@@ -158,7 +158,7 @@ In \cref{fig:pzmap_W_both} two plots are seen where the one in \cref{fig:pzmap_W
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Graphics/LQI pole zero/103_step_W.png}
-	\caption{Step response from a step on the free wind disturbance. The weight on $ \Omega $ is varied. The y-axis shows the deviation from the operating point. The rotor speed reference is at the operating point and therefore the third subplot shows the rotor speed tracking error. An increased weight on the rotor speed tracking error yields slightly greater fore-aft motion oscillations but lower rotor speed tracking overshoot.}
+	\caption{Step response from a step on the free wind disturbance. The weight on $ \Omega $ is varied. The y-axis shows the deviation from the OP. The rotor speed reference is at the OP and therefore the third subplot shows the rotor speed tracking error. An increased weight on the rotor speed tracking error yields slightly greater fore-aft motion oscillations but lower rotor speed tracking overshoot.}
 	\label{fig:step_W}
 \end{figure}
 
@@ -173,7 +173,7 @@ In \cref{fig:pzmap_theta} the maximum accepted value of the rotor pitch angle ac
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Graphics/LQI pole zero/105_step_theta.png}
-	\caption{Step response from a step on the free wind disturbance. The weight on $ \theta_{ref} $ is varied. The y-axis shows the deviation from the operating point. The rotor speed reference is at the operating point and therefore the third subplot shows the rotor speed tracking error. Lowered weights on the actuator effort results in both smaller fore-aft oscillations with lower settling time and smaller rotor speed tracking overshoot with slightly lower settling time.}
+	\caption{Step response from a step on the free wind disturbance. The weight on $ \theta_{ref} $ is varied. The y-axis shows the deviation from the OP. The rotor speed reference is at the OP and therefore the third subplot shows the rotor speed tracking error. Lowered weights on the actuator effort results in both smaller fore-aft oscillations with lower settling time and smaller rotor speed tracking overshoot with slightly lower settling time.}
 	\label{fig:step_theta}
 \end{figure}
 

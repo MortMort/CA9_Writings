@@ -2,8 +2,6 @@
 The purpose of this chapter is to outline the linear model of the system. The model is intended to be used as a control model for state-space control with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. Instead such components models are either completely left out or modelled with algebraic equations. 
 
 
-
-
 %\subsection{wtLin component models} \label{sec:compcomps}
 %\sout{A Matlab tool named wtLin has been developed by the LaC department in Vestas for creating linear models of their turbines based on simple component models and parameters extracted from VTS parts files. The tool's component models can be connected in loops based on the input-output variables of each component model in a manner chosen by the user. A component can be in the form of a physical system such as a generator or a converter but can also be models of physics which are relevant for the system such as the interaction between the tower movement and the free wind.
 %
@@ -12,14 +10,14 @@ The purpose of this chapter is to outline the linear model of the system. The mo
 
 
 \subsection{Component models} \label{sec:comp}
-A component approach to modelling is adopted where system parts are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point. Model parameters and operating points are extracted from Vestas Turbine Simulator (VTS) with a tool developed by the LaC department called wtLin. When the components are defined in the correct manner the Matlab \textit{connect()} function can used to create a connected model.
+A component approach to modelling is adopted where system parts are modelled individually. Each component takes a set of inputs and calculates a set of outputs. If the components contain dynamics they include internal states. Non-linear components are linearised individually at an operating point (OP). Model parameters and OPs are extracted from Vestas Turbine Simulator (VTS) with a tool developed by the LaC department called wtLin which also contains all the model components. When the components are defined in the correct manner the Matlab \textit{connect()} function can used to create a connected model.
 
 \smallskip
 \noindent In this section the relevant component models are derived. The modelled components are:
 \begin{itemize}
 	\item Drivetrain
 	\item Generator
-	\item Converter
+	%\item Converter
 	\item Aerodynamic torque
 	\item Aerodynamic thrust
 	\item Rotor wind
@@ -37,13 +35,14 @@ The stiff drivetrain consists of two free inertias connected through a gearbox. 
 \begin{equation}\label{eq:wtlin_comp_drivetrain}
 	(J_{gL} + J_{r}) \ddot{\theta}_r = T_{r} + T_{g}
 \end{equation}
+where the $ g $ and $ r $ subscripts denote the generator-side and rotor-side intertias ($ J $), torques ($ T $) and angles ($ \theta $).
 The torques are related to the low-speed rotor side and thus the high-speed generator side inertias are mapped to the low speed side:
 \begin{equation} \label{eq:wtlin_comp_inertiamap}
 	J_{gL} = J_{g} \left(\dfrac{N_r}{N_g}\right)^2
 \end{equation}
 where $ N_r $ and $ N_g $ is the number of teeth on the rotor and generator side of the gearbox respectively. The rotor spins at angular velocity $ \dot{\theta}_r = \Omega $.
 
-Given $ \dot{\Omega} = \ddot{\theta}_r $ the model becomes:
+Given $ \dot{\Omega} = \ddot{\theta}_r $ and isolating the rotor speed rate of change the model becomes:
 \begin{equation}\label{key}
 	 \dot{\Omega} = \dfrac{T_{r} + T_{g}}{\left(\dfrac{N_r}{N_g}\right)^2 J_{g} + J_{r}}
 \end{equation}
@@ -59,13 +58,13 @@ While the generator model in wtLin includes the generator efficiencies they are 
 
 The power of a rotating machine can be defined as the product of torque and rotational velocity:
 \begin{equation}\label{eq:comp_power_in_rot}
-	P_{g} = T_g \left( \dfrac{N_g}{N_r} \right)\omega_L
+	P_{g} = T_g \omega
 \end{equation}
 The non linear generator model is then defined by rearranging \cref{eq:comp_power_in_rot}:
 \begin{equation}\label{eq:comp_gen_torque}
 	T_g(P_g, \omega) = \dfrac{P_g}{\omega}
 \end{equation}
-The linear model of the generator is obtained through a taylor expansion. The definition of the taylor expansion is not included in this report. \cref{eq:comp_power_in_rot} is an algebraic equation describing the absolute value of the generator torque and not its rate of change as it would have been for a model including dynamics. Therefore the taylor expansion linearisation at the operating point yields an affine linear approximation at the operating point:
+The linear model of the generator is obtained through a taylor expansion. The definition of the taylor expansion is not included in this report. \cref{eq:comp_power_in_rot} is an algebraic equation describing the absolute value of the generator torque and not its rate of change as it would have been for a model including dynamics. Therefore the taylor expansion linearisation at the OP yields an affine linear approximation at the OP:
 \begin{equation}\label{eq:comp_gen_taylor}
 	T_g( P_g, \omega) \approx T_g(P_{g_o}, \omega_o) + 
 	\left. \dfrac{\partial T_g( P_g, \omega)}{\partial P_g} \right |_{P_{g_o},\omega_o} ( P_g-P_{g_o}) + 
@@ -81,37 +80,37 @@ The generator torque sensitivity to rotational velocity change from \cref{eq:com
 	& = P_g \dfrac{\partial \left (\dfrac{1}{\omega}\right )}{\partial \omega} \\
 	& = -P_g \, \dfrac{1}{\omega^2}
 \end{align}
-The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\frac{N_r}{N_g} \right ) \omega $ and since the generator model is implemented assuming a stiff drivetrain then $ \omega_L = \Omega $. This yields the affine linear generator model evaluated at the operating point $ (P_{g_o}, \Omega_o) $:
+The generator model derived above is referred to the rotor side by replacing $ \omega $ with $ \Omega $ where $ \Omega = \left (\frac{N_r}{N_g} \right ) \omega $. This yields the affine linear generator model evaluated at the OP $ (P_{g_o}, \Omega_o) $:
 \begin{equation}
 	T_g(P_g, \Omega) \approx \dfrac{P_{g_o}}{\omega_o} + \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
 	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 \end{equation}
-The goal is to have a linear model of the generator and therefore the change in the generator torque from the operating point is defined:
+The goal is to have a linear model of the generator around an OP and therefore the change in the generator torque from the OP is defined:
 \begin{equation}
 	\hat T_g(P_g, \Omega) \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
 	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 \end{equation}
 where $ \hat T_g = T_g - T_{g_o} $.
 
-When the model is linearised in a FLC operating point P is constant and therefore the first part is also zero. The second part is the \textit{negative damping} term which yields and increase in the generator torque when the rotational speed decreases which even further decreases the rotational speed.
+When the model is linearised in a FLC OP P is constant and therefore the first part is also zero. The second part is the \textit{negative damping} term which yields and increase in the generator torque when the rotational speed decreases which even further decreases the rotational speed.
 
 The component model input is $ \{P, \Omega\} $ and the output is $ \{T_g\} $
 
 
-\subsubsection{Converter} \label{sec:comp_conv_unity}
-The converter connects the generator with the grid and it is controlled by the power controller. It handles the power flow from the generator to the grid.
-
-The dynamics of modern converters are much faster than the rotor and tower dynamics and therefore it is simply modelled as an algebraic equation as a direct feed-through:
-\begin{equation}\label{eq:comp_convdft}
-	P_{conv} = P_{ref}
-\end{equation}
-In other words the converter is treated as a \textit{black box} system which, when given a power reference, delivers a power equal to said power reference instantly. 
-
-The input is $ \{P_{conv}\} $ and the output is $ \{P_{ref}\} $
+%\subsubsection{Converter} \label{sec:comp_conv_unity}
+%The converter connects the generator with the grid and it is controlled by the power controller. It handles the power flow from the generator to the grid.
+%
+%The dynamics of modern converters are much faster than the rotor and tower dynamics and therefore it is simply modelled as an algebraic equation as a direct feed-through:
+%\begin{equation}\label{eq:comp_convdft}
+%	P_{conv} = P_{ref}
+%\end{equation}
+%In other words the converter is treated as a \textit{black box} system which, when given a power reference, delivers a power equal to said power reference instantly. 
+%
+%The input is $ \{P_{conv}\} $ and the output is $ \{P_{ref}\} $
 
 
 \subsubsection{Aerodynamic torque} \label{sec:comp_aero_torque}
-In \cref{sec:theory_fowt_challenges} it was explained that it was convenient to use the pre-calculated thrust coefficient values $ C_T $ to determine the stationary thrust. Likewise pre-calculated power coefficient tables $ C_p $ can be used to calculate the stationary torque. Both $ C_p $ and $ C_T $ are extracted and linearised at the operating point with wtLin.
+In \cref{sec:theory_fowt_challenges} it was explained that it was convenient to use the pre-calculated thrust coefficient values $ C_T $ to determine the stationary thrust. Likewise pre-calculated power coefficient tables $ C_p $ can be used to calculate the stationary torque. Both $ C_p $ and $ C_T $ are extracted and linearised at the OP with wtLin.
 
 In \cref{eq:power_w_Cp} the extractable power from the free wind was defined. When combining this equation with the definition of power in a mechanical system the torque on the rotor can be expressed:
 \begin{equation}\label{eq:comp_Mrot_lambda}
@@ -121,7 +120,7 @@ The TSR is dependent on $ \Omega $ and $ v $ and thus the rotor torque model end
 \begin{equation}\label{eq:comp_Mrot_wind}
 	T_r(\theta, \Omega, v) = \dfrac{1}{2} \rho A_d v^3 \, C_p(\theta, \Omega, v) \dfrac{1}{\Omega}
 \end{equation}
-The model is linearised at an operating point with a taylor expansion $ (\theta_o, \Omega_o, v_o) $:
+The model is linearised at an OP with a taylor expansion $ (\theta_o, \Omega_o, v_o) $:
 \begin{align}
 	T_r(\theta, \Omega, v) \approx T_r(\theta_o, \Omega_o, v_o) 
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial \theta} \right |_{\theta_o, \Omega_o, v_o} ( \theta-\theta_o) \\
@@ -259,7 +258,7 @@ The component input is $ \{e \} $ and the output is $ \{\theta_{ref} \} $
 
 
 \subsection{The connected model} \label{sec:comp_connected}
-In the previous section all individual component models were defined and the non-linear models were linearised at an operating point. When the components are connected we are left with a system which is only a function of states and inputs with the states deriving\todo[inline]{With the states deriving..??} from the components with modelled dynamics. We can then set up a continuous linear state-space system on the following form:
+In the previous section all individual component models were defined and the non-linear models were linearised at an OP. When the components are connected we are left with a system which is only a function of states and inputs. We can then set up a continuous linear state-space system on the following form:
 \begin{equation}\label{eq:state-space-sys}
 	\begin{split}
 		\dot x &= A x + B u + B_d d \\
@@ -292,13 +291,13 @@ The frequency response is plotted from the pitch reference to the surge directio
 	\subfloat[Linear model response]{\includegraphics[width=.49\textwidth]{Graphics/TestResults/foreaftFitting/wtLin_th-vy_16ms.png}
 		\label{fig:wtlin_wref-vy_16}}
 	
-	\caption{pitch reference to fore-aft surge velocity fitting with operating point at 16 m/s; \textbf{(a)} VTS bode plot; \textbf{(b)} Linear model bode plot. Black lines are positioned in the magnitude plot to indicate the location of the peak of the VTS bode plot magnitude in (a). Black lines also indicate the position of the beginning and end of the large phase shift around the eigenfrequency from (a).}
+	\caption{pitch reference to fore-aft surge velocity fitting with OP at 16 m/s; \textbf{(a)} VTS bode plot; \textbf{(b)} Linear model bode plot. Black lines are positioned in the magnitude plot to indicate the location of the peak of the VTS bode plot magnitude in (a). Black lines also indicate the position of the beginning and end of the large phase shift around the eigenfrequency from (a).}
 	\label{fig:wref-vy_16}
 \end{figure*}
 
 
 \subsubsection{The linear model} \label{sec:linear_model}
-The resulting linear state space system derived at the 16 m/s operating point becomes:
+The resulting linear state space system derived at the 16 m/s OP becomes:
 \begin{equation}\label{eq:xdot}
 	\dot{\begin{bmatrix} \Omega_{int} \\
 						p_y \\ 
@@ -340,15 +339,15 @@ The resulting linear state space system derived at the 16 m/s operating point be
 
 
 \subsubsection{System stability, controllability and observability}
-A linear system model with the FLC has now been derived at an operating point. Before moving further some key evaluations should be made. Firstly stability is checked and secondly controllability. 
+A linear system model with the FLC has now been derived at an OP. Before moving further some key evaluations should be made. Firstly stability is checked and secondly controllability. 
 %and observability.
 
 \medskip
-An important characteristic of any system is stability. Some system $ \dot x = f(x) $ which is linearised at an operating point $ x_0 $ such that $ A = \left. \dfrac{\partial f}{\partial x} \right| _{x_0} $ is stable in a vicinity around the origin iff
+An important characteristic of any system is stability. Some system $ \dot x = f(x) $ which is linearised at an OP $ x_0 $ such that $ A = \left. \dfrac{\partial f}{\partial x} \right| _{x_0} $ is stable in a vicinity around the origin iff
 \begin{equation}\label{eq:stability}
 	Re\{\lambda_i\} < 0 \;\;\; \text{for} \;\;\; 1 \leq i \leq n
 \end{equation}
-with $ \lambda_i $ being the eigenvalues of the system. For an inherently linear system if \cref{eq:stability} holds then no matter where the states are initialized they will always return to an equilibrium point. For a non-linear system linearised at an operating point it only means that the system is stable in some vicinity around that operating point. There is furthermore no guarantee that stability holds for all operating points. The poles of $ A $ from \cref{eq:xdot} all have negative real values and it is thus stable.
+with $ \lambda_i $ being the eigenvalues of the system. For an inherently linear system if \cref{eq:stability} holds then no matter where the states are initialized they will always return to an equilibrium point. For a non-linear system linearised at an OP it only means that the system is stable in some vicinity around that OP. There is furthermore no guarantee that stability holds for all OPs. The poles of $ A $ from \cref{eq:xdot} all have negative real values and it is thus stable.
 
 \smallskip
 \textbf{Controllability} is checked by making sure that the rank of the controllability matrix is equal to the number of states with the controllability matrix being defined:
