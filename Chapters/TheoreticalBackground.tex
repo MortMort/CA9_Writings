@@ -224,7 +224,32 @@ In \cref{fig:eigen_and_1p3p} an illustration of the tower modes of both fixed-bo
 	\label{fig:eigen_and_1p3p}
 \end{figure}
 
-\clearpage \newpage
+\newpage
+\subsection{Fatigue Loads}
+The motivation for dampening the fore-aft motion is mainly to reduce loads on the turbine structure while ensuring proper rotor speed tracking. During a WTs lifetime its blades, tower and other components will experience stress mainly in the form of bending due to gravity and the wind. Different materials have different properties which make them able to sustain varying degrees of absolute and cyclic stress. If a component such as a wind turbine blade is subjected to large absolute stress in the form of bending it can be damaged through deformation. The blade's ability to sustain a large degree of bending is largely dependent on the material it is made of. Alternatively the blade can also be damaged by being subjected to many smaller absolute stresses (load cycles) called \textit{cyclic loads} or \textit{fatigue loads}. Again the material defines how many cyclic loads a component can handle before it is damaged. \textit{Wöhler curves} describe how many cycles of a given amplitude a material can handle before damage occurs and such curves can be seen in \cref{fig:woher_curve}. Some materials will break after a certain number of cycles no matter the stress amplitude but steel has a threshold stress amplitude which essentially means that it can sustain an infinite amount of cycles if the stress amplitude is below said threshold value.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Graphics/WohlerCurve.png}
+	\caption{Illustration of the Wöhler curves of different materials. The curves are only illustrative and not necessarily accurately scaled with respect to each other.}
+	\label{fig:woher_curve}
+\end{figure}
+
+But of course the amplitude and frequency of cyclic loads experienced by WT components vary in size making it hard to determine when a component might have experienced a specific amount of cyclic loads of a specific amplitude. An equivalent fatigue load of specific frequency and amplitude can be approximated from a set of data to handle this issue called \textit{damage equivalent load} (DEL). DEL can be calculated from the following formula:
+\begin{equation}\label{eq:del}
+	L_{DEL} = \left( \dfrac{\sum_{i}^{k}n_i L_i^m}{N_{eq}} \right)^{\frac{1}{m}}
+\end{equation}
+$ k $, $ n_i $ and $ L_i $ are the product of running a set of data through an algorithm called \textit{rain flow counting}. Described briefly rain flow counting is a process of defining the cycles and the ranges of these cycles based on data. A given cycle is either a full or half-cycle depending on whether the stress of the material changes direction fully or partly when oscillating. The resulting output is a list of $ k $ amount of cycles which are either full or half cycles $ n_i $ with ranges $ L_i $. The DEL is is then calculated based on the specific material which has a \textit{Wöhler constant} $ m $. It is also dependent on what frequency of oscillation the equivalent fatigue load has and is included in the formula as such:
+\begin{equation}\label{key}
+	N_{eq} = \dfrac{T_{data}}{T_{eq}}
+\end{equation} 
+where $ T_{eq} $ is the equivalent fatigue load period and $ T_{data} $ is the time length of the data.
+
+Thus a resulting sinusoid of frequency $ f_eq $ and amplitude $ L_{DEL} $ is calculated and can be used to estimate how long a component can sustain loads based on the Wöhler curves.
+
+
+
+%\clearpage \newpage
 \subsection{FOWT challenges and control} \label{sec:theory_fowt_challenges}
 This section is concerned with the challenges that are prevalent in FOWT design and control. In the introduction of the FOWT in \cref{sec:intro_theFOWT} a specific issue; the negative dampening problem, was briefly described. This phenomena is further explored here and other relevant challenges are furthermore touched upon. Lastly a few solutions to the negative dampening problem are briefly presented.
 

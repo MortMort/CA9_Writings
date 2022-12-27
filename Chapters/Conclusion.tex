@@ -1,27 +1,13 @@
 \section{Conclusion} \label{sec:concl}
+Due to the naturally ever decreasing number of economically feasible shallow-depth offshore wind farm sites, an accelerated transition to floating offshore wind turbines will eventually take place. The relatively low maturity of the FOWT technological development is partly holding back the economical feasibility of floating turbines. They face a large number of challenges one of which has been shown to be the negative damping problem. A wind turbine is a complex system in itself and it is subject to interactions with the environment whose underlying physics are also complex in nature. In this report it was shown that despite this complexity a simple linear model can be used to sufficiently capture the dynamics of the fore-aft motion and herein the negative damping phenomena. Using simple models of each relevant turbine component a cohesive linear model was derived at an operating point in the full load region. A simple mass-spring-damper model was successfully used to model the fore-aft motion when parameters were fitted to the Vestas Turbine Simulator model. By inducing a sinusoid at different frequencies on the rotor speed and pitch angle reference, frequency domain plots of the VTS turbine could be made. These plots were compared to frequency domain plots of the linear system for fitting of the fore-aft motion model.
 
-\textbf{THE GOOD}
+\smallskip
+An LQI controller was developed to achieve rotor speed tracking with zero steady state error and fore-aft motion damping. Initial simulations of the linear model, where the LQI controller was compared to the original fixed-bottom turbine FLC, showed promising results with vastly improved performance with LQI.
 
-\begin{itemize}
-	\item Good thing 1
-	\item Good thing 2
-\end{itemize}
+In the transition to an implementation of the LQI controller in VTS it was discovered that the available fore-aft motion accelerometer was not useable. It provided a signal too corrupted by gravity and noise to be used for readings of position and velocity. The solution was to feed the real states of position and velocity from inside VTS directly into the controller. As a result it would not currently be possible to implement the controller on a real turbine without a sufficiently accurate estimator for the fore-aft position and velocity. Simulation results furthermore showed deviations in the system behaviour between the linear model simulations and VTS with the fixed-bottom FLC. While the general tendency of the system response between the two was the same, VTS showed a system closer to being marginally stable than the linear model.
 
-\noindent \textbf{THE BAD}
-
-\begin{itemize}
-	\item The LQI implementation in VTS requires \textit{real} states of py and vy
-\end{itemize}
-
-\noindent \textbf{THE GOOD \#2}
-
-\begin{itemize}
-	\item Good thing 1
-\end{itemize}
-
-\textbf{Conclusion text:}
- The underlying physics of a trailer refrigeration system are complex, as several components of the system require extensive modeling to accurately represent reality. xxx
-
+\smallskip
+Despite the slight model deviation the LQI controller was successfully implemented in VTS and achieved satisfactory rotor speed tracking while greatly damping the fore-aft motion. The use of Bryson's rule eased LQI tuning by giving an intuitive starting point for the LQI $ Q $ and $ R $ weights. While the tuned LQI controller had slightly higher actuator activity than the detuned FLC it was shown to be more efficient than the fixed-bottom tuned FLC and the detuned FLC in both rotor speed tracking and fore-aft motion damping. Furthermore the controller was shown to reduce the 1 Hz damage equivalent load on the tower based on data from a bending moment sensor. Recalculating the LQI controller parameters for other operating points was observed to partly or fully improve performance at said operating points despite not further tuning weights. It is expected that tuning the LQI controller for the other operating points would yield much greater performance.
 
 
 

@@ -73,18 +73,51 @@ When looking at \cref{fig:vts_12_zoom_th_w_py_vy} the fore-aft velocity oscillat
 	\label{fig:vts_13_zoom_fft_th_w_py_vy}
 \end{figure}
 
-\clearpage
+\newpage
+
+In \cref{tab:del} the 1 Hz DEL of the tower at 17 m height is seen. In VTS there are two possible bending moment sensors: At 12 and 17 m height respectively and they showed largely the same results. The 1 Hz DEL has been calculated for the three respective controllers. It is observed that the LQI 1 Hz DEL is the lowest and FLC's is the highest. This conclusion is in line with what has been observed from the results showing the fore-aft motion in the previous figures. As expected the loads experienced by the tower with the FLC are very large compared to the other controllers.
+
+\begin{table}[t]
+	\centering
+	\caption{1 Hz damage equivalent loads of LQI controllers}
+	\label{tab:del}
+	\begin{tabular}{@{}|lll|@{}}
+		\toprule
+		\multicolumn{3}{|c|}{1 Hz damage equivalent loads}                                                                     \\ \midrule
+		\multicolumn{1}{|l|}{LQI}                           & \multicolumn{1}{l|}{FLC detuned} & FLC                           \\ \midrule
+		\multicolumn{1}{|l|}{\cellcolor[HTML]{9AFF99}21760} & \multicolumn{1}{l|}{25099}       & \cellcolor[HTML]{FFCCC9}81343 \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+To more easily compare actuation effort the sum of pitch angle changes are calculated for each of the controllers and the results are seen in \cref{tab:pitch_sum}. There are two rows which show a set of pitch change sums: Unfiltered and filtered. A lot of the pitch actuation observed in the preceding results are due to oscillations at frequencies higher than the fore-aft motion frequency. In a realistic implementation a lot of these would be filtered out and dealt with by other parts of the controller. Therefore they are filtered out of the the pitch angle data such that only the sum of pitch changes at below 0.1 Hz are included. Filtering is done with a 4th order Butterworth filter. As expected the FLC controller does the worst in both cases while the detuned FLC has the least total pitch actuation in both cases. It can though be observed that the difference is very small for for the filtered blade pitch signal.
+
+\begin{table}[t]
+	\centering
+	\caption{Blade pitch actuation sums}
+	\label{tab:pitch_sum}
+	\begin{tabular}{@{}|llll|@{}}
+		\toprule
+		\multicolumn{4}{|c|}{Blade pitch actuation sums}                                                                                                   \\ \midrule
+		\multicolumn{1}{|l|}{}           & \multicolumn{1}{l|}{LQI}   & \multicolumn{1}{l|}{FLC detuned}                   & FLC                           \\ \midrule
+		\multicolumn{1}{|l|}{Unfiltered} & \multicolumn{1}{l|}{169.9} & \multicolumn{1}{l|}{\cellcolor[HTML]{9AFF99}103.3} & \cellcolor[HTML]{FFCCC9}716.5 \\ \midrule
+		\multicolumn{1}{|l|}{Filtered}   & \multicolumn{1}{l|}{67.6}  & \multicolumn{1}{l|}{\cellcolor[HTML]{9AFF99}63.7}  & \cellcolor[HTML]{FFCCC9}557.7 \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+%\clearpage
 \subsection{Results: 12, 16 and 26 m/s LQI OP performance} \label{sec:test_vts_part2}
 It is of interest to see whether using the controller at other OPs yield a better performance at the other respective OPs despite not further tuning the LQI weights. Only a single convenient OP has been considered in the project so far since gain scheduling has been deemed out of scope. But redefining the linear model at other OPs using the Vestas wtLin tool is straightforward. Therefore new LQI controller parameters can be obtained for other OPs and some results of the controller performance at other OPs are thus included. The LQI $ Q $ and $ R $ weights are not tuned for the other OPs but are left at the values which yielded the best performance at 16 m/s.
 
 As mentioned the other wind speeds are 12 m/s and 26 m/s. Due to the larger rotor thrust sensitivity around nominal wind speed which can be observed in \cref{fig:thrust_vs_windspeed} lower dampening is expected for the 12 m/s simulations. The WT controller will furthermore change between PLC and FLC as the wind speed observed by the rotor goes above and below the nominal wind speed. This is expected to lower dampening and worsen overall performance. At higher wind the rotor thrust sensitivity decreases and thus greater general dampening and better performance is expected at 26 m/s.
+
+In \cref{fig:vts_20_pow_th_w_py_vy} the 16, 12 and 26 m/s OP LQI controller parameter configurations are compared at a 12 m/s mean wind speed. As expected the power deviates from 8 MW due to the switching between PLC and FLC. The power fluctuations are largely the same except around 0 to 60 seconds and 610 to 670 seconds where the 12 m/s LQI configuration has some fluctuations not observed in the other two. When observing the fore-aft velocity in the bottom plot a slightly greater backwards velocity is present which would cause a lower observed wind speed at the rotor resulting in a dip into PLC. The blade pitch activity seems to be largely the same across the controllers. The rotor speed errors is better for the 12 m/s LQI controller in several places especially visible around 50 to 130 seconds and 650 to 730 seconds. The greater rotor speed tracking seems to come at the cost of slightly worse fore-aft motion dampening observed in the fore-aft position and velocity plots. Although when consulting the Fourier transform plot in \cref{fig:vts_21_fft_th_w_py_vy} the 12 m/s configuration seems to dampen almost all oscillations around the natural frequency better. Only 0 to 0.1 Hz is plotted since the frequency content for greater frequencies is mainly flat.
+
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/20_pow_th_w_py_vy.png}
 	\caption{VTS simulation at 12 m/s mean wind speed for 1000 seconds. LQI parameters calculated for OPs at 16 m/s (blue), 12 m/s (red) and 26 m/s (yellow) are compared.}
 	\label{fig:vts_20_pow_th_w_py_vy}
 \end{figure}
-In \cref{fig:vts_20_pow_th_w_py_vy} the 16, 12 and 26 m/s OP LQI controller parameter configurations are compared at a 12 m/s mean wind speed. As expected the power deviates from 8 MW due to the switching between PLC and FLC. The power fluctuations are largely the same except around 0 to 60 seconds and 610 to 670 seconds where the 12 m/s LQI configuration has some fluctuations not observed in the other two. When observing the fore-aft velocity in the bottom plot a slightly greater backwards velocity is present which would cause a lower observed wind speed at the rotor resulting in a dip into PLC. The blade pitch activity seems to be largely the same across the controllers. The rotor speed errors is better for the 12 m/s LQI controller in several places especially visible around 50 to 130 seconds and 650 to 730 seconds. The greater rotor speed tracking seems to come at the cost of slightly worse fore-aft motion dampening observed in the fore-aft position and velocity plots. Although when consulting the Fourier transform plot in \cref{fig:vts_21_fft_th_w_py_vy} the 12 m/s configuration seems to dampen almost all oscillations around the natural frequency better. Only 0 to 0.1 Hz is plotted since the frequency content for greater frequencies is mainly flat.
 
 \begin{figure}[ht]
 	\centering
@@ -93,6 +126,7 @@ In \cref{fig:vts_20_pow_th_w_py_vy} the 16, 12 and 26 m/s OP LQI controller para
 	\label{fig:vts_21_fft_th_w_py_vy}
 \end{figure}
 
+\clearpage\newpage
 In \cref{fig:vts_30_pow_th_w_py_vy} the 16 m/s and 26 m/s OP LQI parameter configurations are plotted at a mean wind speed of 26 m/s. The 12 m/s OP parameter configuration is left out since it had feedback weights so high that the system behaviour was oscillating out of control. At 26 m/s the turbine is de-rated as observed in the power output of the two remaining controllers which is constant around 6.8 MW. The generator speed set-point is also de-rated to around 370 rpm and relative high frequencies are present. The magnitude of fore-aft position oscillations is largely the same as at 16 m/s mean wind speed. In contrast to the expected much larger frequency content is present in the rotor speed and resultingly the blade pitch angle.
 \begin{figure}[h]
 	\centering
@@ -100,6 +134,8 @@ In \cref{fig:vts_30_pow_th_w_py_vy} the 16 m/s and 26 m/s OP LQI parameter confi
 	\caption{VTS simulation at 26 m/s mean wind speed. LQI parameters calculated for OPs at 16 m/s (blue), 12 m/s (red) and 26 m/s (yellow) are compared.}
 	\label{fig:vts_30_pow_th_w_py_vy}
 \end{figure}
+
+
 While not obvious it seems like the 26 m/s OP version has slightly lower generator speed error fluctuations. Interestingly when observing the fore-aft position and velocity the 26 m/s version seems to have smaller velocity oscillations but higher fluctuation in its position. When consulting the Fourier transform of the signal in \cref{fig:vts_31_fft_th_w_py_vy} it becomes apparent that the 26 m/s version does a better job with regards to dampening oscillations for both the 1st and 2nd mode. In both the generator speed and the fore-aft velocity the 3P frequency and second mode oscillations are greatly present. At 26 m/s mean wind speed the 3P frequency is even closer to the second mode due to the de-rated rotor speed. It is expected that the high second mode frequency content in the system is largely a result of the 3P excitation. When observing the rotor pitch it is confirmed that the 26 m/s controller version handles the fluctuations better by not transferring them as intensely to the blade pitch. The result is vastly smaller 2nd mode oscillations and smaller 3P oscillations. A phenomena which has not been observed in any of the other simulations is a large dominating 1P component in the pitch angle. The lack of frequency content at 1P in the generator speed and the fore-aft motion suggests that this results from another part of the Vestas controller. When observing \cref{fig:vts_10_th_w_py_vy} at 16 m/s the same kind of pitch activity is visible around 550 to 610 seconds.
 \begin{figure}[h]
 	\centering
@@ -107,8 +143,60 @@ While not obvious it seems like the 26 m/s OP version has slightly lower generat
 	\caption{VTS simulation at 26 m/s mean wind speed. LQI parameters calculated for OPs at 16 m/s (blue), 12 m/s (red) and 26 m/s (yellow) are compared.}
 	\label{fig:vts_31_fft_th_w_py_vy}
 \end{figure}
+
+%\clearpage
+%\newpage
+
+In \cref{tab:del_lqi} the DELs of the three LQI controller setup at the three different wind speeds are observed. In the preceding results it was hard to observe a significant difference between the 12 m/s and 16 m/s configuration but the DELs conclude that the 12 m/s configuration does worse at all wind speeds. The difference between the 16 and 26 m/s LQI configurations are negligible at 12 and 16 m/s while at 26 m/s the 26 m/s LQI configuration has a greatly decreased DEL.
+
+\begin{table}[ht]
+	\centering
+	\caption{1 Hz damage equivalent loads of LQI controllers}
+	\label{tab:del_lqi}
+	\begin{tabular}{@{}|llll|@{}}
+		\toprule
+		\multicolumn{4}{|c|}{1 Hz damage equivalent loads of LQI controllers}                                                                                                                                \\ \midrule
+		\multicolumn{1}{|l|}{}              & \multicolumn{1}{l|}{LQI OP 12}                                            & \multicolumn{1}{l|}{LQI OP 16}                     & LQI OP 26                     \\ \midrule
+		\multicolumn{1}{|l|}{Wind speed 12} & \multicolumn{1}{l|}{\cellcolor[HTML]{FFCCC9}{\color[HTML]{333333} 24132}} & \multicolumn{1}{l|}{\cellcolor[HTML]{9AFF99}23127} & 23749                         \\ \midrule
+		\multicolumn{1}{|l|}{Wind speed 16} & \multicolumn{1}{l|}{\cellcolor[HTML]{FFCCC9}185830}                       & \multicolumn{1}{l|}{21760}                         & \cellcolor[HTML]{9AFF99}21525 \\ \midrule
+		\multicolumn{1}{|l|}{Wind speed 26} & \multicolumn{1}{l|}{\cellcolor[HTML]{FFCCC9}115800}                       & \multicolumn{1}{l|}{36366}                         & \cellcolor[HTML]{9AFF99}23515 \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+In \cref{tab:pitch_sum_lqi} the pitch sums of the LQI controllers with the unfiltered pitch data are seen. Again the 12 m/s configuration does worse at all wind speeds. The differences in pitch actuation between the 16 ns 26 m/s configurations is significant for all wind speeds. Only in the 12 m/s wind speed case the 16 m/s wind speed configuration wins. When observing the filtered version in \cref{tab:filt_pitch_sum_lqi} the results are very different. It becomes obvious that most of the pitch actuation of the 12 m/s configuration is due to higher frequency content than the fore-aft motion. The 16 m/s configuration seems to be the overall best between the three configurations despite not being the best at any single wind speed. From all of the tables it can be concluded that the 26 m/s configuration does a better job at 26 m/s wind speed and that the 12 m/s configuration amplifies higher frequencies too much to be applicable.
+
+\begin{table}[ht]
+	\centering
+	\caption{Blade pitch actuation sums of LQI controllers}
+	\label{tab:pitch_sum_lqi}
+	\begin{tabular}{@{}|llll|@{}}
+		\toprule
+		\multicolumn{4}{|c|}{Blade pitch actuation sums of LQI controllers}                                                                                                           \\ \midrule
+		\multicolumn{1}{|l|}{}              & \multicolumn{1}{l|}{LQI OP 12}                     & \multicolumn{1}{l|}{LQI OP 16}                     & LQI OP 26                     \\ \midrule
+		\multicolumn{1}{|l|}{Wind Speed 12} & \multicolumn{1}{l|}{\cellcolor[HTML]{FFCCC9}186.4} & \multicolumn{1}{l|}{\cellcolor[HTML]{9AFF99}113.3} & 139.3                         \\ \midrule
+		\multicolumn{1}{|l|}{Wind Speed 16} & \multicolumn{1}{l|}{\cellcolor[HTML]{FFCCC9}8432}  & \multicolumn{1}{l|}{169.9}                         & \cellcolor[HTML]{9AFF99}132.8 \\ \midrule
+		\multicolumn{1}{|l|}{Wind Speed 26} & \multicolumn{1}{l|}{\cellcolor[HTML]{FFCCC9}12261} & \multicolumn{1}{l|}{1033.6}                        & \cellcolor[HTML]{9AFF99}795.6 \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\caption{Filtered blade pitch actuation sums of LQI controllers}
+	\label{tab:filt_pitch_sum_lqi}
+	\begin{tabular}{@{}|llll|@{}}
+		\toprule
+		\multicolumn{4}{|c|}{Filtered blade pitch actuation sums}                                                                                                                        \\ \midrule
+		\multicolumn{1}{|l|}{}              & \multicolumn{1}{l|}{LQI OP 12}                     & \multicolumn{1}{l|}{LQI OP 16} & LQI OP 26                                            \\ \midrule
+		\multicolumn{1}{|l|}{Wind Speed 12} & \multicolumn{1}{l|}{\cellcolor[HTML]{9AFF99}115.6} & \multicolumn{1}{l|}{116.3}     & \cellcolor[HTML]{FFCCC9}{\color[HTML]{333333} 128.9} \\ \midrule
+		\multicolumn{1}{|l|}{Wind Speed 16} & \multicolumn{1}{l|}{\cellcolor[HTML]{9AFF99}63.1}  & \multicolumn{1}{l|}{67.6}      & \cellcolor[HTML]{FFCCC9}77.6                         \\ \midrule
+		\multicolumn{1}{|l|}{Wind Speed 26} & \multicolumn{1}{l|}{\cellcolor[HTML]{FFCCC9}205.2} & \multicolumn{1}{l|}{65.2}      & \cellcolor[HTML]{9AFF99}64.4                         \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+
+\clearpage
 \newpage
 \subsection{Test conclusion}
 Between the three controllers compared in \cref{sec:test_vts_part1} the following can be concluded: The fixed-bottom tuned FLC induces extreme oscillations in the whole WT structure observed in both the fore-aft motion and the rotor speed. Detuning the FLC yields higher dampening and performance in all aspects but does not yield satisfactory performance overall. Oscillations of undesirable magnitude is present on both the generator speed and the fore-aft position. When switching to the LQI controller oscillations on both the generator speed and fore-aft position are greatly reduced in comparison to the detuned FLC at the cost of increased pitch actuation activity. The LQI performance is satisfactory but it is also based on ideal, perfect fore-aft state feedback in VTS. The 2nd mode oscillations which were observed on the fore-aft velocity translated into the pitch actuation due to the lack of consideration for this dynamic in the model.
 
-Greater performance is achieved in \cref{sec:test_vts_part2} at 12 m/s and 26 m/s mean wind speed if the LQI controller parameters are recalculated at the respective OPs. This signifies that either gain scheduling or other methods should be employed to cover the whole turbine operating range. This comes to no surprise as the non-linear control authority of WT pitching is well known. It is assumed that greater performance can be achieved if LQI weight tuning was performed at the alternative wind speeds and perhaps if the fore-aft model fitting shown in \cref{sec:lin_fit_eval} was revisited as well. Lower dampening and performance is observed at lower wind speeds mainly attributed to the greater rotor thrust sensitivity close to nominal wind speed. Big 2nd mode and 3P oscillations are present on the generator speed and fore-aft velocity at 26 m/s mean wind speed. Recalculating the LQI parameters for both the 12 and 26 m/s OP resulted in reduced oscillations on all states and inputs and for the 26 m/s case especially the 2nd mode oscillations.
+Greater performance is achieved in \cref{sec:test_vts_part2} at 26 m/s and in some areas at 12 m/s mean wind speed if the LQI controller parameters are recalculated at the respective OPs. This signifies that either gain scheduling or other methods should be employed to cover the whole turbine operating range. This comes to no surprise as the non-linear control authority of WT pitching is well known. It is assumed that greater performance can be achieved if LQI weight tuning was performed at the alternative wind speeds and perhaps if the fore-aft model fitting shown in \cref{sec:lin_fit_eval} was revisited as well. Lower dampening and performance is observed at lower wind speeds mainly attributed to the greater rotor thrust sensitivity close to nominal wind speed. Big 2nd mode and 3P oscillations are present on the generator speed and fore-aft velocity at 26 m/s mean wind speed. Recalculating the LQI parameters for both the 12 and 26 m/s OP resulted in reduced oscillations on some states and inputs and for the 26 m/s case especially the 2nd mode oscillations.

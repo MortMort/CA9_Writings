@@ -1,136 +1,3 @@
-\subsection{Excluded component models} \label{sec:app_excl_comp_models}
-This appendix contains component models which contain dynamics that from an understanding-the-theory POV are interesting but otherwise deemed unnecessary for the control objective. This is simply due to the frequency separation between the generally higher frequencies of these dynamics and the very slow eigenfrequency of a floating structure.
-
-\subsubsection{Drivetrain (flexible)} \label{sec:mod_drt_flex}
-As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. The flexible drivetrain is modelled with a dampener and a spring between the rotor and the gearbox. The model is then reduced by translating the dampener and spring from the generator side to the rotor side of the gearbox. As such the model ends up consisting of two inertias coupled through a spring with stiffness $ K $ and a dampener with dampening $ B $. Due to the introduced spring and damper it is necessary to model both the rotor and and generator angle.
-\begin{align} 
-	J_{g} \ddot{\theta}_{gL} & = B (\dot{\theta}_r - \dot{\theta}_{gL}) + K(\theta_r - \theta_{gL}) - T_{g} \label{eq:comp_comp_drivetrain_flex_1} \\
-	J_{r} \ddot{\theta}_r & = B (\dot{\theta}_{gL} - \dot{\theta}_r ) - K(\theta_r - \theta_{gL}) + T_{r} \label{eq:comp_comp_drivetrain_flex_2}
-\end{align}
-Recall the relationship between derivatives:
-\begin{align}
-	\dot{\Omega} & = \ddot{\theta}_r \\
-	\dot{\omega}_{L} & = \ddot{\theta}_{gL} \\
-	\dot{\theta}_g & = \omega \\
-	\dot{\theta}_r & = \Omega
-\end{align}
-%and
-%\begin{align}
-%	\dot{\theta}_g & = \omega \\
-%	\dot{\theta}_r & = \Omega
-%\end{align}
-and
-\begin{align}
-	\dot{\theta}_g 	&= \left(\dfrac{N_g}{N_r}\right) \dot{\theta}_{gL} \label{eq:comp_comp_drivetrain_flex_mod_3} \\
-	J_{gL} 			&= J_{g} \left(\dfrac{N_r}{N_g}\right)^2 \label{eq:comp_comp_inertiamap_flex}
-\end{align}
-Which leaves the flexible drivetrain model as:
-%\begin{align} 
-%	\dot{\omega}_{gL} & = \dfrac{-B \dot{\theta}_{gL} + K(\theta_r - \theta_{gL}) - T_{g}}{J_{g}} \label{eq:comp_comp_drivetrain_flex_mod_1} \\
-%	\dot{\Omega} & = \dfrac{-B \dot{\theta}_{gL} -B - K(\theta_r - \theta_{gL}) + T_{r}}{J_{r}} \label{eq:comp_comp_drivetrain_flex_mod_2} \\
-%\end{align}
-\begin{align} 
-	\dot{\omega} & = \dfrac{B \left(\Omega - \dfrac{N_r}{N_g}\omega\right) + K\left(\theta_r - \dfrac{N_r}{N_g} \theta_{g}\right) - T_{g}}{\left(\dfrac{N_r}{N_g}\right)^2 J_{g} \dfrac{N_r}{N_g} } \label{eq:comp_comp_drivetrain_flex_mod_1} \\
-	\dot{\Omega} & = \dfrac{B \left(\dfrac{N_r}{N_g}\omega - \Omega \right) \omega + K\left(\dfrac{N_r}{N_g} \theta_{g} - \theta_r\right) + T_{r}}{J_{r}} \label{eq:comp_comp_drivetrain_flex_mod_2} \\
-		\dot{\theta}_g & = \omega \\
-		\dot{\theta}_r & = \Omega
-\end{align}
-The model is observed to be linear and thus no linearisation is necessary.
-
-The component inputs are $ \{T_g, T_r\} $ and the outputs are $ \{\omega, \Omega\} $. 
-
-\subsubsection{Pitch system dynamics} \label{sec:comp_pitch_dyn}
-The pitch system dynamics can be approximated with a simple first order low-pass filter which in the frequency domain is:
-\begin{equation}\label{eq:comp_pitch_freq_dyn}
-	\theta(s) = \dfrac{1}{\tau_{pit} s + 1} (\theta_{ref}(s) + \theta_{fatd}(s))
-\end{equation}
-where $ \tau_{pit} $ is a time-constant which suits the response of the pitching system at the operating point. In VTS the pitch system dynamics are modelled from a table which takes in the flap-wise bending moment of the blade and a pitch angle and outputs a pitch angle rate of change. As such wtLin uses the operating point and a user defined flap-wise bending moment to calculate $ \tau_{pit} $.
-
-In the time domain the model becomes:
-\begin{equation}\label{eq:comp_pitch_time}
-	\dot{\theta} =\dfrac{(\theta_{ref}(s) + \theta_{fatd}(s)) - \theta}{\tau_{pit}}
-\end{equation}
-
-% The calculation of the time-domain version:
-%\begin{align}\label{eq:comp_pitch}
-%	\theta(s) & = \dfrac{1}{\tau_{pit} s + 1} (\theta_{ref}(s) + \theta_{fatd}(s)) \\
-%	(\tau_{pit} s + 1) \theta(s) & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
-%	\tau_{pit}\theta s + \theta(s)  & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
-%	\tau_{pit}\dot{\theta} + \theta  & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
-%	\dot{\theta} & =\dfrac{(\theta_{ref}(s) + \theta_{fatd}(s)) - \theta}{\tau_{pit}}
-%\end{align}
-
-The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is $ \{\theta \} $
-
-
-\subsubsection{Generator model} \label{sec:comp_generator_eff}
-The generator is mechanically connected to the drivetrain and is electrically connected to the converter. It is used to control the rotor speed during PLC by means of the generator torque.
-
-A more detailed generator model could include efficiencies. In Vestas' turbine simulator (VTS) the generator efficiencies are defined in tables and are dependent on grid output power $ P $ and generator speed $ \omega $. The output is three respective output efficiencies: 
-\begin{enumerate}
-	\item Mechanic efficiency: $ \eta_m(P,\omega) $
-	\item Electric efficiency: $ \eta_e(P,\omega) $
-	\item Auxiliary efficiency: $ \eta_a(P,\omega) $
-\end{enumerate}
-Where 
-\begin{equation}\label{eq:comp_gen_effi_eff}
-	\eta(P,\omega) = \eta_m(P,\omega) + \eta_e(P,\omega) + \eta_a(P,\omega)
-\end{equation}
-From the total efficiency the output grid power is:
-\begin{equation}\label{eq:comp_gen_elec_pow_eff}
-	P_{gen} \eta(P,\omega) = P
-\end{equation}
-where $ P_{gen} $ is the electrical power output of the generator.
-
-This leaves the power loss from generator to grid to be defined as:
-\begin{equation} \label{eq:comp_gen_pow_loss_eff}
-	P_{loss}(P, \omega) = P_{gen} - P = \dfrac{P}{\eta(P, \omega)} - P
-\end{equation}
-The power of a rotating machine can be defined as the product of torque and rotational velocity:
-\begin{equation}\label{eq:comp_power_in_rot_eff}
-	P_{gen} = T_g \omega
-\end{equation}
-As such for the system at hand the torque can be defined by rearranging \cref{eq:comp_power_in_rot_eff} and substituting in $ P_{gen} $ from \cref{eq:comp_gen_pow_loss_eff}. This leaves the non-linear generator model to be:
-\begin{equation}\label{eq:comp_gen_torque_eff}
-	T_g(P, \omega) = \dfrac{P_{loss}(P, \omega) + P}{\omega}
-\end{equation}
-\cref{eq:comp_power_in_rot_eff} is the non-linear model of the generator. It contains $ P_{loss}(P,\omega) $ which from \cref{eq:comp_gen_pow_loss_eff} is dependent on $ \eta(P, \omega) $. The $ \eta $ function is extracted from VTS and linearized.
-
-The linear model of the generator is obtained through a taylor expansion. The notation is relaxed a bit such that $ P_{loss}( P, \omega) $ is simply expressed as $ P_{loss} $.
-\begin{equation}\label{eq:comp_taylor_eff}
-	T_g( P, \omega) \approx T_g(P_o, \omega_o) + 
-	\left. \dfrac{\partial T_g( P, \omega)}{\partial P} \right |_{P_o,\omega_o} ( P-P_o) + 
-	\left. \dfrac{\partial T_g( P, \omega)}{\partial \omega} \right |_{P_o,\omega_o} (\omega - \omega_o)
-\end{equation}
-Below the the generator torque sensitivity to the grid power change term from \cref{eq:comp_taylor_eff} is derived. From \cref{eq:comp_gen_1_1_eff} to \cref{eq:comp_gen_1_2_eff} the \textit{sum rule} is used to split the derivative into two added derivatives. From \cref{eq:comp_gen_1_2_eff} to \cref{eq:comp_gen_1_3_eff} the first fractions in the denominators of the partial derivatives of the two terms are treated as a product of two functions thus the \textit{product rule} is used. The assumption is that the grid power is completely disconnected from the generator through the converter. Thus from \cref{eq:comp_gen_1_3_eff} to \cref{eq:comp_gen_1_4_eff} $ \, \frac{\partial \, \omega^{-1}}{\partial P} = 0 $.
-\begin{align} 
-	\dfrac{\partial T_g( P, \omega)}{\partial P} &= \dfrac{\partial \left (\dfrac{P_{loss} +  P}{\omega}\right )}{\partial P} \label{eq:comp_gen_1_1_eff} \\
-	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial P} + \dfrac{\partial \left ( \dfrac{ P}{\omega} \right )}{\partial P} \label{eq:comp_gen_1_2_eff} \\
-	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{\partial \left ( \dfrac{1}{\omega} \right )}{\partial P} P_{loss} + \dfrac{1}{\omega} \cdot \dfrac{\partial P}{\partial P} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial P}  P \label{eq:comp_gen_1_3_eff} \\
-	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{1}{\omega} \label{eq:comp_gen_1_4_eff}
-\end{align}
-
-
-The generator torque sensitivity to rotational velocity change from \cref{eq:comp_taylor_eff} is then derived:
-\begin{align}
-	\dfrac{\partial T_g(P, \omega)}{\partial \omega} & = \dfrac{\partial \left (\dfrac{P_{loss} +  P}{\omega}\right )}{\partial \omega} \\
-	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial \omega} + \dfrac{\partial \left (\dfrac{P}{\omega} \right )}{\partial \omega} \\
-	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega} + \dfrac{\partial \left (\dfrac{1}{\omega} \right)}{\partial \omega} P_{loss} + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial \omega} P \\
-	& = \dfrac{1}{\omega} \cdot  \dfrac{\partial P_{loss}}{\partial \omega} - \dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} \\
-	& = -\dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega}
-\end{align}
-The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\frac{N_r}{N_g} \right ) \omega $. This yields the final linear generator model evaluated at the operating point $ (P_o, \omega_o) $. Furthermore $P_{loss}$ is still just a function of $ \omega_L $ and $ P $:
-\begin{equation}
-	\begin{split}
-		T_g(P, \omega_L) 	& \approx \left. \left ( \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}(P, \omega_L)}{\partial P} + \dfrac{1}{\omega_L} \right ) \right |_{P_o,\omega_{L_o}} (P - P_0) \\ 
-		& + \left ( -\dfrac{1}{\omega_L^2}(P + P_{loss}(P, \omega_L)) + \left. \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}(P, \omega_L)}{\partial \omega_L} \right ) \right |_{P_o,\omega_{L_o}} (\omega_L - \omega_{L_o})
-	\end{split}
-\end{equation}
-The calculation of the power loss and derivation of the power loss sensitivity to grid power are left out here, but are calculated in wtLin at an operating point. In the wtLin tool these sensitivities are calculated based on the extracted tables of efficiency $ \eta $.
-
-Presently the generator model in wtLin is implemented assuming a stiff drivetrain such that $ \Omega = \omega_L $.
-
-The component model input is $ \{P, \Omega\} $ and the output is $ \{T_g\} $
 
 
 
@@ -322,3 +189,138 @@ Conclusively the LQI controller performance is very good on the linear model in 
 %	\caption{Simulink simulation results. Bottom left and right plots are zommed in at 0 to 50 s and 295 to 360 s.}
 %	\label{fig:app_sim_01_pitch}
 %\end{figure}
+
+
+\subsection{Excluded component models} \label{sec:app_excl_comp_models}
+This appendix contains component models which contain dynamics that from an understanding-the-theory POV are interesting but otherwise deemed unnecessary for the control objective. This is simply due to the frequency separation between the generally higher frequencies of these dynamics and the very slow eigenfrequency of a floating structure.
+
+\subsubsection{Drivetrain (flexible)} \label{sec:mod_drt_flex}
+As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. The flexible drivetrain is modelled with a dampener and a spring between the rotor and the gearbox. The model is then reduced by translating the dampener and spring from the generator side to the rotor side of the gearbox. As such the model ends up consisting of two inertias coupled through a spring with stiffness $ K $ and a dampener with dampening $ B $. Due to the introduced spring and damper it is necessary to model both the rotor and and generator angle.
+\begin{align} 
+	J_{g} \ddot{\theta}_{gL} & = B (\dot{\theta}_r - \dot{\theta}_{gL}) + K(\theta_r - \theta_{gL}) - T_{g} \label{eq:comp_comp_drivetrain_flex_1} \\
+	J_{r} \ddot{\theta}_r & = B (\dot{\theta}_{gL} - \dot{\theta}_r ) - K(\theta_r - \theta_{gL}) + T_{r} \label{eq:comp_comp_drivetrain_flex_2}
+\end{align}
+Recall the relationship between derivatives:
+\begin{align}
+	\dot{\Omega} & = \ddot{\theta}_r \\
+	\dot{\omega}_{L} & = \ddot{\theta}_{gL} \\
+	\dot{\theta}_g & = \omega \\
+	\dot{\theta}_r & = \Omega
+\end{align}
+%and
+%\begin{align}
+%	\dot{\theta}_g & = \omega \\
+%	\dot{\theta}_r & = \Omega
+%\end{align}
+and
+\begin{align}
+	\dot{\theta}_g 	&= \left(\dfrac{N_g}{N_r}\right) \dot{\theta}_{gL} \label{eq:comp_comp_drivetrain_flex_mod_3} \\
+	J_{gL} 			&= J_{g} \left(\dfrac{N_r}{N_g}\right)^2 \label{eq:comp_comp_inertiamap_flex}
+\end{align}
+Which leaves the flexible drivetrain model as:
+%\begin{align} 
+%	\dot{\omega}_{gL} & = \dfrac{-B \dot{\theta}_{gL} + K(\theta_r - \theta_{gL}) - T_{g}}{J_{g}} \label{eq:comp_comp_drivetrain_flex_mod_1} \\
+%	\dot{\Omega} & = \dfrac{-B \dot{\theta}_{gL} -B - K(\theta_r - \theta_{gL}) + T_{r}}{J_{r}} \label{eq:comp_comp_drivetrain_flex_mod_2} \\
+%\end{align}
+\begin{align} 
+	\dot{\omega} & = \dfrac{B \left(\Omega - \dfrac{N_r}{N_g}\omega\right) + K\left(\theta_r - \dfrac{N_r}{N_g} \theta_{g}\right) - T_{g}}{\left(\dfrac{N_r}{N_g}\right)^2 J_{g} \dfrac{N_r}{N_g} } \label{eq:comp_comp_drivetrain_flex_mod_1} \\
+	\dot{\Omega} & = \dfrac{B \left(\dfrac{N_r}{N_g}\omega - \Omega \right) \omega + K\left(\dfrac{N_r}{N_g} \theta_{g} - \theta_r\right) + T_{r}}{J_{r}} \label{eq:comp_comp_drivetrain_flex_mod_2} \\
+	\dot{\theta}_g & = \omega \\
+	\dot{\theta}_r & = \Omega
+\end{align}
+The model is observed to be linear and thus no linearisation is necessary.
+
+The component inputs are $ \{T_g, T_r\} $ and the outputs are $ \{\omega, \Omega\} $. 
+
+\subsubsection{Pitch system dynamics} \label{sec:comp_pitch_dyn}
+The pitch system dynamics can be approximated with a simple first order low-pass filter which in the frequency domain is:
+\begin{equation}\label{eq:comp_pitch_freq_dyn}
+	\theta(s) = \dfrac{1}{\tau_{pit} s + 1} (\theta_{ref}(s) + \theta_{fatd}(s))
+\end{equation}
+where $ \tau_{pit} $ is a time-constant which suits the response of the pitching system at the operating point. In VTS the pitch system dynamics are modelled from a table which takes in the flap-wise bending moment of the blade and a pitch angle and outputs a pitch angle rate of change. As such wtLin uses the operating point and a user defined flap-wise bending moment to calculate $ \tau_{pit} $.
+
+In the time domain the model becomes:
+\begin{equation}\label{eq:comp_pitch_time}
+	\dot{\theta} =\dfrac{(\theta_{ref}(s) + \theta_{fatd}(s)) - \theta}{\tau_{pit}}
+\end{equation}
+
+% The calculation of the time-domain version:
+%\begin{align}\label{eq:comp_pitch}
+%	\theta(s) & = \dfrac{1}{\tau_{pit} s + 1} (\theta_{ref}(s) + \theta_{fatd}(s)) \\
+%	(\tau_{pit} s + 1) \theta(s) & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
+%	\tau_{pit}\theta s + \theta(s)  & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
+%	\tau_{pit}\dot{\theta} + \theta  & = (\theta_{ref}(s) + \theta_{fatd}(s)) \\
+%	\dot{\theta} & =\dfrac{(\theta_{ref}(s) + \theta_{fatd}(s)) - \theta}{\tau_{pit}}
+%\end{align}
+
+The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is $ \{\theta \} $
+
+
+\subsubsection{Generator model} \label{sec:comp_generator_eff}
+The generator is mechanically connected to the drivetrain and is electrically connected to the converter. It is used to control the rotor speed during PLC by means of the generator torque.
+
+A more detailed generator model could include efficiencies. In Vestas' turbine simulator (VTS) the generator efficiencies are defined in tables and are dependent on grid output power $ P $ and generator speed $ \omega $. The output is three respective output efficiencies: 
+\begin{enumerate}
+	\item Mechanic efficiency: $ \eta_m(P,\omega) $
+	\item Electric efficiency: $ \eta_e(P,\omega) $
+	\item Auxiliary efficiency: $ \eta_a(P,\omega) $
+\end{enumerate}
+Where 
+\begin{equation}\label{eq:comp_gen_effi_eff}
+	\eta(P,\omega) = \eta_m(P,\omega) + \eta_e(P,\omega) + \eta_a(P,\omega)
+\end{equation}
+From the total efficiency the output grid power is:
+\begin{equation}\label{eq:comp_gen_elec_pow_eff}
+	P_{gen} \eta(P,\omega) = P
+\end{equation}
+where $ P_{gen} $ is the electrical power output of the generator.
+
+This leaves the power loss from generator to grid to be defined as:
+\begin{equation} \label{eq:comp_gen_pow_loss_eff}
+	P_{loss}(P, \omega) = P_{gen} - P = \dfrac{P}{\eta(P, \omega)} - P
+\end{equation}
+The power of a rotating machine can be defined as the product of torque and rotational velocity:
+\begin{equation}\label{eq:comp_power_in_rot_eff}
+	P_{gen} = T_g \omega
+\end{equation}
+As such for the system at hand the torque can be defined by rearranging \cref{eq:comp_power_in_rot_eff} and substituting in $ P_{gen} $ from \cref{eq:comp_gen_pow_loss_eff}. This leaves the non-linear generator model to be:
+\begin{equation}\label{eq:comp_gen_torque_eff}
+	T_g(P, \omega) = \dfrac{P_{loss}(P, \omega) + P}{\omega}
+\end{equation}
+\cref{eq:comp_power_in_rot_eff} is the non-linear model of the generator. It contains $ P_{loss}(P,\omega) $ which from \cref{eq:comp_gen_pow_loss_eff} is dependent on $ \eta(P, \omega) $. The $ \eta $ function is extracted from VTS and linearized.
+
+The linear model of the generator is obtained through a taylor expansion. The notation is relaxed a bit such that $ P_{loss}( P, \omega) $ is simply expressed as $ P_{loss} $.
+\begin{equation}\label{eq:comp_taylor_eff}
+	T_g( P, \omega) \approx T_g(P_o, \omega_o) + 
+	\left. \dfrac{\partial T_g( P, \omega)}{\partial P} \right |_{P_o,\omega_o} ( P-P_o) + 
+	\left. \dfrac{\partial T_g( P, \omega)}{\partial \omega} \right |_{P_o,\omega_o} (\omega - \omega_o)
+\end{equation}
+Below the the generator torque sensitivity to the grid power change term from \cref{eq:comp_taylor_eff} is derived. From \cref{eq:comp_gen_1_1_eff} to \cref{eq:comp_gen_1_2_eff} the \textit{sum rule} is used to split the derivative into two added derivatives. From \cref{eq:comp_gen_1_2_eff} to \cref{eq:comp_gen_1_3_eff} the first fractions in the denominators of the partial derivatives of the two terms are treated as a product of two functions thus the \textit{product rule} is used. The assumption is that the grid power is completely disconnected from the generator through the converter. Thus from \cref{eq:comp_gen_1_3_eff} to \cref{eq:comp_gen_1_4_eff} $ \, \frac{\partial \, \omega^{-1}}{\partial P} = 0 $.
+\begin{align} 
+	\dfrac{\partial T_g( P, \omega)}{\partial P} &= \dfrac{\partial \left (\dfrac{P_{loss} +  P}{\omega}\right )}{\partial P} \label{eq:comp_gen_1_1_eff} \\
+	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial P} + \dfrac{\partial \left ( \dfrac{ P}{\omega} \right )}{\partial P} \label{eq:comp_gen_1_2_eff} \\
+	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{\partial \left ( \dfrac{1}{\omega} \right )}{\partial P} P_{loss} + \dfrac{1}{\omega} \cdot \dfrac{\partial P}{\partial P} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial P}  P \label{eq:comp_gen_1_3_eff} \\
+	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial P} + \dfrac{1}{\omega} \label{eq:comp_gen_1_4_eff}
+\end{align}
+
+
+The generator torque sensitivity to rotational velocity change from \cref{eq:comp_taylor_eff} is then derived:
+\begin{align}
+	\dfrac{\partial T_g(P, \omega)}{\partial \omega} & = \dfrac{\partial \left (\dfrac{P_{loss} +  P}{\omega}\right )}{\partial \omega} \\
+	& = \dfrac{\partial \left (\dfrac{P_{loss}}{\omega} \right )}{\partial \omega} + \dfrac{\partial \left (\dfrac{P}{\omega} \right )}{\partial \omega} \\
+	& = \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega} + \dfrac{\partial \left (\dfrac{1}{\omega} \right)}{\partial \omega} P_{loss} + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} + \dfrac{\partial \left (\dfrac{1}{\omega} \right )}{\partial \omega} P \\
+	& = \dfrac{1}{\omega} \cdot  \dfrac{\partial P_{loss}}{\partial \omega} - \dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \dfrac{\partial P}{\partial \omega} \\
+	& = -\dfrac{1}{\omega^2}(P + P_{loss}) + \dfrac{1}{\omega} \cdot \dfrac{\partial P_{loss}}{\partial \omega}
+\end{align}
+The above derived generator model is referred to the low-speed generator side by replacing $ \omega $ with $ \omega_L $ where $ \omega_L = \left (\frac{N_r}{N_g} \right ) \omega $. This yields the final linear generator model evaluated at the operating point $ (P_o, \omega_o) $. Furthermore $P_{loss}$ is still just a function of $ \omega_L $ and $ P $:
+\begin{equation}
+	\begin{split}
+		T_g(P, \omega_L) 	& \approx \left. \left ( \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}(P, \omega_L)}{\partial P} + \dfrac{1}{\omega_L} \right ) \right |_{P_o,\omega_{L_o}} (P - P_0) \\ 
+		& + \left ( -\dfrac{1}{\omega_L^2}(P + P_{loss}(P, \omega_L)) + \left. \dfrac{1}{\omega_L} \cdot \dfrac{\partial P_{loss}(P, \omega_L)}{\partial \omega_L} \right ) \right |_{P_o,\omega_{L_o}} (\omega_L - \omega_{L_o})
+	\end{split}
+\end{equation}
+The calculation of the power loss and derivation of the power loss sensitivity to grid power are left out here, but are calculated in wtLin at an operating point. In the wtLin tool these sensitivities are calculated based on the extracted tables of efficiency $ \eta $.
+
+Presently the generator model in wtLin is implemented assuming a stiff drivetrain such that $ \Omega = \omega_L $.
+
+The component model input is $ \{P, \Omega\} $ and the output is $ \{T_g\} $
