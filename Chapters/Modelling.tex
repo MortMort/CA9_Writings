@@ -54,7 +54,7 @@ The component inputs are $ \{T_r, T_g\} $ and the output is $ \{\Omega\} $
 \subsubsection{Generator} \label{sec:comp_generator}
 The generator is mechanically connected to the drivetrain and is electrically connected to the converter. It is used to control the rotor speed during PLC by means of the generator torque. 
 
-While the generator model in wtLin includes the generator efficiencies they are left out here for simplicity. In the appendix in \cref{sec:comp_generator_eff} the generator model is derived including efficiencies. No generator dynamics are modelled and thus it is simply an algebraic equation.
+While the generator model in wtLin includes the generator efficiencies they are left out here for simplicity. In the appendix in \cref{sec:comp_generator_eff} the generator model is derived including efficiencies. No generator dynamics are modelled and thus the model simply consists of algebraic equations.
 
 The power of a rotating machine can be defined as the product of torque and rotational velocity:
 \begin{equation}\label{eq:comp_power_in_rot}
@@ -64,7 +64,7 @@ The non linear generator model is then defined by rearranging \cref{eq:comp_powe
 \begin{equation}\label{eq:comp_gen_torque}
 	T_g(P_g, \omega) = \dfrac{P_g}{\omega}
 \end{equation}
-The linear model of the generator is obtained through a taylor expansion. The definition of the taylor expansion is not included in this report. \cref{eq:comp_power_in_rot} is an algebraic equation describing the absolute value of the generator torque and not its rate of change as it would have been for a model including dynamics. Therefore the taylor expansion linearisation at the OP yields an affine linear approximation at the OP:
+The linear model of the generator is obtained through a taylor expansion. \cref{eq:comp_power_in_rot} is an algebraic equation describing the absolute value of the generator torque and not its rate of change as it would have been for a model including dynamics. Therefore the taylor expansion linearisation at the OP yields an affine linear approximation at the OP:
 \begin{equation}\label{eq:comp_gen_taylor}
 	T_g( P_g, \omega) \approx T_g(P_{g_o}, \omega_o) + 
 	\left. \dfrac{\partial T_g( P_g, \omega)}{\partial P_g} \right |_{P_{g_o},\omega_o} ( P_g-P_{g_o}) + 
@@ -92,9 +92,9 @@ The goal is to have a linear model of the generator around an OP and therefore t
 \end{equation}
 where $ \hat T_g = T_g - T_{g_o} $.
 
-When the model is linearised in a FLC OP P is constant and therefore the first part is also zero. The second part is the \textit{negative damping} term which yields and increase in the generator torque when the rotational speed decreases which even further decreases the rotational speed.
+When the model is linearised in a FLC operating point, P is constant and therefore the first term in the above equation is also zero. The second term is the \textit{negative damping} term which yields and increase in the generator torque when the rotational speed decreases which even further decreases the rotational speed.
 
-The component model input is $ \{P, \Omega\} $ and the output is $ \{T_g\} $
+The component model inputs are $ \{P, \Omega\} $ and the output is $ \{T_g\} $
 
 
 %\subsubsection{Converter} \label{sec:comp_conv_unity}
@@ -127,7 +127,7 @@ The model is linearised at an OP with a taylor expansion $ (\theta_o, \Omega_o, 
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial \Omega} \right |_{\theta_o, \Omega_o, v_o} ( \Omega-\Omega_o) \\
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial v} \right |_{\theta_o, \Omega_o, v_o} ( v - v_o)
 \end{align}
-The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving a linear model can easily be done for the remainder of the components with the \textit{jacobian()} Matlab functions.
+The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving a linear model can easily be done for the remainder of the components with the \textit{jacobian()} Matlab function.
 
 The component inputs are $ \{\theta, \Omega, v\} $ and the output is $ \{T_r\} $
 
@@ -144,7 +144,7 @@ The component inputs are $ \{\theta, \Omega, v \} $ and the output is $ \{F_T\} 
 
 
 \subsubsection{Rotor wind} \label{sec:comp_rot_wind}
-There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's point of view. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the  (\textbf{y}) direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
+There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's point of view. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the  \textbf{y} direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
 \begin{equation}\label{eq:comp_rotorwind}
 	v_{0_{rot}} = v_{0} - v_y
 \end{equation}
@@ -154,11 +154,11 @@ The component inputs are $ \{v_0, v_y\} $ and the output is $ \{v_{0_{rot}}\} $
 
 
 \subsubsection{Tower fore-aft motion} \label{sec:comp_foreaft_mod}
-The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation follows the convention in \cref{fig:fowt_coordinates}. Vestas uses a slightly different notation where \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} is called \textit{tilt}. This document for the most part follows the notation in \cref{fig:fowt_coordinates}. Since Vestas and the wtLin tool adopts the Vestas DOF notation the equations presented make use of this notation as well.
+The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation follows the convention in \cref{fig:fowt_coordinates}. Vestas uses a slightly different notation where \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} is called \textit{tilt}. This report for the most part follows the notation in \cref{fig:fowt_coordinates}. Since Vestas and the wtLin tool adopts the Vestas DOF notation the equations presented make use of this notation instead.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.9\linewidth]{Graphics/wtLinForeAftMotionModel.pdf}
-	\caption{Illustration of the mass spring damper approximation of the fore-aft tower movement}
+	\caption{Illustration of the mass spring damper approximation of the fore-aft tower movement.}
 	\label{fig:wtLin_fore-aft_diagram}
 \end{figure}
 The fore-aft motion is modelled by a mass-spring-damper system whose movement is defined to be at nacelle height. This choice is initially made because a sensor in VTS is currently located at nacelle height which is utilized by the FATD controller. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ m $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
@@ -194,7 +194,7 @@ From comparison to the standard TF it can be derived that:
 \end{align}
 where $ f_{eig} $ represents the natural frequency of the system while $ \zeta $ is the damping factor. 
 
-This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any inputs/parameters in VTS. They need to be tuned such that the response of the model fits the real system as close as possible. In the appendix in \cref{sec:app_mod_foreaft_fitting} this process is further described in detail.
+This leaves three new tuning parameters to be considered: $ m $, $ f_{eig} $ and $ \zeta $. Since this simple model is a crude approximation of a much more complex system these parameters can not be directly inferred from any inputs or parameters in VTS. They need to be tuned such that the response of the model fits the real system as close as possible. In the appendix in \cref{sec:app_mod_foreaft_fitting} this process is further described in detail.
 
 \medskip
 The second order TF standard form:
@@ -216,7 +216,7 @@ The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is
 
 
 \subsubsection{Full load controller} \label{sec:comp_flc}
-The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC controller is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller designed later in \cref{sec:ctrl-design} acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the linear turbine model behaves under normal operation.
+The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC controller is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller to be developed in this project acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the linear turbine model behaves under normal operation.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Graphics/PiController.pdf}
@@ -269,7 +269,7 @@ Where $ \dot x $ is the time derivative of the state vector, $ u $ the input vec
 
 In \cref{fig:connected_components} a diagram of the connected model can be found. The outputs of most component models can be observed entering adjacent components. The inputs to the full system can be observed to be the rotor speed reference $ wRef $ and the free wind speed $ vfree $. It should be highlighted again that the system contains the FLC controller component described in \cref{sec:comp_flc} which like the other components is embedded in the $ A $ and $ B $ matrices, essentially making it a closed-loop system. When the controller is made in \cref{sec:ctrl-design} the FLC is removed such that the designed controller regulates both rotor speed and the turbine tower top movement.
 
-Outputs are defined from the available sensors and if the outputs are equal to the states then the output matrix $ C $ only contains ones and zeros.
+Outputs are defined from the available sensors in VTS and if the outputs are equal to the states then the output matrix $ C $ only contains ones and zeros.
 
 \begin{figure}[ht]
 	\centering

@@ -4,7 +4,7 @@ The purpose of this chapter is to show and discuss some of the performance resul
 It is expected that the LQI controller will perform much better in damping the fore-aft movement than the original FLC PI controller with no FATD. Results are shown for both frequency and time domain.
 
 
-\subsection{Frequency Domain}
+\subsection{Frequency domain}
 The frequency domain analysis shows that the LQI controller performs better in dampening the effect of the disturbance on both the fore-aft movement and the rotor speed. The plot in \cref{fig:script_vfreeTovy} has been included here and it shows the frequency response from the free wind disturbance $ v_{free} $ to the fore-aft tower top velocity $ v_y $. Both the FLC PI system and LQI system are plotted for comparison. It is observed that the LQI controller yields much greater dampening of the eigenfrequency than the FLC PI controller. This is of course expected because the FLC controller is tuned for fixed-bottom turbine control.
 \begin{figure}[ht]
 	\centering
@@ -16,7 +16,7 @@ The frequency domain analysis shows that the LQI controller performs better in d
 
 \clearpage
 \subsection{Time domain}
-Time domain simulations were executed with Matlab Simulink for 1000 seconds and the results plotted with Matlab. In \cref{fig:sim_11_W_py_vy_comp} the rotor speed, fore-aft position and fore-aft velocity is plotted. Both the FLC PI and LQI controlled systems are plotted for comparison. Both rotor speed tracking and fore-aft motion performance is vastly superior for the LQI controller. The poor rotor speed tracking performance of the FLC controller is expected because of its lack of consideration for the fore-aft motion. The pitch actuation activity from the LQI controller furthermore does not exceed alarming values.
+Time domain simulations were executed with Matlab Simulink for 1000 seconds and the results plotted with Matlab. In \cref{fig:sim_11_W_py_vy_comp} the rotor speed, fore-aft (surge direction) position and velocity is plotted. Both the FLC PI and LQI controlled systems are plotted for comparison. Both rotor speed tracking and fore-aft motion damping performance is vastly superior for the LQI controller. The poor rotor speed tracking performance of the FLC controller is expected because of its lack of consideration for the fore-aft motion. The pitch actuation activity from the LQI controller furthermore does not exceed alarming values.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/linearModPerf/sim_11_W_py_vy_comp.png}

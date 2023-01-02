@@ -3,25 +3,25 @@
 \textbf{Executed by: Martin} \\
 \textbf{Date: 16/11/2022}
 
-\subsubsection{Objective}
+\subsubsection*{Objective}
 The objective of this test journal is to document the behaviour of the floating turbine under normal conditions in FLC. The focus is on how the turbine operates and reacts when no fore-aft motion mitigation strategy is implemented with a FLC controller tuned for fixed bottom turbines. The Vestas fore-aft tower damper is turned off.
 
-\subsubsection{Background}
+\subsubsection*{Background}
 The negative damping problem present in FOWTs can results in instability or oscillations around the pitching axes of the turbine. The magnitude of these oscillations can be severe, resulting in loads exceeding design specifications or at the very least increased fatigue loads. A FLC controller tuned for fixed bottom turbines will normally amplify fore-aft movement oscillations resulting in even worse stability.
 
-\subsubsection{Test subject}
+\subsubsection*{Test subject}
 The test subject is the Vestas V164 8MW wind turbine on a floating platform simulated in VTS.
 
-\subsubsection{Equipment/Software used and test setup}
+\subsubsection*{Equipment/Software used and test setup}
 \begin{itemize}
 	\item Vestas Turbine Simulator (turbine simulation) + OrcaFlex (floating foundation simulation)
 	\item Matlab (Plotting)
 \end{itemize}
 
-\subsubsection{Test procedure}
+\subsubsection*{Test procedure}
 A simulation is run for 600 amount of seconds at the average wind speeds: \{14, 16\} [m/s]. A normal turbulence model is used to model the turbulence. Relevant sensor readings are plotted via Matlab.
 
-\subsubsection{Results and Comments}
+\subsubsection*{Results and Comments}
 \cref{fig:tj02_vfree_to_genangvel} contains four subplots. They are placed in the same plot to make it easier to see the correlation between events in the plot. Both 14 and 16 m/s average wind speeds are plotted. The V164 8MW reaches nominal wind speed at 13 m/s. So when looking at the the 14 m/s plot a lot of the behaviour observed is due to the turbine switching between PLC and FLC when the wind speed observed by the rotor goes below 13 m/s. In the power plot both dips and spikes are observed because the controller switches between power and pitch control. The effect of the power dip can also be observed in the torque which is seen more easily when looking at the zoomed blot in \cref{fig:tj02_vfree_to_genangvel_zoom}. From 4 to 7 seconds the power dips from 8 MW to 7.4 MW and a dip in the torque is observed in the same interval. While not readily visible from the plot of the free wind speed this occurs due to the wind speed observed by the rotor dropping below 13 m/s due to the turbine fore-aft movement. A later plot shows this. The generator torque is observed falling below the 400 m/s nominal rotor speed to 360 rpm during this event which makes sense considering the fore-aft movement. The increase in both power and torque results from a decrease in the tower fore-aft velocity which is also readily visible from the increase in the generator speed.
 \begin{figure}[ht]
 	\centering

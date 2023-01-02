@@ -123,10 +123,6 @@ The maximum tolerated rotor speed is multiplied with $ 2 \pi $/$ 60 $ to transla
 \subsection{LQI controller analysis}
 This section is dedicated to analysing how the LQI controller moves the system poles and changes the system behaviour when some weights of $ Q $ and $ R $ are changed. The poles of the open-loop uncontrolled system is plotted together with the closed-loop LQI controlled system. Each plot contains a change in one weight (e.g. via $ max(\Omega) $) with three variations of that weight to see how the poles move. The weights which are not changed are left at the tuned values presented in \cref{sec:ctrl_thecontroller}. 
 
-\smallskip
-In \cref{fig:pzmap_vy} the LQI $ Q $ weight on $ v_y $ is varied via $ 1/max(v_y)^2 $. The blue markers indicate the poles of the uncontrolled system which only has three poles due to the missing integrator state. The frequency of the pole pair closest to the imaginary axis fit well with the structure eigenfrequency around 0.035 Hz. The high ratio between the imaginary and real part indicate a very low dampening of especially the uncontrolled system (blue markers). As expected when putting a greater weight on the tower velocity the dampening is increased. It moves from 0.28 for $ max(vy) = 1 $ to 0.435 for $ max(vy) = 0.25 $. This happens because of the reduction of mainly the imaginary component of the dominating pole pair. The increased dampening is expected to lead to reduced oscillations of the turbine structure. This is also apparent when observing a step response as in \cref{fig:step_vy}. Here a reduction of the oscillations of $ p_y $ and $ v_y $ is observed but at the cost of a greater rotor tracking error. Furthermore, in the pole-zero diagram, the \textit{fastest} (most negative) pole on the real axis becomes even faster while the slowest becomes slower. The implications of how this affects the system response is harder to deduce. It is especially difficult to reason why the pole movement translates into the observed rotor speed response.
-
-Furthermore one might wonder why the LQI controller does not simply make the dominating floating pole pair even faster with an even higher dampening. Here one should consider that a weight on the actuator effort is still in place (in the form of $ max(\theta_{ref}) = 5 $) which limits the possibility of extensively reducing the fore-aft motion.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.55\textwidth]{Graphics/LQI pole zero/02_pzmap_vy}
@@ -139,8 +135,10 @@ Furthermore one might wonder why the LQI controller does not simply make the dom
 	\caption{Step response from a step on the free wind disturbance. The weight on $ v_y $ is varied. The y-axis shows the deviation from the OP. The rotor speed reference is at the OP and therefore the third subplot shows the rotor speed tracking error. An increased weight on the fore-aft velocity results in reduced fore-aft motion oscillations but greater rotor speed tracking error.}
 	\label{fig:step_vy}
 \end{figure}
+In \cref{fig:pzmap_vy} the LQI $ Q $ weight on $ v_y $ is varied via $ 1/max(v_y)^2 $. The blue markers indicate the poles of the uncontrolled system which only has three poles due to the missing integrator state. The frequency of the pole pair closest to the imaginary axis fit well with the structure eigenfrequency around 0.035 Hz. The high ratio between the imaginary and real part indicate a very low dampening of especially the uncontrolled system (blue markers). As expected when putting a greater weight on the tower velocity the dampening is increased. It moves from 0.28 for $ max(vy) = 1 $ to 0.435 for $ max(vy) = 0.25 $. This happens because of the reduction of mainly the imaginary component of the dominating pole pair. The increased dampening is expected to lead to reduced oscillations of the turbine structure. This is also apparent when observing a step response as in \cref{fig:step_vy}. Here a reduction of the oscillations of $ p_y $ and $ v_y $ is observed but at the cost of a greater rotor tracking error. Furthermore, in the pole-zero diagram, the \textit{fastest} (most negative) pole on the real axis becomes even faster while the slowest becomes slower. The implications of how this affects the system response is harder to deduce. It is especially difficult to reason why the pole movement translates into the observed rotor speed response.
 
-In \cref{fig:pzmap_W_both} two plots are seen where the one in \cref{fig:pzmap_W_zoom} is zoomed in at the area indicated in the top right corner of \cref{fig:pzmap_W}. Here a greater weight is put on $ \Omega $ and in contrast to the $ v_y $ case the dominating pole pair of the floating structure moves in the opposite direction. This leads to lower dampening and stability of the floating movement due to the poles being closer to the imaginary axis. As expected when observing the step response in \cref{fig:step_W} the fore-aft oscillations are greater and last longer. Surprisingly the two poles located on the real axis move in the same direction as in \cref{fig:pzmap_vy} with the fastest pole becoming much faster and the slow pole becoming much slower. The effect as seen on the step response is that the rotor speed error is reduced. Giving a reasonable explanation for the movement of the poles on the real axis and how it yields better rotor speed tracking is difficult. With regards to the floating pole pair it is perhaps intuitive that if a much greater emphasis is put on limiting the rotor speed error it comes at the cost of less desirable fore-aft motion.
+Furthermore one might wonder why the LQI controller does not simply make the dominating floating pole pair even faster with an even higher dampening. Here one should consider that a weight on the actuator effort is still in place (in the form of $ max(\theta_{ref}) = 5 $) which limits the possibility of extensively reducing the fore-aft motion.
+
 \begin{figure*}[ht]
 	\centering
 	
@@ -152,9 +150,11 @@ In \cref{fig:pzmap_W_both} two plots are seen where the one in \cref{fig:pzmap_W
 	{\includegraphics[width=.48\textwidth]{Graphics/LQI pole zero/13_pzmapzoom_W}%
 		\label{fig:pzmap_W_zoom}}
 	
-	\caption{Pole-zero diagram with varying LQI weight of the state $ \Omega $; \textbf{(a)} a-text; \textbf{(b)} b-text.}
+	\caption{Pole-zero diagram with varying LQI weight of the state $ \Omega $; \textbf{(a)} Pole-zero plot; \textbf{(b)} Pole-zero plot zoomed at the indicated area.}
 	\label{fig:pzmap_W_both}
 \end{figure*}
+In \cref{fig:pzmap_W_both} two plots are seen where the one in \cref{fig:pzmap_W_zoom} is zoomed in at the area indicated in the top right corner of \cref{fig:pzmap_W}. Here a greater weight is put on $ \Omega $ and in contrast to the $ v_y $ case the dominating pole pair of the floating structure moves in the opposite direction. This leads to lower dampening and stability of the floating movement due to the poles being closer to the imaginary axis. As expected when observing the step response in \cref{fig:step_W} the fore-aft oscillations are greater and last longer. Surprisingly the two poles located on the real axis move in the same direction as in \cref{fig:pzmap_vy} with the fastest pole becoming much faster and the slow pole becoming much slower. The effect as seen on the step response is that the rotor speed error is reduced. Giving a reasonable explanation for the movement of the poles on the real axis and how it yields better rotor speed tracking is difficult. With regards to the floating pole pair it is perhaps intuitive that if a much greater emphasis is put on limiting the rotor speed error it comes at the cost of less desirable fore-aft motion.
+
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Graphics/LQI pole zero/103_step_W.png}
@@ -166,7 +166,7 @@ In \cref{fig:pzmap_theta} the maximum accepted value of the rotor pitch angle ac
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.55\textwidth]{Graphics/LQI pole zero/05_pzmap_theta.png}
-	\caption{Poze-zero diagram with varying LQI weight on the actuator input $ \theta $}
+	\caption{Pole-zero diagram with varying LQI weight on the actuator input $ \theta $.}
 	\label{fig:pzmap_theta}
 \end{figure}
 
