@@ -1,4 +1,4 @@
-\begin{frame}{Modelling}{}
+\begin{frame}{Modelling}{Introduction}
 	\begin{itemize}
 		\item A text
 	\end{itemize}
@@ -6,17 +6,74 @@
 
 %%%%%%%%%%%%%%%%
 
-\begin{frame}{Modelling}{Component 1 and component 2}
-	\begin{itemize}
-		\item A text
-	\end{itemize}\bigskip
+\begin{frame}{Modelling}{Drivetrain, generator, aerodynamic torque and thrust}
+	
+	\textbf{Drivetrain}:
+	\begin{equation}\label{drivetrain}
+		\dot{\Omega} = \dfrac{T_{r} + N T_{g}}{N^2 J_{g} + J_{r}}
+	\end{equation}
+	
+	\textbf{Generator} (linearized):
+	\begin{equation}
+		\hat T_g(P_g, \Omega) \approx \left. \dfrac{1}{N^{-1} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_{g_o})
+		\left. - P_g \, \dfrac{1}{\left( N^{-1} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
+	\end{equation}
+
+	\textbf{Aerodynamic torque} (non-linear):
+	\begin{equation}\label{eq:comp_Mrot_wind}
+		T_r(\theta, \Omega, v) = \dfrac{1}{2} \rho \, A_d v^3 \, C_p(\theta, \Omega, v) \dfrac{1}{\Omega}
+	\end{equation}
+
+	\textbf{Aerodynamic thrust} (non-linear):
+	\begin{equation} \label{eq:comp_aero_thrust}
+		F_T(\theta, \Omega, v) = \dfrac{1}{2} \rho A_d v^2 C_T(\theta, \Omega, v)
+	\end{equation}
 \end{frame}
 
 
 %%%%%%%%%%%%%%%%
 
-\begin{frame}{Modelling}{Component 3 and component 4}
-	\begin{itemize}
-		\item A text
-	\end{itemize}\bigskip
+\begin{frame}{Modelling}{Tower fore-aft motion}
+	\begin{equation}
+		\begin{split}
+			\dot{v}_y & = \dfrac{F_{rot} - b v_y - k p_y}{m} \\
+			\dot{p}_y & = v_y
+		\end{split}
+	\end{equation}
+	\begin{equation}
+		\begin{split}
+			k & = (2 \pi f_{eig})^2 m \\
+			b & = 2 \zeta \sqrt{k m}
+		\end{split}
+	\end{equation}
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=0.9\linewidth]{../Graphics/wtLinForeAftMotionModel.pdf}
+		\label{fig:wtLin_fore-aft_diagram}
+	\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%
+
+\begin{frame}{Modelling}{Pitch system and FLC}
+	\textbf{Pitch system}:
+	\begin{equation}\label{eq:comp_pitch_freq}
+		\theta = \theta_{ref}
+	\end{equation}
+	\textbf{FLC}:
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=0.65\linewidth]{../Graphics/PiController.pdf}
+		\label{fig:PIcontroller}
+	\end{figure}
+	\begin{equation}\label{eq:comp_flc_time}
+		\dot{\theta}_{ref} = K_{gs,dP/d\theta} (K_{p, \theta} \dot{e} + K_{p, \theta} \dfrac{1}{T_{i, \theta}} e)
+	\end{equation}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%
+
+\begin{frame}{Modelling}{The model}
+		
 \end{frame}
