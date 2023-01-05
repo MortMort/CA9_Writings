@@ -24,17 +24,18 @@ The performance of the LQI controller is evaluated in a comparison to other rele
 	\caption{VTS simulation results showing the Fourier transform of the rotor azimuth which clearly shows the 1P, 2P and 3P frequencies.}
 	\label{fig:vts_2_fftazi}
 \end{figure}
-
-\cref{fig:vts_3_th_w_py_vy} contains four subplots: The pitch angle of blade 1, the generator speed, the fore-aft tower top position and the fore-aft tower top velocity. The blade pitch is included to evaluate blade pitch actuation and a lower blade pitch activity is ideal since it results in less mechanical wear. Blade 1 was chosen arbitrarily from the three blades since the relevant pitch actuation behaviour should be the same across the three blades. The generator speed set-point is set at 400 rpm and a lower absolute tracking error is better. The fore-aft (y-axis) tower top position should ideally be constant and therefore the velocity should be zero. It is readily visible that the fixed-bottom tuned FLC PI controller without FATD performs extremely poorly as it amplifies the fore-aft motion extensively in comparison to the detuned FLC. The oscillations are present in the whole system and an obvious conclusion is that it is infeasible to use the fixed-bottom tuned FLC in a real WT. When comparing the VTS simulation results in \cref{fig:vts_3_th_w_py_vy} with the linear model simulation results in \cref{fig:script_vfreeTovy} it is obvious that the system with FLC is either marginally stable or closer to being marginally stable than is apparent from the linear system. The fore-aft motion oscillations in VTS are more consistent, much larger and seem less affected by the wind than in the linear model. 
-
-The detuned FLC and the LQI controller perform much better with greatly reduced fore-aft motion. When observing the fft of the fore-aft velocity in \cref{fig:vts_4_fft_py} the eigenfrequency of the floater is readily visible at around 0.035 Hz.
-
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/3_th_w_py_vy.png}
 	\caption{VTS simulation results of the blade pitch, generator speed, fore-aft position and velocity. The fixed-bottom tuned FLC without FATD (yellow trace) is oscillating extensively in comparison to the LQI and detuned FLC.}
 	\label{fig:vts_3_th_w_py_vy}
 \end{figure}
+
+\cref{fig:vts_3_th_w_py_vy} contains four subplots: The pitch angle of blade 1, the generator speed, the fore-aft tower top position and the fore-aft tower top velocity. The blade pitch is included to evaluate blade pitch actuation and a lower blade pitch activity is ideal since it results in less mechanical wear. Blade 1 was chosen arbitrarily from the three blades since the relevant pitch actuation behaviour should be the same across the three blades. The generator speed set-point is set at 400 rpm and a lower absolute tracking error is better. The fore-aft (y-axis) tower top position should ideally be constant and therefore the velocity should be zero. It is readily visible that the fixed-bottom tuned FLC PI controller without FATD performs extremely poorly as it amplifies the fore-aft motion extensively in comparison to the detuned FLC. The oscillations are present in the whole system and an obvious conclusion is that it is infeasible to use the fixed-bottom tuned FLC in a real WT. When comparing the VTS simulation results in \cref{fig:vts_3_th_w_py_vy} with the linear model simulation results in \cref{fig:script_vfreeTovy} it is obvious that the system with FLC is either marginally stable or closer to being marginally stable than is apparent from the linear system. The fore-aft motion oscillations in VTS are more consistent, much larger and seem less affected by the wind than in the linear model. 
+
+The detuned FLC and the LQI controller perform much better with greatly reduced fore-aft motion. When observing the fft of the fore-aft velocity in \cref{fig:vts_4_fft_py} the eigenfrequency of the floater is readily visible at around 0.035 Hz.
+
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/4_fft_py.png}
@@ -45,20 +46,18 @@ The detuned FLC and the LQI controller perform much better with greatly reduced 
 Due to the large oscillations of the fixed-bottom FLC PI controller it is difficult to compare the performance of the LQI controller with the detuned FLC PI controller. In \cref{fig:vts_10_th_w_py_vy} the fixed-bottom FLC trace is left out for easier comparison of the two remaining controllers. From this figure it can be observed that the LQI controller tracks the generator set-point the best due to the smaller absolute size of the tracking error. The fore-aft position oscillations are also dampened much better. The blade pitch angle actuation is largely the same with regards to the greater slow oscillations but smaller higher frequency oscillations seem to be present in the LQI controller. While the detuned FLC yields a more stable system its performance is not satisfactory in comparison to the LQI controller as the magnitude of the rotor error greatly exceeds 20 rpm with apparent oscillations on the fore-aft position with an amplitude of 1.5 to 2 meters. When observing the fore-aft velocity, relatively fast oscillations seem to be present with both controllers. This behaviour is examined later. When observing the Fourier transform in \cref{fig:vts_11_fft_th_w_py_vy} zoomed in around the eigenfrequency it is apparent that the LQI controller performs the best in dampening the fore-aft motion. A lower actuator activity is even observed in the majority of the frequencies around the eigenfrequency.
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/10_th_w_py_vy.png}
+	\includegraphics[width=0.63\linewidth]{Graphics/TestResults/VTSplotting/10_th_w_py_vy.png}
 	\caption{VTS simulation results of the blade pitch, rotor speed, fore-aft position and velocity. Greater performance is achieved with the LQI controller in all aspects besides the higher frequency component on the blade pitch angle.}
 	\label{fig:vts_10_th_w_py_vy}
 \end{figure}
-
-\clearpage
-
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/11_fft_th_w_py.png}
-	\caption{VTS simulation results with the Fourier transform of the blade pitch, generator angular velocity and the fore-aft position. The fore-aft velocity is left out because the frequency content around the eigenfrequency is identical to the position.}
+	\includegraphics[width=0.63\linewidth]{Graphics/TestResults/VTSplotting/11_fft_th_w_py.png}
+	\caption{VTS simulation results with the Fourier transform of the blade pitch, generator speed and the fore-aft position. The fore-aft velocity is left out because the frequency content around the eigenfrequency is identical to the position.}
 	\label{fig:vts_11_fft_th_w_py_vy}
 \end{figure}
 
+\clearpage \newpage
 When looking at \cref{fig:vts_12_zoom_th_w_py_vy} the fore-aft velocity oscillations are obvious. They are present due to oscillations in the tower which is the 2nd mode of a floating turbine as was illustrated earlier in \cref{fig:eigen_and_1p3p}. When observing the Fourier transform plot in \cref{fig:vts_13_zoom_fft_th_w_py_vy} which contains frequencies around 0.5 Hz these oscillations are seen around 0.45 to 0.49 Hz and are very close to the 3P frequencies around 0.5 to 0.55 Hz. The 2nd mode's location close to the 3P frequency was also highlighted before in \cref{fig:vts_12_zoom_th_w_py_vy} and thus this does not come as a surprise. This large 2nd mode oscillation is unwanted because it contributes to fatigue loads. It is also invisible to the LQI controller as it has not been modelled. Should it have been dampened the fore-aft model defined in \cref{sec:comp_foreaft_mod} should have included a second mass-spring-damper in series.
 \begin{figure}[ht]
 	\centering
@@ -69,13 +68,13 @@ When looking at \cref{fig:vts_12_zoom_th_w_py_vy} the fore-aft velocity oscillat
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Graphics/TestResults/VTSplotting/13_zoom_fft_th_vy.png}
-	\caption{VTS simulation results with the Fourier transform which includes frequencies around 0.5 Hz. Second mode oscillations are obvious in the neighbourhood of 0.45 to 0.49 Hz on both simulations and they are translated into the blade pitch with the LQI controller.}
+	\caption{VTS FFT results with which includes frequencies around 0.5 Hz. Second mode oscillations are obvious in the neighbourhood of 0.45 to 0.49 Hz on both simulations and they are translated into the blade pitch with the LQI controller.}
 	\label{fig:vts_13_zoom_fft_th_w_py_vy}
 \end{figure}
 
 \newpage
 
-In \cref{tab:del} the 1 Hz DEL of the tower at 17 m height is seen. In VTS there are two possible bending moment sensors: At 12 and 17 m height and they showed largely the same results. The 1 Hz DEL has been calculated for the three respective controllers. It is observed that the LQI 1 Hz DEL is the lowest and FLC's is the highest. This conclusion is in line with what has been observed from the results of the fore-aft motion in the previous figures. As expected the loads experienced by the tower with the FLC are very large compared to the other controllers.
+In \cref{tab:del} the 1 Hz DEL of the tower at 17 m height is seen. In VTS there are two possible bending moment sensors: At 12 and 17 m height and upon inspection of their data they showed the same tendency. The 1 Hz DEL has been calculated for the three respective controllers. It is observed that the LQI 1 Hz DEL is the lowest and FLC's is the highest. This conclusion is in line with what has been observed from the results of the fore-aft motion in the preceding figures. As expected the loads experienced by the tower with the FLC are very large compared to the other controllers.
 
 \begin{table}[t]
 	\centering
@@ -106,7 +105,7 @@ To more easily compare actuation effort the sum of pitch angle changes are calcu
 
 %\clearpage
 \subsection{Results: 12, 16 and 26 m/s LQI OP performance} \label{sec:test_vts_part2}
-It is of interest to see whether using the controller at other OPs yield a better performance at the other respective OPs despite not further tuning the LQI weights. Only a single convenient OP has been considered in the project so far since gain scheduling has been deemed out of scope. But redefining the linear model at other OPs using the Vestas wtLin tool is straightforward. Therefore new LQI controller parameters can be obtained for other OPs and some results of the controller performance at other OPs are thus included. The LQI $ Q $ and $ R $ weights are not tuned for the other OPs but are left at the values which yielded the best performance at 16 m/s.
+It is of interest to see whether using the controller at other OPs yield a better performance at OPs despite not further tuning the LQI weights. Only a single convenient OP has been considered in the project so far since gain scheduling has been deemed out of scope. But redefining the linear model at other OPs using the Vestas wtLin tool is straightforward. Therefore new LQI controller parameters can be obtained for other OPs and some results of the controller performance at other OPs are thus included. The LQI $ Q $ and $ R $ weights are not tuned for the other OPs but are left at the values which yielded the best performance at 16 m/s.
 
 As mentioned the other wind speeds are 12 m/s and 26 m/s. Due to the larger rotor thrust sensitivity around nominal wind speed which can be observed in \cref{fig:thrust_vs_windspeed} lower dampening is expected for the 12 m/s simulations. The WT controller will furthermore change between PLC and FLC as the wind speed observed by the rotor goes above and below the nominal wind speed. This is expected to lower dampening and worsen overall performance. At higher wind the rotor thrust sensitivity decreases and thus greater general dampening and better performance is expected at 26 m/s.
 
@@ -163,7 +162,7 @@ In \cref{tab:del_lqi} the DELs of the three LQI controller setup at the three di
 	\end{tabular}
 \end{table}
 
-In \cref{tab:pitch_sum_lqi} the pitch sums of the LQI controllers with the unfiltered pitch data are seen. Again the 12 m/s configuration does worse at all wind speeds. The differences in pitch actuation between the 16 ns 26 m/s configurations is significant for all wind speeds. Only in the 12 m/s wind speed case the 16 m/s wind speed configuration wins. When observing the filtered version in \cref{tab:filt_pitch_sum_lqi} the results are very different. It becomes obvious that most of the pitch actuation of the 12 m/s configuration is due to higher frequency content than the fore-aft motion. The 16 m/s configuration seems to be the overall best between the three configurations despite not being the best at any single wind speed. From all of the tables it can be concluded that the 26 m/s configuration does a better job at 26 m/s wind speed and that the 12 m/s configuration amplifies higher frequencies too much to be applicable.
+In \cref{tab:pitch_sum_lqi} the pitch sums of the LQI controllers with the unfiltered pitch data are seen. Again the 12 m/s configuration does worse at all wind speeds. The differences in pitch actuation between the 16 and 26 m/s configurations is significant for all wind speeds. Only in the 12 m/s wind speed case the 16 m/s wind speed configuration wins. When observing the filtered version in \cref{tab:filt_pitch_sum_lqi} the results are very different. It becomes obvious that most of the pitch actuation of the 12 m/s configuration is due to higher frequency content than the fore-aft motion. The 16 m/s configuration seems to be the overall best between the three configurations despite not being the best at any single wind speed. From all of the tables it can be concluded that the 26 m/s configuration does a better job at 26 m/s wind speed and that the 12 m/s configuration amplifies higher frequencies too much to be applicable. Again it should be considered that in a real implementation these higher frequencies would be dealt with by other means.
 
 \begin{table}[ht]
 	\centering
@@ -197,6 +196,6 @@ In \cref{tab:pitch_sum_lqi} the pitch sums of the LQI controllers with the unfil
 \clearpage
 \newpage
 \subsection{Test conclusion}
-Between the three controllers compared in \cref{sec:test_vts_part1} the following can be concluded: The fixed-bottom tuned FLC induces extreme oscillations in the whole WT structure observed in both the fore-aft motion and the rotor speed. Detuning the FLC yields higher dampening and performance in all aspects but does not yield satisfactory performance overall. Oscillations of undesirable magnitude is present on both the generator speed and the fore-aft position. When switching to the LQI controller, oscillations on both the generator speed and fore-aft position are greatly reduced in comparison to the detuned FLC at the cost of increased pitch actuation activity. The LQI performance is satisfactory but it is also based on ideal, perfect fore-aft state feedback in VTS. The 2nd mode oscillations which were observed on the fore-aft velocity translated into the pitch actuation due to the lack of consideration for this dynamic in the model.
+Between the three controllers compared in \cref{sec:test_vts_part1} the following can be concluded: The fixed-bottom tuned FLC induces extreme oscillations in the whole WT structure, observed in both the fore-aft motion and the rotor speed. Detuning the FLC yields higher dampening and performance in all aspects but does not yield satisfactory performance overall. Oscillations of undesirable magnitude is present on both the generator speed and the fore-aft position. When switching to the LQI controller, oscillations on both the generator speed and fore-aft position are greatly reduced in comparison to the detuned FLC at the cost of increased pitch actuation activity. The LQI performance is satisfactory but it is also based on ideal, perfect fore-aft state feedback in VTS. The 2nd mode oscillations which were observed on the fore-aft velocity translated into the pitch actuation due to the lack of consideration for this dynamic in the model.
 
 Greater performance is achieved in \cref{sec:test_vts_part2} at 26 m/s and in some areas at 12 m/s mean wind speed if the LQI controller parameters are recalculated at the respective OPs. This signifies that either gain scheduling or other methods should be employed to cover the whole turbine operating range. This comes to no surprise as the non-linear control authority of WT pitching is well known. It is assumed that greater performance can be achieved if LQI weight tuning was performed at the alternative wind speeds and perhaps if the fore-aft model fitting shown in \cref{sec:lin_fit_eval} was revisited as well. Lower dampening and performance is observed at lower wind speeds mainly attributed to the greater rotor thrust sensitivity close to nominal wind speed. Big 2nd mode and 3P oscillations are present on the generator speed and fore-aft velocity at 26 m/s mean wind speed. Recalculating the LQI parameters for both the 12 and 26 m/s OP resulted in reduced oscillations on some states and inputs and for the 26 m/s case especially the 2nd mode oscillations.

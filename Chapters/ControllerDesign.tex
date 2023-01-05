@@ -1,11 +1,11 @@
 \section{Controller design} \label{sec:ctrl-design}
-The main purpose of this chapter is firstly to discuss the reasoning behind using the LQR controller along with a presentation of the basic LQR and LQI theory. Then the derived LQI controller if shown and finally the LQI controller's effect on the system is analysed with respect to how the closed loop system poles move when LQI weights are changed. The controller to be derived is used in full state feedback and outputs a pitch reference to the system. Therefore the FLC controller is later removed from the model such that the input to the system is the pitch reference $ thRef $ instead of the rotor speed reference $ wRef $.
+The main purpose of this chapter is firstly to discuss the reasoning behind using the LQR controller along with a presentation of the basic LQR and LQI theory. Then the derived LQI controller is shown and finally the LQI controller's effect on the system is analysed with respect to how the closed loop system poles move when LQI weights are changed. The controller to be derived is used in full state feedback and outputs a pitch reference to the system. Therefore the FLC controller is later removed from the model such that the input to the system is the pitch reference $ thRef $ instead of the rotor speed reference $ wRef $.
 
 \subsection{Linear-Quadratic Regulator} \label{sec:ctrl_lqr}
-The Linear-Quadratic Regulator (LQR) in its \textit{infinite horizon} form is the preferred controller type. LQR is chosen because satisfactory performance can be gained reasonably fast with some state and input weight tuning. Furthermore penalizing state deviations by the use of \textit{Bryson's Rule} can give an intuitive starting point for weights. Another common alternative, the \textit{pole placement method}, is disregarded as it can suffer from being less intuitive with regards to choosing the placement of poles. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
+The Linear-Quadratic Regulator (LQR) in its \textit{infinite horizon} form is the preferred controller type. LQR is chosen because satisfactory performance can be gained reasonably fast with some state and input weight tuning. Furthermore penalizing state deviations by the use of \textit{Bryson's Rule} can give an intuitive starting point for weights. Another common alternative, the \textit{pole placement method}, is disregarded as it can suffer from being less intuitive with regards to choosing the placement of poles when system knowledge is insufficient. Furthermore an LQR controller guarantees 6 dB gain margin and 60 degree phase margin \cite{Doyle1978}. 
 
 \smallskip
-\noindent Consider the system:
+Consider the system:
 \begin{equation}\label{eq:ctrl_sys}
 	\begin{split}
 		\dot x &= A x + B u \\
@@ -36,7 +36,7 @@ with P being the solution to the algebraic Ricatti equation:
 \begin{equation}\label{lqr:ricatti}
 	A^T P + P A - P B R^{-1} B^T P + Q = 0
 \end{equation}
-It is noted that proving \cref{eq:lqr_K} is deemed outside the scope of this report. This leaves $ Q $ and $ R $ to be tuned in such a manner that a satisfactory performance is achieved. For initial guesses \textit{Bryson's Rule} can be utilized. It states that a diagonal entry in $ Q $ or $ R $ for a corresponding state $ x_i $ or input $ u_i $ should be set as such:
+It is noted that proving \cref{eq:lqr_K} is deemed outside the scope of this report. This leaves $ Q $ and $ R $ to be tuned in such a manner that a satisfactory performance is achieved. For this \textit{Bryson's Rule} can be utilized. It states that a diagonal entry in $ Q $ or $ R $ for a corresponding state $ x_i $ or input $ u_i $ should be set as such:
 \begin{equation}\label{eq:bryson}
 	\begin{split}
 		Q_i = \dfrac{1}{Max(\hat x_i)^2} \\
@@ -54,7 +54,7 @@ As described \cref{sec:comp_flc} the FLC controller is of the proportional-integ
 \end{align}
 where $ C_{iy} $ is defined such that the desired output is picked out for integration and $ \bar x $ is the deviation state vector extended with the integral state.
 
-A linear quadratic integrator (LQI) controller is obtained when the integrator-augmented system matrices are used to solve the LQR problem. The dimension of $ Q $ increases for every extra integrator state and thus extra weights are defined for these. While Bryson's Rule is utilized for more intuitive definitions of weights on states and inputs, the integrator state weight is a far more awkward weight to choose. In this report it is set based on a tuning process as a multiple of the original state.
+A linear quadratic integrator (LQI) controller is obtained when the integrator-augmented system matrices are used to solve the LQR problem. The dimension of $ Q $ increases for every extra integrator state and thus extra weights are defined for these. While Bryson's Rule is utilized for more intuitive definitions of weights on states and inputs, the integrator state weight is a far more awkward weight to choose. In this report it is set based on a tuning process as a multiple of the original rotor speed state.
 
 
 \subsection{The controller} \label{sec:ctrl_thecontroller}
@@ -86,7 +86,7 @@ From $ Q $ and $ R $ it is observable that:
 	\item the rotor speed integration weight is set 5 times lower than the rotor speed
 	\item the maximum allowed pitch angle actuation deviation is set to 5 deg
 \end{itemize}
-The maximum tolerated rotor speed is multiplied with $ 2 \pi $/$ 60 $ to translate the weight from rpm to rad/s which is the state unit. There is furthermore no intuitive explanation behind the choice of the integrator weight other than that it has yielded satisfactory results in the controller tuning process. Only light tuning was necessary from the initial guesses of maximum tolerable state and input values to achieve good performance. This is regarded as a highlight of the usefulness of the LQR controller when a well fitting linear model is used. Also perhaps importantly when the necessary system understanding has not been achieved such that pole placement can be done based on reasonable design considerations. Some system understanding can perhaps be achieved by considering the positions of system poles and zeros and thus a drawback of LQR might be that some understanding is lost when omitting this process.
+The maximum tolerated rotor speed is multiplied with $ 2 \pi $/$ 60 $ to translate the weight from rpm to rad/s which is the state unit. There is furthermore no intuitive explanation behind the choice of the integrator weight other than that it has yielded satisfactory results in the controller tuning process. Only light tuning was necessary from the initial guesses of maximum tolerable state and input values to achieve good performance. This is regarded as a highlight of the usefulness of the LQR controller when a well fitting linear model is used. Also perhaps importantly when the necessary system understanding has not been achieved such that pole placement can be done based on reasonable design considerations. Some system understanding can perhaps be attained by considering the positions of system poles and zeros and thus a drawback of LQR might be that some understanding is lost when omitting this process.
 %\begin{equation}\label{eq:lqi_Q_and_R}
 %	Q =   \begin{bmatrix}
 %		0.04 &  0 &  0 &  0 \cr
@@ -162,7 +162,7 @@ In \cref{fig:pzmap_W_both} two plots are seen where the one in \cref{fig:pzmap_W
 	\label{fig:step_W}
 \end{figure}
 
-In \cref{fig:pzmap_theta} the maximum accepted value of the rotor pitch angle actuation is varied from 1 deg to 5 deg with 5 deg being the original tuned parameter. With a low accepted value of 1 deg the two poles which were located at the real axis have instead become a slower pole pair as observed by the red poles at $ -0.1 \pm0.8 $. As the "constraint" is relieved from 1 to 5 deg the pole pair becomes faster with a lower dampening and ultimately turns into two faster real poles. The dominating pole pair's imaginary part is furthermore lowered as the weight is decreased. The general tendency is that the system becomes both faster and more dampened. As expected allowing for a greater actuator effort leads to a better and faster system altogether which is also readily visible in the step response in \cref{fig:step_theta}. Both the magnitude of oscillations and settle time is reduces for both the tower movement and rotor speed error.
+In \cref{fig:pzmap_theta} the maximum accepted value of the rotor pitch angle actuation is varied from 1 deg to 5 deg with 5 deg being the original tuned parameter. With a low accepted value of 1 deg the two poles which were located at the real axis have instead become a slower pole pair as observed by the red poles at $ -0.1 \pm0.8 $. As the "constraint" is relieved from 1 to 5 deg the pole pair becomes faster with a lower dampening and ultimately turns into two faster real poles. The dominating pole pair's imaginary part is furthermore lowered as the weight is decreased. The general tendency is that the system becomes both faster and more dampened. As expected, allowing for a greater actuator effort, leads to a better and faster system which is also readily visible in the step response in \cref{fig:step_theta}. Both the magnitude of oscillations and settle time is reduces for both the tower movement and rotor speed error.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.55\textwidth]{Graphics/LQI pole zero/05_pzmap_theta.png}

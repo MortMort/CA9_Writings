@@ -1,5 +1,5 @@
 \section{Modelling} \label{sec:mod} % Incl. Subsection "Component Models"
-The purpose of this chapter is to outline the linear model of the system. The model is intended to be used as a control model for state-space control with the purpose of minimizing the turbine fore-aft motion. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are left out since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. Instead such components models are either completely left out or modelled with algebraic equations. 
+The purpose of this chapter is to outline the linear model of the system. The model is intended to be used as a state-space control model for rotor speed control and fore-aft motion damping. The fore-aft motion dynamics of floating wind turbines are slow (a period of 30 seconds is normal) and the modelling is approached with this in mind: Dynamics which are relatively fast compared to the fore-aft motion dynamics are not included since they are of little importance to the control objective. Examples of such dynamics include but are not limited to: Blade, drivetrain and converter dynamics. Instead such components models are either completely left out or modelled with algebraic equations. 
 
 
 %\subsection{wtLin component models} \label{sec:compcomps}
@@ -29,7 +29,7 @@ In \cref{sec:comp_connected} the components are connected such that the flow of 
 
 
 \subsubsection{Drivetrain} \label{sec:comp_drv}
-As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In a simple \textit{stiff drivetrain} model dampening or spring effects are left out. Thus when a torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor. In the appendix in \cref{sec:mod_drt_flex} a model of a flexible drivetrain can be found. Due to the relatively fast dynamics of the drivetrain in relation to the WT eigenfrequency these dynamics can be left out. 
+As mentioned in \cref{sec:intro_wtcomponents} the drivetrain connects the rotor with the generator through a gearbox. In a simple \textit{stiff} drivetrain model, dampening and spring effects are left out. Thus when a torque is applied at the rotor resulting in a change in twist angle at the rotor the resulting twist angle at the generator is instant and directly proportional to the twist angle at the rotor. In the appendix in \cref{sec:mod_drt_flex} a model of a flexible drivetrain can be found. Due to the relatively fast dynamics of the drivetrain in relation to the WT eigenfrequency these dynamics can be left out. 
 
 The stiff drivetrain consists of two free inertias connected through a gearbox. The drivetrain is modelled from newtons second law for rotation like so:
 \begin{equation}\label{eq:wtlin_comp_drivetrain}
@@ -82,12 +82,12 @@ The generator torque sensitivity to rotational velocity change from \cref{eq:com
 \end{align}
 The generator model derived above is referred to the rotor side by replacing $ \omega $ with $ \Omega $ where $ \Omega = \left (\frac{N_r}{N_g} \right ) \omega $. This yields the affine linear generator model evaluated at the OP $ (P_{g_o}, \Omega_o) $:
 \begin{equation}
-	T_g(P_g, \Omega) \approx \dfrac{P_{g_o}}{\omega_o} + \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
+	T_g(P_g, \Omega) \approx \dfrac{P_{g_o}}{\omega_o} + \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_{g_o}) \\ 
 	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 \end{equation}
 The goal is to have a linear model of the generator around an OP and therefore the change in the generator torque from the OP is defined:
 \begin{equation}
-	\hat T_g(P_g, \Omega) \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_0) \\ 
+	\hat T_g(P_g, \Omega) \approx \left. \dfrac{1}{\dfrac{N_g}{N_r} \Omega} \right |_{P_{g_o},\Omega_o} (P_g - P_{g_o}) \\ 
 	\left. - P_g \, \dfrac{1}{\left( \dfrac{N_g}{N_r} \Omega \right)^2} \right |_{P_{g_o},\Omega_o} (\Omega - \Omega_o)
 \end{equation}
 where $ \hat T_g = T_g - T_{g_o} $.
@@ -127,7 +127,7 @@ The model is linearised at an OP with a taylor expansion $ (\theta_o, \Omega_o, 
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial \Omega} \right |_{\theta_o, \Omega_o, v_o} ( \Omega-\Omega_o) \\
 	& + \left. \dfrac{\partial T_r(\theta, \Omega, v)}{\partial v} \right |_{\theta_o, \Omega_o, v_o} ( v - v_o)
 \end{align}
-The derivation of the linear model is not included for this component and for the following components since the concept of linearising through a taylor expansion was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving a linear model can easily be done for the remainder of the components with the \textit{jacobian()} Matlab function.
+The derivation of the linear model is excluded in the report for this and the following components since the concept of linearising through a taylor expansion of a component model was demonstrated in the \hyperref[sec:comp_generator]{\textbf{generator component model section}}. Retrieving a linear model can easily be done for the remainder of the components with the \textit{jacobian()} Matlab function.
 
 The component inputs are $ \{\theta, \Omega, v\} $ and the output is $ \{T_r\} $
 
@@ -136,15 +136,13 @@ The stationary rotor thrust force $ F_T $ is calculated from the pre-calculated 
 \begin{equation} \label{eq:comp_aero_thrust}
 	F_T(\theta, \Omega, v) = \dfrac{1}{2} \rho A_d v^2 C_T(\theta, \Omega, v)
 \end{equation}
-$ C_T $ is a mapping from the pitch angle, rotor velocity and wind speed to a total stationary rotor thrust.
-
-The model is linearised with a taylor expansion.
+$ C_T $ is a mapping from the pitch angle, rotor velocity and wind speed to a total stationary rotor thrust. The model is linearised with a taylor expansion.
 
 The component inputs are $ \{\theta, \Omega, v \} $ and the output is $ \{F_T\} $
 
 
 \subsubsection{Rotor wind} \label{sec:comp_rot_wind}
-There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's point of view. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the free wind speed $ v_0 $ from the hub translational velocity in the  \textbf{y} direction $ v_y $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas DOF notation in relation to the DOF notation used in most literature. This is further touched upon in the following section. 
+There is an interaction between the tower fore-aft movement and the wind speed which ultimately results in a constantly changing wind speed as seen from the rotor's point of view. Thus it is necessary to calculate the \textit{free} wind speed as observed from the rotors point of reference. This is simply done by subtracting the translational velocity in the  \textbf{y} direction $ v_y $ from the free wind speed $ v_0 $. Note that the \textbf{x} and \textbf{y} directions are interchanged in the Vestas notation of the floating degrees of freedom in relation to the notation used in most literature. This is further touched upon in the following section. 
 \begin{equation}\label{eq:comp_rotorwind}
 	v_{0_{rot}} = v_{0} - v_y
 \end{equation}
@@ -154,13 +152,14 @@ The component inputs are $ \{v_0, v_y\} $ and the output is $ \{v_{0_{rot}}\} $
 
 
 \subsubsection{Tower fore-aft motion} \label{sec:comp_foreaft_mod}
-The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the DOF notation follows the convention in \cref{fig:fowt_coordinates}. Vestas uses a slightly different notation where \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} is called \textit{tilt}. This report for the most part follows the notation in \cref{fig:fowt_coordinates}. Since Vestas and the wtLin tool adopts the Vestas DOF notation the equations presented make use of this notation instead.
+The fore-aft motion is both the \textit{surge} and \textit{pitch} motion of turbine structure. In most literature the degree of fredom notation follows the convention in \cref{fig:fowt_coordinates}. Vestas uses a slightly different notation where \textbf{x} and \textbf{y} are interchanged such that for the Vestas notation y is in the \textit{surge} direction and x in the \textit{sway} direction and \textit{pitch} is called \textit{tilt}. This report for the most part follows the notation in \cref{fig:fowt_coordinates}. Since Vestas and the wtLin tool adopts the Vestas notation the equations presented make use of this notation instead.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.9\linewidth]{Graphics/wtLinForeAftMotionModel.pdf}
 	\caption{Illustration of the mass spring damper approximation of the fore-aft tower movement.}
 	\label{fig:wtLin_fore-aft_diagram}
 \end{figure}
+
 The fore-aft motion is modelled by a mass-spring-damper system whose movement is defined to be at nacelle height. This choice is initially made because a sensor in VTS is currently located at nacelle height which is utilized by the FATD controller. For simplicity it is assumed that the foundation does not translate in any direction and therefore the translation at nacelle height is due to the pitching $ \phi $ of the structure. An illustration of this is seen in \cref{fig:wtLin_fore-aft_diagram}. This is obviously a heavily simplified model. It assumes a stiff nacelle-tower-foundation structure and the stability and dynamics from the hydrodynamic, buoyancy, ballast and mooring line forces are approximated into the mass, spring and damper coefficients. Furthermore the mass $ m $ represents the inertia of the structure pitching. The governing equations for the mass-spring-damper system are:
 \begin{equation}\label{eq:comp_fore-aft_ay1}
 	\ddot{p}_y m = F_{rot} - F_d + F_s
@@ -183,7 +182,7 @@ which yields the fore-aft tower model:
 	\dot{v}_y & = \dfrac{F_{rot} - b v_y - k p_y}{m}  \label{eq:comp_fore-aft_1} \\
 	\dot{p}_y & = v_y \label{eq:comp_fore-aft_2}
 \end{align}
-Furthermore the fore-aft tower model transfer function (TF) from rotor thrust $ F_{rot} $ to equivalent surge translation $ p_y $ can be written on the standard second order TF form (seen in \cref{eq:std_tf}) in the laplace domain as seen below:
+Furthermore the fore-aft tower model transfer function from rotor thrust $ F_{rot} $ to equivalent surge translation $ p_y $ can be written on the standard second order transfer function form (seen in \cref{eq:std_tf}) in the laplace domain as seen below:
 \begin{equation}\label{eq:comp_fore_aft_tf}
 	\dfrac{p_y}{F_{rot}} = \dfrac{\dfrac{1}{m}}{s^2 + \dfrac{b}{m} s + \dfrac{k}{m}}
 \end{equation}
@@ -206,17 +205,17 @@ The component input is $ \{F_{rot} \} $ and the output is $ \{p_y, v_y\} $
 
 
 \subsubsection{Pitch system} \label{sec:comp_pitch}
-The pitch system consists of both the local pitch controller and the hydraulic and electrical parts. The pitch controller takes the pitch reference $ \theta_{ref} $ and the FATD contribution $ \theta_{fatd} $ as input and outputs a voltage in a range which through the electrical and mechanical system translates to a pitch position. 
+The pitch system consists of both the local pitch controller and the hydraulic and electrical parts. The pitch controller takes the pitch reference $ \theta_{ref} $ as input and outputs a voltage in a range which through the electrical and mechanical system translates to a pitch position. 
 
 While the pitch system dynamics can be assumed to be fast enough with regards to the control objective to be left out. Therefore the pitch system is simply modelled as a direct feed-through. Alternatively the pitch system could have been approximated with a single order low-pass filter as it's done in the appendix in \cref{sec:comp_pitch_dyn}. 
 \begin{equation}\label{eq:comp_pitch_freq}
-	\theta = \theta_{ref} + \theta_{fatd}
+	\theta = \theta_{ref}
 \end{equation}
-The component inputs are $ \{\theta_{ref}, \theta_{fatd}  \} $ and the output is $ \{\theta \} $
+The component input is $ \{\theta_{ref}\} $ and the output is $ \{\theta \} $
 
 
 \subsubsection{Full load controller} \label{sec:comp_flc}
-The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC controller is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller to be developed in this project acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the linear turbine model behaves under normal operation.
+The FLC is a PI controller on the form seen in \cref{fig:PIcontroller}. The output of the FLC is the pitch reference $ \theta_{ref} $ which is added with the FATD pitch reference contribution $ \theta_{FATD} $ if the FATD is active. The controller to be developed in this project acts as both the FLC and FATD. Therefore this FLC component is only included in the model to see how the linear turbine model behaves under normal operation.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Graphics/PiController.pdf}
@@ -279,7 +278,7 @@ Outputs are defined from the available sensors in VTS and if the outputs are equ
 \end{figure}
 
 \subsubsection{Evaluation of model fit} \label{sec:lin_fit_eval}
-In the tower fore-aft motion component section in \cref{sec:comp_foreaft_mod} it was explained that a fitting process was necessary to find the parameters which gave the best fit of the linear model. In the appendix in \cref{sec:app_mod_foreaft_fitting} all results from said process are presented and a few of the results are also shown here in \cref{fig:wref-vy_16}. In \cref{fig:sysid_wref-vy_16} the frequency response from VTS is seen. It is generated by applying a test sine is to the pitch reference at different frequencies. While the input to the model is the rotor speed reference (due to the FLC PI controller) the test sine is put on the pitch reference for the evaluation. This is because the controller to be developed regulates the pitch reference and thus the response from the pitch reference is of greater interest than from the rotor speed reference. 
+In the tower fore-aft motion component section in \cref{sec:comp_foreaft_mod} it was explained that a fitting process was necessary to find the parameters which gave the best fit of the linear model. In the appendix in \cref{sec:app_mod_foreaft_fitting} all results from said process are presented and a few of the results are also shown here in \cref{fig:wref-vy_16}. In \cref{fig:sysid_wref-vy_16} the frequency response from VTS is seen. It is generated by applying a test sine to the pitch reference at different frequencies. While the input to the model is the rotor speed reference (due to the FLC PI controller) the test sine is put on the pitch reference for the evaluation. This is because the controller to be developed regulates the pitch reference and thus the response from the pitch reference is of greater interest than from the rotor speed reference. 
 
 The frequency response is plotted from the pitch reference to the surge direction velocity at nacelle height. In \cref{fig:wtlin_wref-vy_16} a bode plot of the linear model is seen from the pitch reference to the surge direction velocity. Black lines are plotted in the linear model bode plot to aid in assessing the fit accuracy. The intersection of the lines are located at the peak of the magnitude of the VTS plot. In the phase plot they are located right before and after the sharp dip in the phase. It is observed that the magnitude of the linear model is around 5-6 dB lower than the VTS model. The phase is furthermore observed almost passing through the cross sections of the black lines. While the fit is not perfect it is deemed good enough to be used for a control model.
 \begin{figure*}[ht]
