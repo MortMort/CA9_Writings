@@ -1,4 +1,4 @@
-\begin{frame}{Controller Design}{Linear-Quadratic Regulator}
+\begin{frame}{Controller Design}{Infinite-Horizon Linear-Quadratic Regulator}
 	\begin{equation}\label{eq:lqr_cost}
 		J = \int_{0}^{\infty} \left(x^T Q x + u^T R u + 2x^T N u\right) dt
 	\end{equation}
@@ -35,14 +35,19 @@
 		\bar y & = \begin{bmatrix} C & 0 \end{bmatrix} \bar x
 	\end{align}
 	$ C_{iy} $ picks out desired output for integration ($\Omega$)
+	
+	\begin{itemize}
+		\item Integral state is included in LQR algorithm
+		\item Weight on integral state is awkward place
+	\end{itemize}
 \end{frame}
 
 
 %%%%%%%%%%%%%%%%
 
-\begin{frame}{Controller Design}{Analysis of LQI controller poles}
-	It was of interest to see how closed-loop system poles moved when changing LQI $ Q $ and $ R $ weights.
-	\begin{itemize}
-		\item A text
-	\end{itemize}\bigskip
-\end{frame}
+%\begin{frame}{Controller Design}{Analysis of LQI controller poles}
+%	It was of interest to see how closed-loop system poles moved when changing LQI $ Q $ and $ R $ weights.
+%	\begin{itemize}
+%		\item A text
+%	\end{itemize}\bigskip
+%\end{frame}

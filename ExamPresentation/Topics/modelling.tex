@@ -74,6 +74,49 @@
 
 %%%%%%%%%%%%%%%%
 
-\begin{frame}{Modelling}{The model}
+\begin{frame}{Modelling}{Fore-aft model fitting}
+	\begin{itemize}
+		\item VTS allows inducing a sine on rotor speed reference and pitch angle reference
+	\end{itemize}
+	Fore-aft motion model parameter fitting results:
+	\begin{columns}
+		\begin{column}{.49\textwidth}
+			\begin{figure}[ht]
+				\centering
+				\includegraphics[width=1\linewidth]{../Graphics/TestResults/foreaftFitting/sysid_thSine-vy_16ms.png}
+				\label{fig:sysid_wref-vy_16}
+			\end{figure}
+		\centering VTS
+		\end{column}
+	
+		\begin{column}{.49\textwidth}
+			\begin{figure}[ht]
+				\centering
+				\includegraphics[width=1\linewidth]{../Graphics/TestResults/foreaftFitting/wtLin_th-vy_16ms.png}
+				\label{fig:wtlin_wref-vy_16}
+			\end{figure}
+		\centering Linear model
+		\end{column}
 		
+	\end{columns}
+	
+\end{frame}
+
+%%%%%%%%%%%%%%%%
+
+\begin{frame}{Modelling}{The model}
+	The resulting model:
+	
+	\begin{itemize}
+		\item \textbf{States:} \{$ p_y, v_y, \Omega, \Omega_{int} $\}
+		\item \textbf{Input:} \{$ \omega_{ref} $\}
+		\item \textbf{Disturbance:} \{$ v_{free} $\}
+		\item \textbf{Outputs:} \{$ p_y, v_y, \Omega $\}
+	\end{itemize}
+
+	Stable
+	
+	\smallskip
+	Controllable and observable
+	
 \end{frame}
