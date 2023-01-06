@@ -1,47 +1,25 @@
-\begin{frame}{Controller Design}{Infinite-Horizon Linear-Quadratic Regulator}
-	\begin{equation}\label{eq:lqr_cost}
-		J = \int_{0}^{\infty} \left(x^T Q x + u^T R u + 2x^T N u\right) dt
-	\end{equation}
-	where
-	\begin{center}
-		\begin{tabular}{l r l }
-			weight & $R$         & $ > 0$\hspace{1mm} (positive definite) and symmetric       \\
-			weight & $Q$		 & $\ge 0$\hspace{1mm} (positive semi-definite) and symmetric
-		\end{tabular}
-	\end{center}
-	Controller gain
-	\begin{equation}\label{eq:lqr_K}
-		K = -R^{-1} B^T P
-	\end{equation}
-	with P being the solution to the algebraic Ricatti equation:
-	\begin{equation}\label{lqr:ricatti}
-		A^T P + P A - P B R^{-1} B^T P + Q = 0
-	\end{equation}
-	Matlab: \textit{lqr(A, B, Q, R, N)}
+\begin{frame}{Controller Design}{Infinite-Horizon Linear-Quadratic Regulator with integral action}
+	\begin{itemize}
+		\item LQR minimizes cost function to yield optimal controller gain
+		\item Costs assigned to states and actuators
+%		\item Matlab: \textit{lqr(A, B, Q, R, N)}
+		\item Bryson's Rule used to find diagonal entries in Q and R
+	\end{itemize}
 	
+	Integral action on rotor speed is necessary.
+
 	\smallskip
-	Bryson's Rule:
-	\begin{equation}\label{eq:bryson}
-			Q_i = \dfrac{1}{Max(\hat x_i)^2} \;\; , \;\; R_i = \dfrac{1}{Max(\hat u_i)^2}
-	\end{equation}
-\end{frame}
-
-%%%%%%%%%%%%%%%%
-
-\begin{frame}{Controller Design}{Integral action}
-	Integral action is necessary for proper rotor speed control. System is augmented with integral state:
+	System is augmented with integral state $ x_i = \int \hat \Omega$:
 	\begin{align} 
-		\dot {\bar x} & = \begin{bmatrix} \dot{\hat x} \\ \dot x_i \end{bmatrix} = \begin{bmatrix} A &0 \\ C_{iy} & 0 \end{bmatrix} \bar x + \begin{bmatrix} B_u \\ 0 \end{bmatrix}  \hat u \\
+		\dot {\bar x} & = \begin{bmatrix} \dot{\hat x} \\ \dot x_i \end{bmatrix} = \begin{bmatrix} A &0 \\ C_{i} & 0 \end{bmatrix} \bar x + \begin{bmatrix} B_u \\ 0 \end{bmatrix}  \hat u \\
 		\bar y & = \begin{bmatrix} C & 0 \end{bmatrix} \bar x
 	\end{align}
-	$ C_{iy} $ picks out desired output for integration ($\Omega$)
 	
 	\begin{itemize}
 		\item Integral state is included in LQR algorithm
-		\item Weight on integral state is awkward place
+		\item Weight on integral state is awkward to place
 	\end{itemize}
 \end{frame}
-
 
 %%%%%%%%%%%%%%%%
 

@@ -9,48 +9,15 @@
 	\end{itemize}\bigskip
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%
-
-\begin{frame}{Introduction}{Wind turbine components}
-	Relevant components:
-	\begin{itemize}
-		\item Rotor, blades, pitch system
-		\item Tower
-		\item Generator
-	\end{itemize}
-	\begin{figure}[ht]
-		\centering
-		\includegraphics[width=0.7\linewidth]{../Graphics/WtComponents.png}
-		\label{fig:wt_components}
-	\end{figure}
-
-\end{frame}
-
 %%%%%%%%%%%%%%%%
 
-\begin{frame}{Introduction}{Floating offshore wind turbines}
-	\begin{itemize}
-		\item Characterized by static stability which counteracts overturning moment
-		\item Restoring force is sum of: Buoyancy, ballast and mooring line forces
-	\end{itemize}
-	Four main foundation concepts:
-	\begin{figure}[ht]
-		\centering
-		\includegraphics[width=.8\linewidth]{../Graphics/FloatingFoundationConcepts.jpg}
-		\label{fig:floating_concepts}
-	\end{figure}
-\end{frame}
-
-%%%%%%%%%%%%%%%%
-
-\begin{frame}{Introduction}{Floating offshore wind turbines}
+\begin{frame}{Introduction}{Floating offshore wind turbines (FOWTs)}
 	\begin{columns}
 		\begin{column}{.49\textwidth}
 			\begin{itemize}
-				\item Subjected to additional loads
-				\item Experiences higher strain due to extra degrees of freedom $ \rightarrow $ higher LCOE
-				\item The negative damping problem
-				\item Load reduction = LCOE reduction = better feasibility
+				\item Experiences higher strain mainly due to extra degrees of freedom
+				\item Fore-aft motion: Surge \& pitch
+				\item Load reduction $ \rightarrow $ LCOE reduction $ \rightarrow $ greater economical feasibility
 			\end{itemize}
 		\end{column}
 		
@@ -65,6 +32,67 @@
 	\end{columns}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction}{FOWT challenges: The negative damping problem}
+	
+	Rotor thrust equation:
+	\begin{equation} \label{eq:aero_thrust}
+		F_T(\theta, \Omega, v) = \dfrac{1}{2} \rho A_d v^2 C_T(\theta, \Omega, v)
+	\end{equation}
+	
+	\begin{columns}
+		\begin{column}{.6\linewidth}
+			Rotor thrust vs. wind speed with active controller:
+			\begin{figure}[ht]
+				\centering
+				\includegraphics[width=1\linewidth]{../Graphics/ThrustWindpeedCurve.PNG}
+				\label{fig:thrust_vs_windspeed}
+			\end{figure}
+			
+		\end{column}
+		\begin{column}{.4\linewidth}
+			\begin{figure}[ht]
+				\centering
+				\includegraphics[width=1\linewidth]{../Graphics/ForeAftMotionModel_onlyTurbine.pdf}
+				\label{fig:turbine_foreaft}
+			\end{figure}
+			\begin{equation*}\label{eq:vrot}
+				v_{rot} = v_0 - v_y
+			\end{equation*}
+		\end{column}
+	\end{columns}
+	
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Introduction}{The negative damping problem}
+	Full-load controller and fore-aft damper have contradicting goals
+	
+	\smallskip
+	In most FLC operating range: $ \dfrac{\partial T_r}{\partial \theta} < 0 $ but also $ \dfrac{\partial F_T}{\partial \theta} < 0 $ 
+	
+	\smallskip
+	An example:
+	\begin{enumerate}
+		\item The turbine is moving forward: $ v_y < 0 $
+		\item Thus $ \dfrac{\partial \Omega}{\partial v_{rot}} > 0 $ and consequently $ \Omega > \Omega_{ref} $
+		\item FLC: $ \dot \theta_{ref} > 0 \rightarrow \dot \Omega < 0 $ and FATD: $ \dot \theta_{ref} < 0 \rightarrow \dot F_T > 0 $
+	\end{enumerate}
+	
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%
+
+%\begin{frame}{Introduction}{Wind turbine control}
+%	Basic turbine controller:
+%	\begin{figure}[ht]
+%		\centering
+%		\includegraphics[width=.8\linewidth]{../Graphics/PLC_PI.pdf}
+%		\label{fig:controller_overview}
+%	\end{figure}
+%\end{frame}
 
 %%%%%%%%%%%%%%%%%%
 %\begin{frame}{Big header}{Smaller header}

@@ -1,16 +1,18 @@
 \begin{frame}{Conclusion}{}
 	\begin{itemize}
-		\item A simple linear model was proven to sufficiently capture the the fore-aft motion dynamics.
-		\item A simple mass-spring-damper model successfully modelled the fore-aft motion
-		\item The developed LQI controller developed achieved rotor speed tracking with zero steady state error and fore-aft motion damping
-		\item In VTS implementation: Real states of position and velocity are fed to controller
+		\item A simple linear model which implemented a mass-spring damper approximation of the fore-aft motion was proven to sufficiently capture the the fore-aft motion dynamics.
 		\item Deviation observed between linear model and VTS behaviour with fixed-bottom FLC
 		\item LQI controller successfully implemented in VTS and achieved satisfactory rotor speed tracking while greatly damping fore-aft motion
-		\begin{itemize}
-			\item Bryson's rule
-			\item LQI had slightly higher actuator activity than detuned FLC
-			\item Superior to fixed-bottom FLC and the detuned FLC
-		\end{itemize}
-	\item LQI controller parameters recalculation for other OPs partly or fully improves performance
+		\item LQI controller parameter recalculation for other OPs partly or fully improves performance - if higher frequency components are assumed to be filtered out.
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Future work}{}
+	
+	\begin{itemize}
+		\item VTS implementation required inputting real states of fore-aft position and velocity to controller
+		\item An estimator fore-aft position and velocity
+		\item Proper gain scheduling across full-load
+	\end{itemize}
+
 \end{frame}
