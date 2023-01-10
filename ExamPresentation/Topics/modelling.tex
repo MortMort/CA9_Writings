@@ -29,7 +29,7 @@
 %%%%%%%%%%%%%%%%
 
 \begin{frame}{Modelling}{Fore-aft model fitting}
-	Fore-aft motion model parameter fitting results:
+	Bode plot: $ \theta_{ref} \; \rightarrow \; v_y $ (fore-aft velocity) 
 	\begin{columns}
 		\begin{column}{.49\textwidth}
 			\begin{figure}[ht]
@@ -43,25 +43,39 @@
 		\begin{column}{.49\textwidth}
 			\begin{figure}[ht]
 				\centering
-				\includegraphics[width=1\linewidth]{../Graphics/TestResults/foreaftFitting/wtLin_th-vy_16ms.png}
+				\includegraphics[width=1\linewidth]{../Graphics/TestResults/foreaftFitting/wtLin_th-vy_16msV2.png}
 				\label{fig:wtlin_wref-vy_16}
 			\end{figure}
 			\centering Linear model
 		\end{column}
 	\end{columns}
+
+	\textbf{TAG OP PÅ VESTAS FOR AT KIGGE PÅ VTS PLOT! DE ER IKKE RIGTIGE IFT. MAGNITUDEN??}
 	
 \end{frame}
 
 %%%%%%%%%%%%%%%%
 
 \begin{frame}{Modelling}{The model}
-	The resulting state-space model:
+	The resulting state-space model (with FLC):
 	\begin{itemize}
 		\item \textbf{States:} \{$ p_y, v_y, \Omega, \Omega_{int} $\} \hspace{1mm} with $ \Omega =$ rotor speed
 		\item \textbf{Input:} \{$ \omega_{ref} $\} \hspace{1mm} with $ \omega =$ generator speed
 		\item \textbf{Disturbance:} \{$ v_{free} $\}
 		\item \textbf{Outputs:} \{$ p_y, v_y, \Omega $\}
+	\end{itemize}	
+	
+	State-space model without FLC:
+	\begin{itemize}
+		\item \textbf{States:} \{$ p_y, v_y, \Omega$\}
+		\item \textbf{Input:} \{$ \theta_{ref} $\}
+	\end{itemize}
+	
+	Model is:
+	\begin{itemize}
 		\item Stable
 		\item Controllable and observable
-	\end{itemize}	
+	\end{itemize}
+
+
 \end{frame}
