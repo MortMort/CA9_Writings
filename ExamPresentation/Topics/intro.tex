@@ -49,7 +49,7 @@
 				\includegraphics[width=1\linewidth]{../Graphics/ThrustWindpeedCurve.PNG}
 				\label{fig:thrust_vs_windspeed}
 			\end{figure}
-			
+			In most FLC operating range: $ \dfrac{\partial T_r}{\partial \theta} < 0 $ and $ \dfrac{\partial F_T}{\partial \theta} < 0 $ 
 		\end{column}
 		\begin{column}{.4\linewidth}
 			\begin{figure}[ht]
@@ -67,21 +67,21 @@
 
 %%%%%%%%%%%%%%%%%%
 
-\begin{frame}{Introduction}{The negative damping problem}
-	Full-load controller and fore-aft damper have contradicting goals
-	
-	\smallskip
-	In most FLC operating range: $ \dfrac{\partial T_r}{\partial \theta} < 0 $ but also $ \dfrac{\partial F_T}{\partial \theta} < 0 $ 
-	
-	\smallskip
-	An example:
-	\begin{enumerate}
-		\item The turbine is moving forward: $ v_y < 0 $
-		\item Thus $ \dfrac{\partial \Omega}{\partial v_{rot}} > 0 $ and consequently $ \Omega > \Omega_{ref} $
-		\item FLC: $ \dot \theta_{ref} > 0 \rightarrow \dot \Omega < 0 $ and FATD: $ \dot \theta_{ref} < 0 \rightarrow \dot F_T > 0 $
-	\end{enumerate}
-	
-\end{frame}
+%\begin{frame}{Introduction}{The negative damping problem}
+%	Full-load controller and fore-aft damper have contradicting goals
+%	
+%	\smallskip
+%	In most FLC operating range: $ \dfrac{\partial T_r}{\partial \theta} < 0 $ but also $ \dfrac{\partial F_T}{\partial \theta} < 0 $ 
+%	
+%	\smallskip
+%	An example:
+%	\begin{enumerate}
+%		\item The turbine is moving forward: $ v_y < 0 $
+%		\item Thus $ \dfrac{\partial \Omega}{\partial v_{rot}} > 0 $ and consequently $ \Omega > \Omega_{ref} $
+%		\item FLC: $ \dot \theta_{ref} > 0 \rightarrow \dot \Omega < 0 $ and FATD: $ \dot \theta_{ref} < 0 \rightarrow \dot F_T > 0 $
+%	\end{enumerate}
+%	
+%\end{frame}
 
 %%%%%%%%%%%%%%%%%%
 
